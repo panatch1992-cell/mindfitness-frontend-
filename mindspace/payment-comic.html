@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ชำระเงิน - Psychoeducation Comics | Mind Fitness</title>
+  <meta name="description" content="ชำระเงินเพื่อเข้าถึง Psychoeducation Comics ทั้ง 6 ตอน">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="../images/logo.jpg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
+.site-header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:1000}
+.header__inner{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand__logo{width:40px;height:40px;border-radius:10px}
+.brand__name{font-size:20px;font-weight:700;color:#0B1E47}
+.page-container{max-width:500px;margin:40px auto;padding:20px}
+.payment-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+.payment-header{background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;padding:24px;text-align:center}
+.payment-header h1{font-size:24px;margin-bottom:8px}
+.payment-header p{opacity:0.9;font-size:14px}
+.payment-body{padding:24px}
+.product-selector{margin-bottom:24px}
+.product-option{display:flex;align-items:center;gap:16px;padding:16px;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;margin-bottom:12px;cursor:pointer;transition:all 0.2s}
+.product-option:hover,.product-option.selected{border-color:#00A8A8;background:#f0fdf4}
+.product-option.selected{box-shadow:0 0 0 3px rgba(0,168,168,0.2)}
+.product-radio{width:20px;height:20px;border:2px solid #cbd5e1;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.product-option.selected .product-radio{border-color:#00A8A8;background:#00A8A8}
+.product-option.selected .product-radio::after{content:'';width:8px;height:8px;background:white;border-radius:50%}
+.product-icon{width:50px;height:50px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:20px}
+.product-details{flex:1}
+.product-details h3{font-size:15px;color:#0B1E47;margin-bottom:2px}
+.product-details p{font-size:12px;color:#64748b}
+.product-pricing{text-align:right}
+.product-price{font-size:20px;font-weight:800;color:#0B1E47}
+.product-original{font-size:12px;color:#94a3b8;text-decoration:line-through}
+.product-badge{display:inline-block;background:#d1fae5;color:#047857;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;margin-top:4px}
+.qr-section{text-align:center;margin-bottom:24px}
+.qr-section img{max-width:280px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+.qr-placeholder{width:280px;height:280px;margin:0 auto;background:#f1f5f9;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#94a3b8}
+.qr-info{margin-top:12px;font-size:14px;color:#64748b}
+.qr-info strong{color:#0B1E47;display:block;margin-top:8px}
+.qr-info .amount{font-size:24px;color:#00A8A8;font-weight:800}
+.loading-spinner{width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#00A8A8;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.step{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;padding:12px;background:#f8fafc;border-radius:10px}
+.step-num{width:28px;height:28px;background:#00A8A8;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.step-content h4{font-size:14px;color:#0B1E47;margin-bottom:4px}
+.step-content p{font-size:13px;color:#64748b}
+.form-group{margin-bottom:16px}
+.form-label{display:block;margin-bottom:8px;font-weight:600;color:#0B1E47;font-size:14px}
+.form-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:10px;font-size:16px;font-family:inherit;transition:border-color 0.2s}
+.form-input:focus{outline:none;border-color:#00A8A8}
+.slip-upload{border:2px dashed #e2e8f0;border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all 0.2s}
+.slip-upload:hover{border-color:#00A8A8;background:#f0fdf4}
+.slip-upload.has-file{border-color:#00A8A8;background:#f0fdf4}
+.slip-upload input{display:none}
+.slip-preview{max-width:200px;border-radius:8px;margin-top:12px}
+.btn{width:100%;padding:16px;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.2s;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 15px rgba(0,168,168,0.3)}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.btn-secondary{background:#f1f5f9;color:#0B1E47;margin-top:12px}
+.otp-section{display:none;margin-top:24px;padding-top:24px;border-top:1px solid #e2e8f0}
+.otp-section.show{display:block}
+.otp-input{text-align:center;font-size:24px;letter-spacing:8px;font-weight:700}
+.success-section{display:none;text-align:center;padding:40px 24px}
+.success-section.show{display:block}
+.success-icon{width:80px;height:80px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:40px}
+.success-section h2{color:#0B1E47;margin-bottom:12px}
+.success-section p{color:#64748b;margin-bottom:24px}
+.auto-verify-badge{background:#dbeafe;color:#1d4ed8;padding:8px 16px;border-radius:8px;font-size:13px;margin-bottom:16px;display:inline-flex;align-items:center;gap:8px}
+.auto-verify-badge.success{background:#d1fae5;color:#047857}
+.error-msg{background:#fee2e2;color:#dc2626;padding:12px;border-radius:8px;font-size:14px;margin-bottom:16px;display:none}
+.error-msg.show{display:block}
+.login-link{text-align:center;margin-top:20px;padding-top:20px;border-top:1px solid #e2e8f0}
+.login-link a{color:#00A8A8;font-weight:600;text-decoration:none}
+@media(max-width:480px){.page-container{padding:12px;margin:20px auto}.product-option{flex-wrap:wrap}.product-pricing{width:100%;text-align:left;margin-top:8px}}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="header__inner"><a class="brand" href="../index.html"><img src="../images/logo.jpg" alt="Mind Fitness" class="brand__logo"><span class="brand__name">Mind Fitness</span></a></div></header>
+<div class="page-container"><div class="payment-card"><div class="payment-header"><h1>ชำระเงิน</h1><p>Psychoeducation Comics</p></div>
+<div class="payment-body" id="paymentForm">
+<div class="product-selector" id="productSelector"><div class="product-option selected" data-product="bundle-all" data-price="399"><div class="product-radio"></div><div class="product-icon">📚</div><div class="product-details"><h3>Comic ทั้งหมด 6 เล่ม</h3><p>รวม Psychoeducation Comic ทั้ง 6 เล่ม</p></div><div class="product-pricing"><div class="product-original">฿594</div><div class="product-price">฿399</div><div class="product-badge">ประหยัด 33%</div></div></div></div>
+<div class="qr-section" id="qrSection"><div class="qr-placeholder" id="qrPlaceholder"><div class="loading-spinner"></div></div><img id="qrCode" style="display:none" alt="QR Code ชำระเงิน"><p class="qr-info">สแกน QR Code เพื่อชำระเงิน<strong id="accountName">รอสร้าง QR Code...</strong><span class="amount" id="displayAmount">฿399</span></p></div>
+<div class="step"><div class="step-num">1</div><div class="step-content"><h4>กรอกเบอร์โทรศัพท์</h4><p>เบอร์โทรที่จะใช้รับ OTP และเข้าถึงเนื้อหา</p></div></div>
+<div class="step"><div class="step-num">2</div><div class="step-content"><h4>สแกนจ่ายเงิน</h4><p>สแกน QR Code ที่สร้างขึ้นมาใหม่ตามยอดเงิน</p></div></div>
+<div class="step"><div class="step-num">3</div><div class="step-content"><h4>อัพโหลดสลิป</h4><p>ระบบจะตรวจสอบสลิปอัตโนมัติ หรือยืนยันด้วย OTP</p></div></div>
+<div class="error-msg" id="errorMsg"></div>
+<div class="form-group"><label class="form-label">เบอร์โทรศัพท์ *</label><input type="tel" class="form-input" id="phoneInput" placeholder="0812345678" maxlength="10" pattern="[0-9]*"></div>
+<div class="form-group"><label class="form-label">อีเมล (ไม่บังคับ)</label><input type="email" class="form-input" id="emailInput" placeholder="your@email.com"></div>
+<button class="btn btn-primary" id="createOrderBtn">สร้าง QR Code ชำระเงิน</button>
+<div id="slipSection" style="display:none"><div class="form-group"><label class="form-label">สลิปการโอนเงิน</label><div class="slip-upload" id="slipUpload"><p>📷 คลิกเพื่ออัพโหลดสลิป</p><input type="file" id="slipInput" accept="image/*"><img id="slipPreview" class="slip-preview" style="display:none"></div></div><button class="btn btn-primary" id="submitBtn" disabled>ตรวจสอบสลิป</button></div>
+<div class="otp-section" id="otpSection"><p class="auto-verify-badge" id="verifyStatus"><span>⏳</span> กำลังตรวจสอบสลิปอัตโนมัติ...</p><div class="form-group"><label class="form-label">กรอก OTP (6 หลัก)</label><input type="text" class="form-input otp-input" id="otpInput" placeholder="000000" maxlength="6" pattern="[0-9]*"></div><button class="btn btn-primary" id="verifyBtn">ยืนยัน OTP</button></div>
+<div class="login-link"><p>เคยซื้อแล้ว? <a href="#" id="loginLink">เข้าสู่ระบบด้วยเบอร์โทร</a></p></div>
+</div>
+<div class="success-section" id="successSection"><div class="success-icon">✓</div><h2>ชำระเงินสำเร็จ!</h2><p id="successMessage">คุณสามารถเข้าถึง Psychoeducation Comics ได้แล้ว</p><button class="btn btn-primary" onclick="window.location.href='psychoeducation.html'">เข้าสู่เนื้อหา</button></div>
+</div></div>
+<script>
+const API_BASE='https://mindfitness-ai-backend.vercel.app';
+const phoneInput=document.getElementById('phoneInput'),emailInput=document.getElementById('emailInput'),slipInput=document.getElementById('slipInput'),slipUpload=document.getElementById('slipUpload'),slipPreview=document.getElementById('slipPreview'),createOrderBtn=document.getElementById('createOrderBtn'),slipSection=document.getElementById('slipSection'),submitBtn=document.getElementById('submitBtn'),otpSection=document.getElementById('otpSection'),otpInput=document.getElementById('otpInput'),verifyBtn=document.getElementById('verifyBtn'),verifyStatus=document.getElementById('verifyStatus'),paymentForm=document.getElementById('paymentForm'),successSection=document.getElementById('successSection'),successMessage=document.getElementById('successMessage'),errorMsg=document.getElementById('errorMsg'),qrPlaceholder=document.getElementById('qrPlaceholder'),qrCode=document.getElementById('qrCode'),accountName=document.getElementById('accountName'),displayAmount=document.getElementById('displayAmount'),productSelector=document.getElementById('productSelector'),loginLink=document.getElementById('loginLink');
+let slipData=null,orderId=null,selectedProduct='bundle-all',selectedPrice=399;
+function showError(e){errorMsg.textContent=e;errorMsg.classList.add('show');setTimeout(()=>errorMsg.classList.remove('show'),5000)}
+productSelector.addEventListener('click',e=>{const o=e.target.closest('.product-option');if(o){document.querySelectorAll('.product-option').forEach(e=>e.classList.remove('selected'));o.classList.add('selected');selectedProduct=o.dataset.product;selectedPrice=parseInt(o.dataset.price);displayAmount.textContent=`฿${selectedPrice.toLocaleString()}`}});
+phoneInput.addEventListener('input',e=>{e.target.value=e.target.value.replace(/[^0-9]/g,'')});
+createOrderBtn.addEventListener('click',async()=>{const phone=phoneInput.value.trim();if(!/^0[0-9]{9}$/.test(phone)){showError('กรุณากรอกเบอร์โทรศัพท์ที่ถูกต้อง (10 หลัก)');return}createOrderBtn.disabled=true;createOrderBtn.textContent='กำลังสร้าง QR Code...';try{const res=await fetch(`${API_BASE}/api/payment`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'create_order',productId:selectedProduct,phone,email:emailInput.value.trim()||null})});const data=await res.json();if(data.alreadyPurchased){saveAccess(data.accessToken,phone,selectedProduct);paymentForm.style.display='none';successMessage.textContent='คุณเคยซื้อสินค้านี้แล้ว!';successSection.classList.add('show');return}if(!data.success)throw new Error(data.error||'ไม่สามารถสร้าง order ได้');orderId=data.order.orderId;qrPlaceholder.style.display='none';qrCode.src=data.payment.qrCodeDataUrl;qrCode.style.display='block';accountName.textContent=`PromptPay: ${data.payment.accountName}`;displayAmount.textContent=`฿${data.payment.amount.toLocaleString()}`;createOrderBtn.style.display='none';slipSection.style.display='block';phoneInput.disabled=true;emailInput.disabled=true;productSelector.style.pointerEvents='none';productSelector.style.opacity='0.7'}catch(e){showError(e.message);createOrderBtn.disabled=false;createOrderBtn.textContent='สร้าง QR Code ชำระเงิน'}});
+slipUpload.addEventListener('click',()=>slipInput.click());
+slipInput.addEventListener('change',e=>{const file=e.target.files[0];if(file){if(file.size>5*1024*1024){showError('ไฟล์ต้องมีขนาดไม่เกิน 5MB');return}const reader=new FileReader();reader.onload=event=>{slipData=event.target.result;slipPreview.src=slipData;slipPreview.style.display='block';slipUpload.classList.add('has-file');slipUpload.querySelector('p').textContent='✓ อัพโหลดสลิปแล้ว (คลิกเพื่อเปลี่ยน)';submitBtn.disabled=false};reader.readAsDataURL(file)}});
+submitBtn.addEventListener('click',async()=>{const phone=phoneInput.value.trim();if(!orderId||!slipData){showError('กรุณาอัพโหลดสลิปการโอนเงิน');return}submitBtn.disabled=true;submitBtn.textContent='กำลังตรวจสอบ...';try{const res=await fetch(`${API_BASE}/api/payment`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'upload_slip',orderId,phone,slipData})});const data=await res.json();if(data.autoVerified){saveAccess(data.access,phone,selectedProduct);verifyStatus.innerHTML='<span>✓</span> ตรวจสอบสลิปสำเร็จอัตโนมัติ!';verifyStatus.classList.add('success');successMessage.innerHTML=`ยืนยันการชำระเงินสำเร็จ!<br><small style="color:#64748b">ผู้โอน: ${data.slipInfo?.senderName||'-'}<br>ยอดเงิน: ฿${data.slipInfo?.amount||selectedPrice}</small>`;setTimeout(()=>{paymentForm.style.display='none';successSection.classList.add('show')},1500);return}if(data.success){slipSection.style.display='none';otpSection.classList.add('show');verifyStatus.innerHTML=data.verificationNote?`<span>ℹ️</span> ${data.verificationNote}`:'<span>📱</span> กรุณากรอก OTP ที่ได้รับทาง SMS';if(data.testOtp)alert(`Test OTP: ${data.testOtp}`)}else throw new Error(data.error||'ไม่สามารถตรวจสอบสลิปได้')}catch(e){showError(e.message);submitBtn.disabled=false;submitBtn.textContent='ตรวจสอบสลิป'}});
+otpInput.addEventListener('input',e=>{e.target.value=e.target.value.replace(/[^0-9]/g,'')});
+verifyBtn.addEventListener('click',async()=>{const otp=otpInput.value.trim(),phone=phoneInput.value.trim();if(otp.length!==6){showError('กรุณากรอก OTP 6 หลัก');return}verifyBtn.disabled=true;verifyBtn.textContent='กำลังยืนยัน...';try{const res=await fetch(`${API_BASE}/api/payment`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify_otp',orderId,otp,phone})});const data=await res.json();if(data.success){saveAccess(data.access,phone,selectedProduct);paymentForm.style.display='none';successSection.classList.add('show')}else throw new Error(data.error||'OTP ไม่ถูกต้อง')}catch(e){showError(e.message);verifyBtn.disabled=false;verifyBtn.textContent='ยืนยัน OTP'}});
+function saveAccess(accessData,phone,productId){localStorage.setItem('comic_access',JSON.stringify({tokens:accessData.tokens||[{token:accessData.token||accessData}],phone,productId,grantedAt:new Date().toISOString()}))}
+loginLink.addEventListener('click',async e=>{e.preventDefault();const phone=phoneInput.value.trim();if(!/^0[0-9]{9}$/.test(phone)){showError('กรุณากรอกเบอร์โทรศัพท์ก่อน');phoneInput.focus();return}loginLink.textContent='กำลังตรวจสอบ...';try{const res=await fetch(`${API_BASE}/api/payment`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'check_access',phone})});const data=await res.json();if(data.hasAccess){localStorage.setItem('comic_access',JSON.stringify({phone,products:data.products,grantedAt:new Date().toISOString()}));successMessage.textContent=`ยินดีต้อนรับกลับ! คุณมีสิทธิ์เข้าถึง ${data.accessCount} รายการ`;paymentForm.style.display='none';successSection.classList.add('show')}else{showError('ไม่พบประวัติการซื้อสำหรับเบอร์นี้');loginLink.innerHTML='เคยซื้อแล้ว? <a href="#" id="loginLink">เข้าสู่ระบบด้วยเบอร์โทร</a>'}}catch(e){showError('เกิดข้อผิดพลาด กรุณาลองใหม่');loginLink.innerHTML='เคยซื้อแล้ว? <a href="#" id="loginLink">เข้าสู่ระบบด้วยเบอร์โทร</a>'}});
+const savedAccess=localStorage.getItem('comic_access');if(savedAccess){try{const access=JSON.parse(savedAccess);if(access.phone||access.tokens){if(confirm('คุณมีสิทธิ์เข้าถึงเนื้อหาแล้ว ต้องการเข้าสู่เนื้อหาเลยไหม?'))window.location.href='psychoeducation.html'}}catch(e){}}
+</script>
+</body>
+</html>
