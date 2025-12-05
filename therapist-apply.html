@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>สมัครเป็นผู้ให้คำปรึกษา | Mind Fitness</title>
+  <meta name="description" content="ร่วมเป็นส่วนหนึ่งของทีม Mind Fitness - รับสมัครนักจิตวิทยาคลินิก นักจิตวิทยาการปรึกษา จิตแพทย์">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="images/logo.jpg">
+  <style>
+    .apply-hero {
+      background: linear-gradient(135deg, #0B1E47 0%, #1a3a7a 50%, #00A8A8 100%);
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+    }
+    
+    .apply-hero h1 {
+      font-size: 38px;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    
+    .apply-hero p {
+      font-size: 18px;
+      opacity: 0.9;
+      max-width: 650px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+    
+    .apply-section {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    /* Process Steps */
+    .process-section {
+      background: #f8fafc;
+      padding: 60px 20px;
+    }
+    
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: 40px auto 0;
+    }
+    
+    .process-step {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      position: relative;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .process-step:hover {
+      border-color: #00A8A8;
+      transform: translateY(-4px);
+    }
+    
+    .step-number {
+      position: absolute;
+      top: -15px;
+      left: 24px;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #00A8A8, #00c4c4);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    
+    .process-step h3 {
+      color: #0B1E47;
+      margin: 16px 0 12px;
+      font-size: 20px;
+    }
+    
+    .process-step p {
+      color: #64748b;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+    
+    .process-step ul {
+      color: #475569;
+      padding-left: 20px;
+      margin-top: 12px;
+      line-height: 2;
+    }
+    
+    .process-step .note {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+    
+    /* Requirements */
+    .requirements-section {
+      padding: 60px 20px;
+      background: white;
+    }
+    
+    .requirements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      margin: 40px auto 0;
+    }
+    
+    .requirement-card {
+      background: linear-gradient(135deg, #f0fdfa, #f0f9ff);
+      border-radius: 16px;
+      padding: 28px;
+      border-left: 4px solid #00A8A8;
+    }
+    
+    .requirement-card h4 {
+      color: #0B1E47;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .requirement-card ul {
+      color: #475569;
+      padding-left: 20px;
+      line-height: 2;
+    }
+    
+    /* Benefits */
+    .benefits-section {
+      background: #0B1E47;
+      color: white;
+      padding: 60px 20px;
+    }
+    
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      margin: 40px auto 0;
+    }
+    
+    .benefit-item {
+      text-align: center;
+      padding: 24px;
+    }
+    
+    .benefit-item .icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    
+    .benefit-item h4 {
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+    
+    .benefit-item p {
+      opacity: 0.8;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    
+    /* Application Form */
+    .form-section {
+      padding: 60px 20px;
+      background: #f8fafc;
+    }
+    
+    .apply-form {
+      background: white;
+      border-radius: 24px;
+      padding: 48px;
+      box-shadow: 0 10px 50px rgba(0,0,0,0.08);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .form-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .form-title h2 {
+      color: #0B1E47;
+      margin-bottom: 8px;
+      font-size: 28px;
+    }
+    
+    .form-title p {
+      color: #64748b;
+    }
+    
+    .form-section-title {
+      color: #0B1E47;
+      font-size: 18px;
+      margin: 32px 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .form-section-title:first-of-type {
+      margin-top: 0;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group.full {
+      grid-column: span 2;
+    }
+    
+    .form-group label {
+      display: block;
+      color: #0B1E47;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    
+    .form-group label .required {
+      color: #ef4444;
+    }
+    
+    .form-group label .hint {
+      font-weight: 400;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: all 0.2s;
+      background: white;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #00A8A8;
+      box-shadow: 0 0 0 4px rgba(0,168,168,0.1);
+    }
+    
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+    
+    .checkbox-item:hover {
+      background: #e9f1ff;
+      border-color: #79a8ff;
+    }
+    
+    .checkbox-item input {
+      width: auto;
+    }
+    
+    .checkbox-item input:checked + span {
+      color: #0B1E47;
+      font-weight: 600;
+    }
+    
+    /* File Upload */
+    .file-upload-group {
+      display: grid;
+      gap: 16px;
+    }
+    
+    .file-upload-item {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fafafa;
+    }
+    
+    .file-upload-item:hover {
+      border-color: #00A8A8;
+      background: #f0fdfa;
+    }
+    
+    .file-upload-item.uploaded {
+      border-color: #10b981;
+      background: #f0fdf4;
+    }
+    
+    .file-upload-item .icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    
+    .file-upload-item .label {
+      color: #0B1E47;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .file-upload-item .hint {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    
+    .file-upload-item .file-name {
+      color: #10b981;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #00A8A8, #00c4c4);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 32px;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,168,168,0.3);
+    }
+    
+    .submit-btn:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .form-note {
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+      margin-top: 20px;
+      line-height: 1.7;
+    }
+    
+    /* Success Message */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 48px;
+    }
+    
+    .success-message .icon {
+      font-size: 80px;
+      margin-bottom: 24px;
+    }
+    
+    .success-message h3 {
+      color: #059669;
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    
+    .success-message p {
+      color: #64748b;
+      line-height: 1.9;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .success-message .app-id {
+      background: #f0fdf4;
+      border: 2px solid #10b981;
+      border-radius: 12px;
+      padding: 16px 24px;
+      display: inline-block;
+      margin: 24px 0;
+      font-family: monospace;
+      font-size: 18px;
+      color: #065f46;
+    }
+    
+    @media (max-width: 768px) {
+      .apply-hero h1 { font-size: 26px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: span 1; }
+      .apply-form { padding: 24px; }
+      .process-steps { gap: 40px; }
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header__inner">
+    <a class="brand" href="index.html">
+      <img src="images/logo.jpg" alt="Mind Fitness" class="brand__logo">
+      <span class="brand__name">Mind Fitness</span>
+    </a>
+    <button class="nav-toggle" id="mobile-nav-toggle">☰</button>
+    <nav id="primary-nav" class="nav">
+      <ul class="nav__list">
+        <li><a href="index.html" class="nav__link">หน้าแรก</a></li>
+        <li><a href="about.html" class="nav__link">เกี่ยวกับเรา</a></li>
+        <li><a href="therapist-apply.html" class="nav__link active">สมัครผู้ให้คำปรึกษา</a></li>
+      </ul>
+      <div id="lang-switcher-placeholder"></div>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="apply-hero">
+  <div class="container">
+    <span style="background:rgba(255,255,255,0.2);padding:10px 24px;border-radius:25px;font-size:14px;display:inline-block;margin-bottom:20px;">🎯 เปิดรับสมัครผู้ให้คำปรึกษา</span>
+    <h1>ร่วมเป็นส่วนหนึ่งของทีม<br>Mind Fitness</h1>
+    <p>เรากำลังมองหานักจิตวิทยาคลินิก นักจิตวิทยาการปรึกษา และจิตแพทย์<br>ที่มีใจรักในการช่วยเหลือผู้อื่น มาร่วมสร้างสังคมสุขภาพจิตดี</p>
+  </div>
+</section>
+
+<!-- Process Steps -->
+<section class="process-section">
+  <div class="container" style="text-align:center;">
+    <h2 style="color:#0B1E47;font-size:28px;">📋 ขั้นตอนการสมัคร</h2>
+    <p style="color:#64748b;">กระบวนการพิจารณาใช้เวลา 5-7 วันทำการ</p>
+  </div>
+  
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-number">1</div>
+      <h3>ตรวจสอบคุณสมบัติ</h3>
+      <p>คุณต้องเป็นนักจิตวิทยาที่มีใบอนุญาตหรือได้รับการรับรอง และยินยอมให้ทาง Mind Fitness ตรวจสอบประวัติ</p>
+      <ul>
+        <li>มีใบอนุญาตประกอบวิชาชีพ (สำหรับนักจิตวิทยาคลินิก/จิตแพทย์)</li>
+        <li>มีประสบการณ์การให้คำปรึกษาหรือผ่านการรับรอง</li>
+        <li>มีประสบการณ์การทำงานอย่างน้อย <strong>600 ชั่วโมง</strong></li>
+      </ul>
+    </div>
+    
+    <div class="process-step">
+      <div class="step-number">2</div>
+      <h3>ส่งใบสมัครและเอกสาร</h3>
+      <p>กรอกแบบฟอร์มและแนบเอกสารที่จำเป็น:</p>
+      <ul>
+        <li>ใบอนุญาตประกอบวิชาชีพ</li>
+        <li>Resume หรือ CV</li>
+        <li>เอกสารสรุปชั่วโมงประสบการณ์</li>
+        <li>ใบรับรองความสามารถทางภาษา (ถ้ามี)</li>
+      </ul>
+    </div>
+    
+    <div class="process-step">
+      <div class="step-number">3</div>
+      <h3>รอการพิจารณา</h3>
+      <p>หลังส่งใบสมัคร ทีมงานจะตรวจสอบคุณสมบัติและติดต่อกลับเพื่อแจ้งรายละเอียดเพิ่มเติม</p>
+      <div class="note">
+        ⏰ กระบวนการพิจารณาใช้เวลา 5-7 วันทำการ
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Requirements -->
+<section class="requirements-section">
+  <div class="container" style="text-align:center;">
+    <h2 style="color:#0B1E47;font-size:28px;">📑 เอกสารที่ต้องแนบ</h2>
+    <p style="color:#64748b;">เตรียมเอกสารให้พร้อมก่อนสมัคร</p>
+  </div>
+  
+  <div class="requirements-grid">
+    <div class="requirement-card">
+      <h4>📜 เอกสารบังคับ</h4>
+      <ul>
+        <li>ใบอนุญาตประกอบวิชาชีพ <span style="color:#94a3b8;">(จิตแพทย์/นักจิตวิทยาคลินิก)</span></li>
+        <li>Resume หรือ CV</li>
+        <li>เอกสารสรุปชั่วโมงประสบการณ์การทำงาน <span style="color:#94a3b8;">(ระบุสถานที่ทำงาน และชั่วโมงเฉลี่ยต่อที่)</span></li>
+      </ul>
+    </div>
+    
+    <div class="requirement-card">
+      <h4>📋 เอกสารเพิ่มเติม (ถ้ามี)</h4>
+      <ul>
+        <li>ใบรับรองความสามารถทางภาษา <span style="color:#94a3b8;">(TOEIC, IELTS, HSK ฯลฯ)</span></li>
+        <li>ใบรับรองการอบรมเพิ่มเติม</li>
+        <li>Portfolio หรือผลงาน</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Benefits -->
+<section class="benefits-section">
+  <div class="container" style="text-align:center;">
+    <h2 style="font-size:28px;">✨ ทำไมต้องร่วมงานกับเรา?</h2>
+    <p style="opacity:0.8;">Mind Fitness ให้ความสำคัญกับผู้เชี่ยวชาญทุกคน</p>
+  </div>
+  
+  <div class="benefits-grid">
+    <div class="benefit-item">
+      <div class="icon">💰</div>
+      <h4>รายได้ดี</h4>
+      <p>แบ่งรายได้ 70-80% ให้ผู้เชี่ยวชาญ พร้อมโบนัสตามผลงาน</p>
+    </div>
+    <div class="benefit-item">
+      <div class="icon">🕐</div>
+      <h4>เวลายืดหยุ่น</h4>
+      <p>เลือกเวลาทำงานได้เอง ทำงานจากที่ไหนก็ได้</p>
+    </div>
+    <div class="benefit-item">
+      <div class="icon">🌐</div>
+      <h4>แพลตฟอร์มทันสมัย</h4>
+      <p>ระบบ AI ช่วยคัดกรอง จัดการนัดหมาย และติดตามผล</p>
+    </div>
+    <div class="benefit-item">
+      <div class="icon">📚</div>
+      <h4>พัฒนาตนเอง</h4>
+      <p>อบรม Supervision และ Workshop ฟรีทุกเดือน</p>
+    </div>
+  </div>
+</section>
+
+<!-- Application Form -->
+<section class="form-section" id="apply-form">
+  <div class="apply-form">
+    <div class="form-title">
+      <h2>📝 แบบฟอร์มสมัคร</h2>
+      <p>กรอกข้อมูลให้ครบถ้วน ทีมงานจะติดต่อกลับภายใน 5-7 วันทำการ</p>
+    </div>
+    
+    <form id="therapist-application" onsubmit="submitApplication(event)">
+      
+      <!-- Personal Info -->
+      <h3 class="form-section-title">👤 ข้อมูลส่วนตัว</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>คำนำหน้า <span class="required">*</span></label>
+          <select name="prefix" required>
+            <option value="">-- เลือก --</option>
+            <option value="นาย">นาย</option>
+            <option value="นาง">นาง</option>
+            <option value="นางสาว">นางสาว</option>
+            <option value="ดร.">ดร.</option>
+            <option value="นพ.">นพ.</option>
+            <option value="พญ.">พญ.</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>ชื่อ-นามสกุล <span class="required">*</span></label>
+          <input type="text" name="fullname" required placeholder="ชื่อ นามสกุล">
+        </div>
+        
+        <div class="form-group">
+          <label>ชื่อเล่น</label>
+          <input type="text" name="nickname" placeholder="ชื่อเล่น">
+        </div>
+        
+        <div class="form-group">
+          <label>อีเมล <span class="required">*</span></label>
+          <input type="email" name="email" required placeholder="email@example.com">
+        </div>
+        
+        <div class="form-group">
+          <label>เบอร์โทรศัพท์ <span class="required">*</span></label>
+          <input type="tel" name="phone" required placeholder="08X-XXX-XXXX">
+        </div>
+        
+        <div class="form-group">
+          <label>LINE ID</label>
+          <input type="text" name="line_id" placeholder="LINE ID">
+        </div>
+      </div>
+      
+      <!-- Professional Info -->
+      <h3 class="form-section-title">🎓 ข้อมูลวิชาชีพ</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>ตำแหน่งที่สมัคร <span class="required">*</span></label>
+          <select name="position" required onchange="toggleLicenseField(this.value)">
+            <option value="">-- เลือกตำแหน่ง --</option>
+            <option value="psychiatrist">จิตแพทย์</option>
+            <option value="clinical">นักจิตวิทยาคลินิก</option>
+            <option value="counseling">นักจิตวิทยาการปรึกษา</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>รูปแบบการทำงานที่สนใจ <span class="required">*</span></label>
+          <select name="work_type" required>
+            <option value="">-- เลือก --</option>
+            <option value="fulltime">Full-time</option>
+            <option value="parttime">Part-time</option>
+            <option value="freelance">Freelance / Per Case</option>
+          </select>
+        </div>
+        
+        <div class="form-group full">
+          <label>วุฒิการศึกษาสูงสุด <span class="required">*</span></label>
+          <input type="text" name="education" required placeholder="เช่น ปริญญาโท จิตวิทยาการปรึกษา มหาวิทยาลัยเชียงใหม่">
+        </div>
+        
+        <div class="form-group full" id="license-field">
+          <label>เลขที่ใบอนุญาตประกอบวิชาชีพ <span class="required">*</span> <span class="hint">(สำหรับจิตแพทย์/นักจิตวิทยาคลินิก)</span></label>
+          <input type="text" name="license_number" placeholder="เลขที่ใบอนุญาต">
+        </div>
+        
+        <div class="form-group">
+          <label>ประสบการณ์การให้คำปรึกษา <span class="required">*</span></label>
+          <select name="experience_hours" required>
+            <option value="">-- เลือก --</option>
+            <option value="600-1000">600 - 1,000 ชั่วโมง</option>
+            <option value="1000-2000">1,000 - 2,000 ชั่วโมง</option>
+            <option value="2000-5000">2,000 - 5,000 ชั่วโมง</option>
+            <option value="5000+">มากกว่า 5,000 ชั่วโมง</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>ประสบการณ์ทำงาน (ปี)</label>
+          <select name="experience_years">
+            <option value="0-1">น้อยกว่า 1 ปี</option>
+            <option value="1-3">1-3 ปี</option>
+            <option value="3-5">3-5 ปี</option>
+            <option value="5-10">5-10 ปี</option>
+            <option value="10+">มากกว่า 10 ปี</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Specializations -->
+      <h3 class="form-section-title">🎯 ความเชี่ยวชาญ</h3>
+      <div class="form-group">
+        <label>เลือกความเชี่ยวชาญ <span class="hint">(เลือกได้หลายข้อ)</span></label>
+        <div class="checkbox-group">
+          <label class="checkbox-item">
+            <input type="checkbox" name="specialization[]" value="depression">
+            <span>ซึมเศร้า</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="specialization[]" value="anxiety">
+            <span>วิตกกังวล</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="specialization[]" value="stress">
+            <span>ความเครียด</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="specialization[]" value="relationship">
+            <span>ความสัมพันธ์</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="specialization[]" value="trauma">
+            <span>Trauma / PTSD</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="specialization[]" value="child">
+            <span>เด็กและวัยรุ่น</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="specialization[]" value="family">
+            <span>ครอบครัว</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="specialization[]" value="career">
+            <span>Career Counseling</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="specialization[]" value="addiction">
+            <span>การเสพติด</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="specialization[]" value="lgbtq">
+            <span>LGBTQ+</span>
+          </label>
+        </div>
+      </div>
+      
+      <!-- Languages -->
+      <h3 class="form-section-title">🌍 ภาษาที่ให้บริการได้</h3>
+      <div class="form-group">
+        <div class="checkbox-group">
+          <label class="checkbox-item">
+            <input type="checkbox" name="languages[]" value="thai" checked>
+            <span>🇹🇭 ไทย</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="languages[]" value="english">
+            <span>🇬🇧 อังกฤษ</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="languages[]" value="chinese">
+            <span>🇨🇳 จีน</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="languages[]" value="japanese">
+            <span>🇯🇵 ญี่ปุ่น</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="languages[]" value="other">
+            <span>อื่นๆ</span>
+          </label>
+        </div>
+      </div>
+      
+      <!-- Documents Upload -->
+      <h3 class="form-section-title">📎 แนบเอกสาร</h3>
+      <div class="file-upload-group">
+        <div class="file-upload-item" onclick="document.getElementById('file-resume').click()" id="upload-resume">
+          <div class="icon">📄</div>
+          <div class="label">Resume / CV <span style="color:#ef4444;">*</span></div>
+          <div class="hint">PDF, DOC, DOCX (ไม่เกิน 5MB)</div>
+          <input type="file" id="file-resume" name="resume" accept=".pdf,.doc,.docx" style="display:none" onchange="updateUpload('resume', this)" required>
+          <div class="file-name" id="name-resume"></div>
+        </div>
+        
+        <div class="file-upload-item" onclick="document.getElementById('file-license').click()" id="upload-license">
+          <div class="icon">📜</div>
+          <div class="label">ใบอนุญาตประกอบวิชาชีพ</div>
+          <div class="hint">PDF, JPG, PNG (ไม่เกิน 5MB)</div>
+          <input type="file" id="file-license" name="license_doc" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="updateUpload('license', this)">
+          <div class="file-name" id="name-license"></div>
+        </div>
+        
+        <div class="file-upload-item" onclick="document.getElementById('file-hours').click()" id="upload-hours">
+          <div class="icon">⏰</div>
+          <div class="label">เอกสารสรุปชั่วโมงประสบการณ์ <span style="color:#ef4444;">*</span></div>
+          <div class="hint">ระบุสถานที่ทำงาน และชั่วโมงเฉลี่ย - PDF, DOC (ไม่เกิน 5MB)</div>
+          <input type="file" id="file-hours" name="hours_doc" accept=".pdf,.doc,.docx" style="display:none" onchange="updateUpload('hours', this)" required>
+          <div class="file-name" id="name-hours"></div>
+        </div>
+        
+        <div class="file-upload-item" onclick="document.getElementById('file-lang-cert').click()" id="upload-lang-cert">
+          <div class="icon">🌐</div>
+          <div class="label">ใบรับรองความสามารถทางภาษา</div>
+          <div class="hint">TOEIC, IELTS, HSK ฯลฯ (ถ้ามี)</div>
+          <input type="file" id="file-lang-cert" name="lang_cert" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="updateUpload('lang-cert', this)">
+          <div class="file-name" id="name-lang-cert"></div>
+        </div>
+      </div>
+      
+      <!-- Additional Info -->
+      <h3 class="form-section-title">💬 ข้อมูลเพิ่มเติม</h3>
+      <div class="form-group">
+        <label>ประวัติการทำงานโดยย่อ <span class="hint">(ระบุสถานที่ทำงานและชั่วโมงเฉลี่ยต่อที่)</span></label>
+        <textarea name="work_history" placeholder="เช่น&#10;- โรงพยาบาล ABC (2020-2022) - เฉลี่ย 500 ชม.&#10;- คลินิก XYZ (2022-ปัจจุบัน) - เฉลี่ย 300 ชม."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>ทำไมอยากร่วมงานกับ Mind Fitness?</label>
+        <textarea name="motivation" placeholder="เล่าให้เราฟังหน่อย..."></textarea>
+      </div>
+      
+      <!-- Consent -->
+      <div class="form-group" style="margin-top:32px;">
+        <label class="checkbox-item" style="background:#f0fdf4;border:2px solid #10b981;padding:16px;">
+          <input type="checkbox" name="consent" required>
+          <span>ข้าพเจ้ายินยอมให้ Mind Fitness เก็บและใช้ข้อมูล รวมถึงตรวจสอบประวัติเพื่อการพิจารณาใบสมัคร <span class="required">*</span></span>
+        </label>
+      </div>
+      
+      <button type="submit" class="submit-btn" id="submit-btn">
+        ส่งใบสมัคร →
+      </button>
+      
+      <p class="form-note">
+        หากมีข้อสงสัย ติดต่อ <a href="mailto:hr@mindfitness.co" style="color:#00A8A8;">hr@mindfitness.co</a><br>
+        การพิจารณาใช้เวลา 5-7 วันทำการ
+      </p>
+    </form>
+    
+    <!-- Success Message -->
+    <div class="success-message" id="success-message">
+      <div class="icon">🎉</div>
+      <h3>ส่งใบสมัครเรียบร้อยแล้ว!</h3>
+      <p>
+        ขอบคุณที่สนใจร่วมงานกับ Mind Fitness<br>
+        ทีมงานจะตรวจสอบใบสมัครและติดต่อกลับภายใน <strong>5-7 วันทำการ</strong>
+      </p>
+      <div class="app-id" id="app-id">APP-XXXXXX</div>
+      <p style="font-size:14px;margin-top:0;">
+        กรุณาเก็บรหัสนี้ไว้อ้างอิง
+      </p>
+      <a href="index.html" class="btn-primary" style="display:inline-block;margin-top:24px;text-decoration:none;padding:14px 32px;background:#0B1E47;color:white;border-radius:10px;">กลับหน้าแรก</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer__inner">
+    <div style="text-align:center;padding:30px;">
+      <p style="color:#94a3b8;">© 2025 Mind Fitness | <a href="mailto:hr@mindfitness.co" style="color:#00A8A8;">hr@mindfitness.co</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+function updateUpload(type, input) {
+  const fileName = input.files[0]?.name;
+  const nameEl = document.getElementById('name-' + type);
+  const uploadEl = document.getElementById('upload-' + type);
+  
+  if (fileName) {
+    nameEl.textContent = '✅ ' + fileName;
+    uploadEl.classList.add('uploaded');
+  } else {
+    nameEl.textContent = '';
+    uploadEl.classList.remove('uploaded');
+  }
+}
+
+function toggleLicenseField(position) {
+  const field = document.getElementById('license-field');
+  const input = field.querySelector('input');
+  
+  if (position === 'psychiatrist' || position === 'clinical') {
+    field.style.display = 'block';
+    input.required = true;
+  } else {
+    field.style.display = 'block';
+    input.required = false;
+  }
+}
+
+async function submitApplication(e) {
+  e.preventDefault();
+  
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'กำลังส่ง...';
+  
+  const form = document.getElementById('therapist-application');
+  const formData = new FormData(form);
+  
+  try {
+    const response = await fetch('/payment/api/therapist-apply.php', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      document.getElementById('therapist-application').style.display = 'none';
+      document.querySelector('.form-title').style.display = 'none';
+      document.getElementById('success-message').style.display = 'block';
+      document.getElementById('app-id').textContent = result.application_id || 'APP-XXXXXX';
+      
+      // Scroll to success message
+      document.getElementById('success-message').scrollIntoView({ behavior: 'smooth' });
+    } else {
+      alert(result.error || 'เกิดข้อผิดพลาด กรุณาลองใหม่');
+      btn.disabled = false;
+      btn.textContent = 'ส่งใบสมัคร →';
+    }
+  } catch (error) {
+    console.error(error);
+    alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
+    btn.disabled = false;
+    btn.textContent = 'ส่งใบสมัคร →';
+  }
+}
+
+// Mobile nav toggle
+document.getElementById('mobile-nav-toggle')?.addEventListener('click', function() {
+  document.getElementById('primary-nav').classList.toggle('active');
+});
+</script>
+
+<script src="js/i18n.js"></script>
+<script src="js/auto-translate.js"></script>
+</body>
+</html>

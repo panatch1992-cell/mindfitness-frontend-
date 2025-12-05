@@ -1,0 +1,36 @@
+# ============================================
+# Robots.txt
+# MindSpace by MindFitness
+# ============================================
+
+User-agent: *
+
+# Allow main pages
+Allow: /
+Allow: /index.html
+Allow: /about.html
+Allow: /b2b-solutions.html
+Allow: /school-assessment.html
+Allow: /mhl-assessment.html
+Allow: /mindspace/
+
+# Disallow sensitive paths
+Disallow: /payment/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /config/
+Disallow: /logs/
+Disallow: /uploads/
+Disallow: /*.php$
+Disallow: /*.sql$
+Disallow: /*.log$
+Disallow: /*.env$
+
+# Disallow error pages
+Disallow: /error.html
+
+# Sitemap (optional - create this file later)
+# Sitemap: https://www.mindfitness.co/sitemap.xml
+
+# Crawl delay (be nice to the server)
+Crawl-delay: 1

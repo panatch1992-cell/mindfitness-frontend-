@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mind Fitness - Demo สำหรับโรงเรียน/องค์กร</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Prompt', sans-serif; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function MindFitnessDemo() {
+      const [activeSection, setActiveSection] = useState('overview');
+      const [demoType, setDemoType] = useState('school');
+      const [chatMessages, setChatMessages] = useState([]);
+      const [chatInput, setChatInput] = useState('');
+      const [isTyping, setIsTyping] = useState(false);
+      const [assessmentStep, setAssessmentStep] = useState(0);
+
+      const demoData = {
+        school: { name: 'โรงเรียนสาธิตมหาวิทยาลัย', total: 1250, assessed: 847, high: 23, medium: 156, low: 668, avgScore: 128.5, concerns: ['ความเครียดจากการเรียน', 'ปัญหาครอบครัว', 'ความกังวลอนาคต'], trend: '+12%' },
+        org: { name: 'บริษัท ABC จำกัด (มหาชน)', total: 450, assessed: 312, high: 8, medium: 67, low: 237, avgScore: 142.3, concerns: ['Work-life balance', 'Burnout', 'ความสัมพันธ์ในทีม'], trend: '+8%' }
+      };
+
+      const data = demoData[demoType];
+
+      const mhlQuestions = [
+        { q: 'ในช่วง 2 สัปดาห์ที่ผ่านมา คุณรู้สึกหดหู่ เศร้า หรือหมดหวังบ่อยแค่ไหน?', options: ['ไม่เลย', 'บางวัน', 'มากกว่าครึ่ง', 'เกือบทุกวัน'] },
+        { q: 'คุณรู้สึกเหนื่อยล้าหรือไม่มีพลังงานบ่อยแค่ไหน?', options: ['ไม่เลย', 'บางวัน', 'มากกว่าครึ่ง', 'เกือบทุกวัน'] },
+        { q: 'คุณมีปัญหาในการนอนหลับหรือนอนมากเกินไปบ่อยแค่ไหน?', options: ['ไม่เลย', 'บางวัน', 'มากกว่าครึ่ง', 'เกือบทุกวัน'] }
+      ];
+
+      const ventPosts = [
+        { id: 1, emotion: '😰', text: 'งานเยอะมาก ไม่รู้จะจัดการยังไงดี...', time: '5 นาทีที่แล้ว', reactions: { heart: 12, hug: 8, strength: 15 } },
+        { id: 2, emotion: '😢', text: 'รู้สึกโดดเดี่ยว ไม่มีใครเข้าใจ', time: '12 นาทีที่แล้ว', reactions: { heart: 24, hug: 18, strength: 9 } },
+        { id: 3, emotion: '😤', text: 'เบื่อที่ต้องทำทุกอย่างคนเดียว', time: '28 นาทีที่แล้ว', reactions: { heart: 7, hug: 5, strength: 11 } }
+      ];
+
+      const handleSendMessage = () => {
+        if (!chatInput.trim()) return;
+        setChatMessages(prev => [...prev, { role: 'user', text: chatInput }]);
+        setChatInput('');
+        setIsTyping(true);
+        setTimeout(() => {
+          const responses = ['เข้าใจนะ ฟังดูเหนื่อยจริงๆ 💙 อยากเล่าเพิ่มไหม?', 'ยากจริงๆ เนอะ... รู้สึกแบบนี้มานานแค่ไหนแล้ว?', 'ขอบคุณที่ไว้วางใจเล่าให้ฟังนะ คุณไม่ได้อยู่คนเดียว 🫂', 'อืม... แบบนี้เหรอ มันหนักใจจริงๆ นะ'];
+          setChatMessages(prev => [...prev, { role: 'bot', text: responses[Math.floor(Math.random() * responses.length)] }]);
+          setIsTyping(false);
+        }, 1500);
+      };
+
+      const sections = [
+        { id: 'overview', icon: '🏠', label: 'ภาพรวม' },
+        { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+        { id: 'assessment', icon: '📋', label: 'MHL Assessment' },
+        { id: 'mindbot', icon: '🤖', label: 'MindBot AI' },
+        { id: 'vent', icon: '💭', label: 'Vent Wall' },
+        { id: 'toolkit', icon: '🧰', label: 'Toolkit' },
+        { id: 'pricing', icon: '💎', label: 'แพ็คเกจ' }
+      ];
+
+      const btnStyle = (active) => ({
+        display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 14px', borderRadius: '10px', border: 'none',
+        background: active ? 'rgba(228,170,58,0.2)' : 'transparent', color: active ? '#E4AA3A' : 'rgba(255,255,255,0.7)',
+        cursor: 'pointer', fontSize: '14px', fontWeight: active ? 600 : 400, textAlign: 'left', transition: 'all 0.2s', width: '100%'
+      });
+
+      return (
+        <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0B1E47 0%, #1a3a6e 50%, #0B1E47 100%)', fontFamily: 'Prompt, sans-serif', color: 'white', overflow: 'hidden' }}>
+          {/* Header */}
+          <header style={{ padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', position: 'sticky', top: 0, zIndex: 100 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #E4AA3A, #f5c842)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>🧠</div>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: '18px' }}>Mind Fitness</div>
+                <div style={{ fontSize: '11px', opacity: 0.7 }}>Mental Health Ecosystem</div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', background: 'rgba(255,255,255,0.1)', borderRadius: '25px', padding: '4px' }}>
+              <button onClick={() => setDemoType('school')} style={{ padding: '8px 16px', borderRadius: '20px', border: 'none', background: demoType === 'school' ? '#E4AA3A' : 'transparent', color: demoType === 'school' ? '#0B1E47' : 'white', cursor: 'pointer', fontWeight: 600, fontSize: '13px' }}>🏫 โรงเรียน</button>
+              <button onClick={() => setDemoType('org')} style={{ padding: '8px 16px', borderRadius: '20px', border: 'none', background: demoType === 'org' ? '#E4AA3A' : 'transparent', color: demoType === 'org' ? '#0B1E47' : 'white', cursor: 'pointer', fontWeight: 600, fontSize: '13px' }}>🏢 องค์กร</button>
+            </div>
+          </header>
+
+          <div style={{ display: 'flex', height: 'calc(100vh - 73px)' }}>
+            {/* Sidebar */}
+            <nav style={{ width: '200px', padding: '20px 12px', borderRight: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {sections.map(sec => (
+                <button key={sec.id} onClick={() => setActiveSection(sec.id)} style={btnStyle(activeSection === sec.id)}>
+                  <span style={{ fontSize: '18px' }}>{sec.icon}</span>{sec.label}
+                </button>
+              ))}
+            </nav>
+
+            {/* Main */}
+            <main style={{ flex: 1, padding: '24px', overflowY: 'auto', animation: 'fadeIn 0.4s ease' }}>
+              
+              {/* Overview */}
+              {activeSection === 'overview' && (
+                <div>
+                  <h1 style={{ fontSize: '28px', marginBottom: '8px' }}>🌟 Mind Fitness Ecosystem</h1>
+                  <p style={{ opacity: 0.8, marginBottom: '32px' }}>ระบบดูแลสุขภาพจิตแบบครบวงจรสำหรับ{demoType === 'school' ? 'สถานศึกษา' : 'องค์กร'}</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
+                    {[{ icon: '📋', label: 'MHL Assessment', desc: 'แบบประเมิน 35 ข้อ', color: '#3b82f6' }, { icon: '🤖', label: 'MindBot AI', desc: 'ที่ปรึกษา 24/7', color: '#10b981' }, { icon: '💭', label: 'Vent Wall', desc: 'พื้นที่ระบาย', color: '#8b5cf6' }, { icon: '📊', label: 'Dashboard', desc: 'รายงานภาพรวม', color: '#f59e0b' }].map((item, i) => (
+                      <div key={i} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', transition: 'transform 0.3s' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                        <div style={{ fontSize: '32px', marginBottom: '12px' }}>{item.icon}</div>
+                        <div style={{ fontWeight: 600, marginBottom: '4px' }}>{item.label}</div>
+                        <div style={{ fontSize: '13px', opacity: 0.7 }}>{item.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '16px', padding: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                    <h3 style={{ marginBottom: '16px' }}>✨ ความสามารถหลัก</h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+                      {['✅ แบบประเมินสุขภาพจิต MHL-35 มาตรฐาน', '✅ AI Chatbot รองรับ 3 ภาษา (TH/EN/CN)', '✅ ระบบแจ้งเตือนความเสี่ยงอัตโนมัติ', '✅ Dashboard สำหรับผู้บริหาร Real-time', '✅ Vent Wall พื้นที่ระบายแบบ Anonymous', '✅ Wellness Toolkit 20+ เครื่องมือ', '✅ รายงาน PDF ส่งออกได้', '✅ รองรับ PDPA ครบถ้วน'].map((feat, i) => <div key={i} style={{ fontSize: '14px', opacity: 0.9 }}>{feat}</div>)}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Dashboard */}
+              {activeSection === 'dashboard' && (
+                <div>
+                  <h2 style={{ marginBottom: '24px' }}>📊 Dashboard - {data.name}</h2>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
+                    <div style={{ background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', borderRadius: '16px', padding: '20px' }}>
+                      <div style={{ fontSize: '13px', opacity: 0.8 }}>👥 {demoType === 'school' ? 'นักเรียนทั้งหมด' : 'พนักงานทั้งหมด'}</div>
+                      <div style={{ fontSize: '32px', fontWeight: 700 }}>{data.total.toLocaleString()}</div>
+                    </div>
+                    <div style={{ background: 'linear-gradient(135deg, #10b981, #059669)', borderRadius: '16px', padding: '20px' }}>
+                      <div style={{ fontSize: '13px', opacity: 0.8 }}>📋 ทำแบบประเมินแล้ว</div>
+                      <div style={{ fontSize: '32px', fontWeight: 700 }}>{data.assessed}</div>
+                      <div style={{ fontSize: '12px', opacity: 0.7 }}>{Math.round(data.assessed/data.total*100)}%</div>
+                    </div>
+                    <div style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', borderRadius: '16px', padding: '20px' }}>
+                      <div style={{ fontSize: '13px', opacity: 0.8 }}>📈 คะแนนเฉลี่ย</div>
+                      <div style={{ fontSize: '32px', fontWeight: 700 }}>{data.avgScore}</div>
+                      <div style={{ fontSize: '12px', opacity: 0.7 }}>จาก 175 คะแนน</div>
+                    </div>
+                    <div style={{ background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', borderRadius: '16px', padding: '20px' }}>
+                      <div style={{ fontSize: '13px', opacity: 0.8 }}>📊 แนวโน้ม</div>
+                      <div style={{ fontSize: '32px', fontWeight: 700 }}>{data.trend}</div>
+                      <div style={{ fontSize: '12px', opacity: 0.7 }}>ดีขึ้นจากเดือนก่อน</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '16px', padding: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                      <h3 style={{ marginBottom: '20px' }}>🎯 การกระจายความเสี่ยง</h3>
+                      {[{ label: '🟢 ความเสี่ยงต่ำ', value: data.low, color: '#10b981' }, { label: '🟡 ความเสี่ยงปานกลาง', value: data.medium, color: '#f59e0b' }, { label: '🔴 ความเสี่ยงสูง', value: data.high, color: '#ef4444' }].map((item, i) => (
+                        <div key={i} style={{ marginBottom: '12px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}><span>{item.label}</span><span style={{ fontWeight: 600 }}>{item.value} คน</span></div>
+                          <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                            <div style={{ width: `${item.value/data.assessed*100}%`, height: '100%', background: item.color, borderRadius: '4px' }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '16px', padding: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                      <h3 style={{ marginBottom: '20px' }}>🔥 ปัญหาที่พบบ่อย</h3>
+                      {data.concerns.map((concern, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', marginBottom: '8px' }}>
+                          <span style={{ width: '28px', height: '28px', background: ['#ef4444', '#f59e0b', '#3b82f6'][i], borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '14px' }}>{i + 1}</span>
+                          <span>{concern}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Assessment */}
+              {activeSection === 'assessment' && (
+                <div>
+                  <h2 style={{ marginBottom: '8px' }}>📋 MHL Assessment</h2>
+                  <p style={{ opacity: 0.7, marginBottom: '24px' }}>แบบประเมินสุขภาพจิต 35 ข้อ (Demo: 3 ข้อ)</p>
+                  <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '20px', padding: '32px', border: '1px solid rgba(255,255,255,0.1)', maxWidth: '600px' }}>
+                    {assessmentStep < mhlQuestions.length ? (
+                      <>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
+                          <span style={{ opacity: 0.7 }}>ข้อที่ {assessmentStep + 1} / {mhlQuestions.length}</span>
+                          <span style={{ color: '#E4AA3A' }}>{Math.round((assessmentStep / mhlQuestions.length) * 100)}%</span>
+                        </div>
+                        <div style={{ height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', marginBottom: '32px' }}>
+                          <div style={{ width: `${(assessmentStep / mhlQuestions.length) * 100}%`, height: '100%', background: '#E4AA3A', borderRadius: '2px', transition: 'width 0.3s' }} />
+                        </div>
+                        <h3 style={{ fontSize: '18px', marginBottom: '24px', lineHeight: 1.6 }}>{mhlQuestions[assessmentStep].q}</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                          {mhlQuestions[assessmentStep].options.map((opt, i) => (
+                            <button key={i} onClick={() => setAssessmentStep(prev => prev + 1)} style={{ padding: '16px 20px', borderRadius: '12px', border: '2px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.05)', color: 'white', cursor: 'pointer', fontSize: '15px', textAlign: 'left', transition: 'all 0.2s' }} onMouseEnter={e => { e.currentTarget.style.borderColor = '#E4AA3A'; e.currentTarget.style.background = 'rgba(228,170,58,0.1)'; }} onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}>{opt}</button>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <div style={{ textAlign: 'center', padding: '20px' }}>
+                        <div style={{ fontSize: '64px', marginBottom: '16px' }}>🎉</div>
+                        <h3 style={{ marginBottom: '12px' }}>ทำแบบประเมินเสร็จสิ้น!</h3>
+                        <p style={{ opacity: 0.7, marginBottom: '24px' }}>ระบบจะวิเคราะห์และแสดงผลทันที</p>
+                        <div style={{ background: 'linear-gradient(135deg, #10b981, #059669)', borderRadius: '12px', padding: '20px', marginBottom: '20px' }}>
+                          <div style={{ fontSize: '14px', opacity: 0.8 }}>ผลประเมิน</div>
+                          <div style={{ fontSize: '28px', fontWeight: 700 }}>สุขภาพจิตดี 💚</div>
+                          <div style={{ fontSize: '13px', marginTop: '8px' }}>คะแนน: 142/175</div>
+                        </div>
+                        <button onClick={() => setAssessmentStep(0)} style={{ padding: '12px 24px', borderRadius: '10px', border: 'none', background: '#E4AA3A', color: '#0B1E47', cursor: 'pointer', fontWeight: 600 }}>ทำใหม่อีกครั้ง</button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* MindBot */}
+              {activeSection === 'mindbot' && (
+                <div>
+                  <h2 style={{ marginBottom: '8px' }}>🤖 MindBot AI</h2>
+                  <p style={{ opacity: 0.7, marginBottom: '24px' }}>ที่ปรึกษาสุขภาพจิต AI รองรับ 3 ภาษา</p>
+                  <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)', maxWidth: '500px', height: '500px', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, #E4AA3A, #f5c842)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🤖</div>
+                      <div><div style={{ fontWeight: 600 }}>น้องมายด์</div><div style={{ fontSize: '12px', color: '#10b981' }}>● ออนไลน์</div></div>
+                    </div>
+                    <div style={{ flex: 1, padding: '16px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      {chatMessages.length === 0 && <div style={{ textAlign: 'center', padding: '40px 20px', opacity: 0.6 }}><div style={{ fontSize: '40px', marginBottom: '12px' }}>💬</div><p>สวัสดีค่ะ! เราคือน้องมายด์ 💙</p><p style={{ fontSize: '14px' }}>พร้อมรับฟังและให้กำลังใจคุณเสมอ</p></div>}
+                      {chatMessages.map((msg, i) => <div key={i} style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '80%', padding: '12px 16px', borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px', background: msg.role === 'user' ? '#E4AA3A' : 'rgba(255,255,255,0.1)', color: msg.role === 'user' ? '#0B1E47' : 'white' }}>{msg.text}</div>)}
+                      {isTyping && <div style={{ alignSelf: 'flex-start', padding: '12px 16px', borderRadius: '16px 16px 16px 4px', background: 'rgba(255,255,255,0.1)' }}><span style={{ animation: 'pulse 1s infinite' }}>กำลังพิมพ์...</span></div>}
+                    </div>
+                    <div style={{ padding: '16px', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', gap: '12px' }}>
+                      <input type="text" value={chatInput} onChange={e => setChatInput(e.target.value)} onKeyPress={e => e.key === 'Enter' && handleSendMessage()} placeholder="พิมพ์ข้อความ..." style={{ flex: 1, padding: '12px 16px', borderRadius: '25px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.05)', color: 'white', outline: 'none', fontFamily: 'Prompt' }} />
+                      <button onClick={handleSendMessage} style={{ width: '44px', height: '44px', borderRadius: '50%', border: 'none', background: '#E4AA3A', color: '#0B1E47', cursor: 'pointer', fontSize: '18px' }}>➤</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Vent Wall */}
+              {activeSection === 'vent' && (
+                <div>
+                  <h2 style={{ marginBottom: '8px' }}>💭 Vent Wall</h2>
+                  <p style={{ opacity: 0.7, marginBottom: '24px' }}>พื้นที่ระบายความรู้สึกแบบไม่ระบุตัวตน</p>
+                  <div style={{ maxWidth: '500px' }}>
+                    {ventPosts.map(post => (
+                      <div key={post.id} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', marginBottom: '16px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+                          <span style={{ background: 'rgba(255,255,255,0.1)', padding: '4px 12px', borderRadius: '20px', fontSize: '14px' }}>{post.emotion} ไม่ระบุตัวตน</span>
+                          <span style={{ opacity: 0.6, fontSize: '13px' }}>{post.time}</span>
+                        </div>
+                        <p style={{ lineHeight: 1.6, marginBottom: '16px' }}>{post.text}</p>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          {Object.entries(post.reactions).map(([type, count]) => (
+                            <button key={type} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'white', cursor: 'pointer', fontSize: '13px' }}>
+                              {type === 'heart' ? '❤️' : type === 'hug' ? '🤗' : '💪'} {count}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Toolkit */}
+              {activeSection === 'toolkit' && (
+                <div>
+                  <h2 style={{ marginBottom: '8px' }}>🧰 Wellness Toolkit</h2>
+                  <p style={{ opacity: 0.7, marginBottom: '24px' }}>เครื่องมือดูแลสุขภาพจิตด้วยตัวเอง</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+                    {[{ icon: '🌬️', name: 'การหายใจ 4-7-8', desc: 'ลดความเครียดทันที', color: '#3b82f6' }, { icon: '🧘', name: 'Body Scan', desc: 'ผ่อนคลายกล้ามเนื้อ', color: '#10b981' }, { icon: '📝', name: 'Gratitude Journal', desc: 'บันทึกความขอบคุณ', color: '#f59e0b' }, { icon: '🎯', name: 'Grounding 5-4-3-2-1', desc: 'กลับสู่ปัจจุบัน', color: '#8b5cf6' }, { icon: '💭', name: 'Cognitive Reframe', desc: 'เปลี่ยนมุมมอง', color: '#ec4899' }, { icon: '🌙', name: 'Sleep Hygiene', desc: 'นอนหลับดีขึ้น', color: '#6366f1' }].map((tool, i) => (
+                      <div key={i} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', transition: 'all 0.3s' }} onMouseEnter={e => { e.currentTarget.style.borderColor = tool.color; e.currentTarget.style.transform = 'translateY(-4px)'; }} onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.transform = 'translateY(0)'; }}>
+                        <div style={{ fontSize: '32px', marginBottom: '12px' }}>{tool.icon}</div>
+                        <div style={{ fontWeight: 600, marginBottom: '4px' }}>{tool.name}</div>
+                        <div style={{ fontSize: '13px', opacity: 0.7 }}>{tool.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Pricing */}
+              {activeSection === 'pricing' && (
+                <div>
+                  <h2 style={{ marginBottom: '8px' }}>💎 แพ็คเกจ</h2>
+                  <p style={{ opacity: 0.7, marginBottom: '32px' }}>เลือกแพ็คเกจที่เหมาะกับองค์กรของคุณ</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+                    {[{ name: 'Starter', price: '9,900', period: '/เดือน', features: ['รองรับ 100 คน', 'MHL Assessment', 'MindBot AI (Basic)', 'Dashboard พื้นฐาน'], color: '#64748b', popular: false }, { name: 'Professional', price: '24,900', period: '/เดือน', features: ['รองรับ 500 คน', 'MHL Assessment', 'MindBot AI (Premium)', 'Dashboard + Reports', 'Vent Wall', 'Toolkit ครบชุด', 'Workshop Design'], color: '#E4AA3A', popular: true }, { name: 'Enterprise', price: 'ติดต่อ', period: 'เพื่อรับใบเสนอราคา', features: ['รองรับไม่จำกัด', 'ทุกฟีเจอร์', 'API Integration', 'Dedicated Support', 'Custom Branding', 'On-site Training'], color: '#8b5cf6', popular: false }].map((pkg, i) => (
+                      <div key={i} style={{ background: pkg.popular ? 'linear-gradient(135deg, rgba(228,170,58,0.2), rgba(228,170,58,0.05))' : 'rgba(255,255,255,0.05)', borderRadius: '20px', padding: '28px', border: `2px solid ${pkg.popular ? '#E4AA3A' : 'rgba(255,255,255,0.1)'}`, position: 'relative', transform: pkg.popular ? 'scale(1.05)' : 'scale(1)' }}>
+                        {pkg.popular && <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: '#E4AA3A', color: '#0B1E47', padding: '4px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: 700 }}>🔥 แนะนำ</div>}
+                        <h3 style={{ fontSize: '20px', marginBottom: '8px' }}>{pkg.name}</h3>
+                        <div style={{ marginBottom: '20px' }}><span style={{ fontSize: '36px', fontWeight: 700 }}>฿{pkg.price}</span><span style={{ opacity: 0.7 }}>{pkg.period}</span></div>
+                        <ul style={{ listStyle: 'none', padding: 0, marginBottom: '24px' }}>{pkg.features.map((f, j) => <li key={j} style={{ padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.1)', fontSize: '14px' }}>✓ {f}</li>)}</ul>
+                        <button style={{ width: '100%', padding: '14px', borderRadius: '10px', border: 'none', background: pkg.popular ? '#E4AA3A' : 'rgba(255,255,255,0.1)', color: pkg.popular ? '#0B1E47' : 'white', cursor: 'pointer', fontWeight: 600, fontSize: '15px' }}>เลือกแพ็คเกจนี้</button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            </main>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<MindFitnessDemo />);
+  </script>
+</body>
+</html>

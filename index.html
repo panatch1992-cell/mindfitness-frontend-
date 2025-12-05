@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mind Fitness - Mental Health Ecosystem</title>
+  <meta name="description" content="Mind Fitness - ระบบนิเวศสุขภาพจิตครบวงจร AI Chat, Assessment, Psychoeducation และ Self-Care Tools สำหรับโรงเรียนและบุคคลทั่วไป">
+  <meta property="og:title" content="Mind Fitness - Mental Health Ecosystem">
+  <meta property="og:description" content="ระบบนิเวศสุขภาพจิตครบวงจร สำหรับโรงเรียนและบุคคลทั่วไป">
+  <meta property="og:image" content="https://www.mindfitness.co/images/hero.png">
+  <meta property="og:type" content="website">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/mindbot-widget.css">
+  <link rel="icon" href="images/logo.jpg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Sarabun',sans-serif;color:#0B1E47;line-height:1.6}
+
+.site-header{background:white;box-shadow:0 2px 20px rgba(0,0,0,0.06);position:sticky;top:0;z-index:1000}
+.header__inner{max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand__logo{width:44px;height:44px;border-radius:12px}
+.brand__name{font-size:22px;font-weight:800;color:#0B1E47}
+.nav__list{display:flex;gap:32px;list-style:none}
+.nav__link{text-decoration:none;color:#64748b;font-weight:500;transition:all 0.2s}
+.nav__link:hover{color:#00A8A8}
+.nav-toggle{display:none;background:#0B1E47;color:white;border:none;padding:12px 16px;font-size:20px;border-radius:10px;cursor:pointer}
+
+.hero{background:linear-gradient(135deg,#f0fdf4 0%,#ecfeff 50%,#e0f2fe 100%);padding:80px 24px 100px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(0,168,168,0.1) 0%,transparent 70%);border-radius:50%}
+.hero__inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero__content{position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:white;padding:10px 20px;border-radius:50px;font-size:14px;color:#0B1E47;margin-bottom:24px;box-shadow:0 4px 15px rgba(0,0,0,0.08);font-weight:600}
+.hero-badge img{width:24px;height:24px}
+.hero__title{font-size:48px;font-weight:900;line-height:1.2;margin-bottom:20px;color:#0B1E47}
+.hero__title span{color:#00A8A8}
+.hero__subtitle{font-size:20px;color:#64748b;margin-bottom:32px;line-height:1.7}
+.hero-buttons{display:flex;gap:16px;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:16px 32px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;text-decoration:none;border-radius:14px;font-weight:700;font-size:17px;transition:all 0.3s;box-shadow:0 4px 20px rgba(0,168,168,0.3)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,168,168,0.4)}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;padding:16px 32px;background:white;color:#0B1E47;text-decoration:none;border-radius:14px;font-weight:700;font-size:17px;border:2px solid #e2e8f0;transition:all 0.3s}
+.btn-outline:hover{border-color:#00A8A8;color:#00A8A8}
+.hero__media{position:relative;z-index:1}
+.hero__media img{width:100%;max-width:400px;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.1))}
+
+.ecosystem{padding:100px 24px;background:white}
+.ecosystem__header{text-align:center;max-width:700px;margin:0 auto 60px}
+.ecosystem__header h2{font-size:38px;font-weight:800;margin-bottom:16px;color:#0B1E47}
+.ecosystem__header p{font-size:18px;color:#64748b;line-height:1.7}
+
+.ecosystem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto}
+.ecosystem-card{background:#f8fafc;border-radius:24px;padding:36px 28px;text-align:center;transition:all 0.4s;border:2px solid transparent;text-decoration:none;display:block;position:relative;overflow:hidden}
+.ecosystem-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#00A8A8,#0B1E47);transform:scaleX(0);transition:transform 0.3s}
+.ecosystem-card:hover{transform:translateY(-8px);border-color:#00A8A8;box-shadow:0 20px 50px rgba(0,168,168,0.15)}
+.ecosystem-card:hover::before{transform:scaleX(1)}
+.ecosystem-card img{width:100px;height:100px;margin-bottom:20px;transition:transform 0.3s}
+.ecosystem-card:hover img{transform:scale(1.1)}
+.ecosystem-card h3{font-size:20px;color:#0B1E47;margin-bottom:10px;font-weight:700}
+.ecosystem-card p{color:#64748b;font-size:14px;line-height:1.6;margin-bottom:16px}
+.ecosystem-card .tag{display:inline-block;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600}
+.tag-free{background:#d1fae5;color:#047857}
+.tag-premium{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e}
+
+.premium-badge{position:absolute;top:16px;right:16px;background:linear-gradient(135deg,#E4AA3A,#f59e0b);color:white;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:4px}
+
+.cta-banner{background:linear-gradient(135deg,#0B1E47,#1e3a5f);padding:60px 24px;text-align:center}
+.cta-banner h2{color:white;font-size:32px;margin-bottom:16px}
+.cta-banner p{color:rgba(255,255,255,0.8);font-size:18px;margin-bottom:32px}
+.cta-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-gold{display:inline-flex;align-items:center;gap:8px;padding:18px 36px;background:linear-gradient(135deg,#E4AA3A,#f59e0b);color:#0B1E47;text-decoration:none;border-radius:14px;font-weight:800;font-size:18px;transition:all 0.3s;box-shadow:0 4px 20px rgba(228,170,58,0.4)}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(228,170,58,0.5)}
+.btn-white{display:inline-flex;align-items:center;gap:8px;padding:18px 36px;background:white;color:#0B1E47;text-decoration:none;border-radius:14px;font-weight:700;font-size:18px;transition:all 0.3s}
+.btn-white:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(255,255,255,0.3)}
+
+.services{padding:100px 24px;background:#f8fafc}
+.services__header{text-align:center;max-width:600px;margin:0 auto 50px}
+.services__header h2{font-size:36px;font-weight:800;margin-bottom:16px}
+.services__header p{color:#64748b;font-size:18px}
+.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;max-width:900px;margin:0 auto}
+.service-card{background:white;border-radius:24px;padding:40px;transition:all 0.3s;border:2px solid transparent}
+.service-card:hover{border-color:#00A8A8;transform:translateY(-5px);box-shadow:0 15px 40px rgba(0,0,0,0.08)}
+.service-card img{width:80px;height:80px;margin-bottom:24px}
+.service-card h3{font-size:24px;margin-bottom:16px;color:#0B1E47}
+.service-card p{color:#64748b;font-size:16px;line-height:1.7;margin-bottom:24px}
+.service-card a{color:#00A8A8;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:6px;font-size:16px}
+.service-card a:hover{gap:10px}
+
+.site-footer{background:#0B1E47;color:white;padding:50px 24px;text-align:center}
+.site-footer p{opacity:0.8;margin-bottom:10px}
+.footer-links{display:flex;gap:24px;justify-content:center;margin-top:20px}
+.footer-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:14px}
+.footer-links a:hover{color:#00A8A8}
+
+@media(max-width:768px){
+  .nav-toggle{display:block}
+  .nav{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:white;z-index:9999;padding:80px 20px}
+  .nav.active{display:flex;flex-direction:column}
+  .nav__list{flex-direction:column;gap:0}
+  .nav__link{display:block;padding:18px 20px;font-size:18px;border-bottom:1px solid #f0f0f0}
+  .hero__inner{grid-template-columns:1fr;text-align:center}
+  .hero__title{font-size:32px}
+  .hero-buttons{justify-content:center}
+  .hero__media{order:-1}
+  .hero__media img{max-width:280px}
+  .ecosystem-grid{grid-template-columns:1fr}
+  .services-grid{grid-template-columns:1fr}
+  .cta-buttons{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header__inner">
+    <a class="brand" href="index.html">
+      <img src="images/logo.jpg" alt="Mind Fitness" class="brand__logo">
+      <span class="brand__name">Mind Fitness</span>
+    </a>
+    <button class="nav-toggle" id="mobile-nav-toggle">&#9776;</button>
+    <nav id="primary-nav" class="nav">
+      <ul class="nav__list">
+        <li><a href="index.html" class="nav__link">หน้าแรก</a></li>
+        <li><a href="school.html" class="nav__link">โรงเรียน</a></li>
+        <li><a href="mindspace/index.html" class="nav__link">MindSpace</a></li>
+        <li><a href="mhl-assessment.html" class="nav__link">ประเมิน MHL</a></li>
+        <li><a href="subscription.html" class="nav__link" style="background:linear-gradient(135deg,#E4AA3A,#f59e0b);color:#0B1E47;padding:12px 24px;border-radius:10px;font-weight:700">สมัครสมาชิก</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__content">
+      <div class="hero-badge">
+        <img src="images/mind-mascot/mind-happy.svg" alt="">
+        Mental Health Ecosystem
+      </div>
+      <h1 class="hero__title">ดูแลสุขภาพจิต<br><span>ครบวงจร</span> ในที่เดียว</h1>
+      <p class="hero__subtitle">ระบบนิเวศสุขภาพจิตที่รวม AI Chat, Assessment, Psychoeducation และ Self-Care Tools สำหรับโรงเรียนและบุคคลทั่วไป</p>
+      <div class="hero-buttons">
+        <a href="mhl-assessment.html" class="btn-primary">
+          เริ่มประเมิน MHL-35
+        </a>
+        <a href="mindspace/index.html" class="btn-outline">
+          เข้าสู่ MindSpace
+        </a>
+      </div>
+    </div>
+    <div class="hero__media">
+      <img src="images/mind-mascot/mind-happy.svg" alt="น้องมายด์">
+    </div>
+  </div>
+</section>
+
+<section class="ecosystem">
+  <div class="ecosystem__header">
+    <h2>MindSpace Ecosystem</h2>
+    <p>เครื่องมือดูแลสุขภาพจิตครบวงจร ออกแบบมาเพื่อคนไทยโดยเฉพาะ</p>
+  </div>
+  
+  <div class="ecosystem-grid">
+    <a href="mindspace/mindbot.html" class="ecosystem-card">
+      <img src="images/mind-mascot/mind-support.svg" alt="น้องมายด์ AI">
+      <h3>น้องมายด์ AI</h3>
+      <p>พูดคุยกับ AI ที่พร้อมรับฟัง 24 ชม. พร้อมระบบ Crisis Detection</p>
+      <span class="tag tag-free">ฟรี</span>
+    </a>
+    
+    <a href="mindspace/vent-wall.html" class="ecosystem-card">
+      <img src="images/mind-mascot/mind-vent.svg" alt="Vent Wall">
+      <h3>Vent Wall</h3>
+      <p>ระบายความรู้สึกแบบ Anonymous รับกำลังใจจากชุมชน</p>
+      <span class="tag tag-free">ฟรี</span>
+    </a>
+    
+    <a href="mhl-assessment.html" class="ecosystem-card">
+      <img src="images/mind-mascot/mind-thinking.svg" alt="MHL Assessment">
+      <h3>ประเมิน MHL-35</h3>
+      <p>ประเมินความรอบรู้ด้านสุขภาพจิต รับ Action Plan ส่วนบุคคล</p>
+      <span class="tag tag-free">ฟรี</span>
+    </a>
+    
+    <a href="mindspace/psychoeducation.html" class="ecosystem-card">
+      <span class="premium-badge">Premium</span>
+      <img src="images/mind-mascot/mind-reading.svg" alt="Psychoeducation">
+      <h3>Psychoeducation</h3>
+      <p>เรียนรู้เกี่ยวกับสุขภาพจิตและโรคทางจิตเวช จากแหล่งข้อมูลที่น่าเชื่อถือ</p>
+      <span class="tag tag-premium">สมาชิกเท่านั้น</span>
+    </a>
+    
+    <a href="mindspace/self-care-tools.html" class="ecosystem-card">
+      <span class="premium-badge">Premium</span>
+      <img src="images/mind-mascot/mind-calm.svg" alt="Self-Care Tools">
+      <h3>Self-Care Tools</h3>
+      <p>เครื่องมือดูแลใจจาก SRTF Framework: Breathing, Grounding, Journaling</p>
+      <span class="tag tag-premium">สมาชิกเท่านั้น</span>
+    </a>
+    
+    <a href="mindspace/dashboard.html" class="ecosystem-card">
+      <img src="images/mind-mascot/mind-dashboard.svg" alt="Dashboard">
+      <h3>Dashboard</h3>
+      <p>ติดตามสุขภาพจิตของคุณ ดูประวัติและแนวโน้ม</p>
+      <span class="tag tag-free">ฟรี</span>
+    </a>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <h2>ปลดล็อก Premium Features</h2>
+  <p>เข้าถึง Psychoeducation Library และ Self-Care Tools ทั้งหมด</p>
+  <div class="cta-buttons">
+    <a href="subscription.html" class="btn-gold">
+      สมัครสมาชิก เริ่มต้น 199 บาท
+    </a>
+    <a href="mindspace/index.html" class="btn-white">
+      ทดลองใช้ฟรีก่อน
+    </a>
+  </div>
+</section>
+
+<section class="services">
+  <div class="services__header">
+    <h2>บริการของเรา</h2>
+    <p>โซลูชันสุขภาพจิตสำหรับทุกกลุ่มเป้าหมาย</p>
+  </div>
+  
+  <div class="services-grid">
+    <div class="service-card">
+      <img src="images/mind-mascot/mind-student.svg" alt="โรงเรียน">
+      <h3>สำหรับโรงเรียน</h3>
+      <p>ระบบดูแลสุขภาพจิตนักเรียนครบวงจร พร้อม Dashboard สำหรับครู, Crisis Alert, Private Chat และ MHL Assessment รายบุคคล</p>
+      <a href="school.html">ดูรายละเอียด →</a>
+    </div>
+    
+    <div class="service-card">
+      <img src="images/mind-mascot/mind-happy.svg" alt="บุคคลทั่วไป">
+      <h3>สำหรับบุคคลทั่วไป</h3>
+      <p>เข้าถึงเครื่องมือดูแลใจได้ทุกที่ทุกเวลา ประเมิน MHL-35 ฟรี และสมัครสมาชิกเพื่อปลดล็อก Premium Features ทั้งหมด</p>
+      <a href="subscription.html">สมัครสมาชิก →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <p>© 2025 Mind Fitness | Mental Health Ecosystem</p>
+  <p style="opacity:0.6;">สายด่วนสุขภาพจิต 1323 (24 ชั่วโมง)</p>
+  <div class="footer-links">
+    <a href="index.html">หน้าแรก</a>
+    <a href="school.html">โรงเรียน</a>
+    <a href="mindspace/index.html">MindSpace</a>
+    <a href="subscription.html">สมัครสมาชิก</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('mobile-nav-toggle').addEventListener('click', function() {
+  document.getElementById('primary-nav').classList.toggle('active');
+  this.textContent = this.textContent === '\u2630' ? '\u2715' : '\u2630';
+});
+</script>
+
+<script src="js/mindbot.js"></script>
+<script src="js/mindbot-widget.js"></script>
+</body>
+</html>

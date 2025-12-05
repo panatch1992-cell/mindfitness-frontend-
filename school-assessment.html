@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ประเมินโรงเรียน SMHQA - Mind Fitness</title>
+  <meta name="description" content="School Mental Health Quality Assessment - ประเมินคุณภาพระบบสุขภาพจิตโรงเรียน 7 ด้าน">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/mindbot-widget.css">
+  <link rel="icon" href="images/logo.jpg">
+  <link rel="stylesheet" href="css/mobile-fix.css">
+<style>
+@media(max-width:768px){
+  .nav-toggle{display:block!important;background:#0B1E47!important;color:#fff!important;border:none!important;padding:12px 16px!important;font-size:24px!important;border-radius:10px!important;cursor:pointer!important;z-index:10000!important}
+  #primary-nav,.nav{display:none!important;position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;background:#fff!important;z-index:9999!important;padding:80px 20px 20px!important;flex-direction:column!important;overflow-y:auto!important}
+  #primary-nav.active,.nav.active{display:flex!important}
+  .nav__list{flex-direction:column!important;width:100%!important;gap:0!important;list-style:none!important;margin:0!important;padding:0!important}
+  .nav__link{display:block!important;padding:18px 20px!important;font-size:18px!important;border-bottom:1px solid #f0f0f0!important;color:#0B1E47!important;text-decoration:none!important}
+  .grid--2,.grid--3,.grid--4{display:block!important}
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header__inner">
+    <a class="brand" href="index.html">
+      <img src="images/logo.jpg" alt="Mind Fitness" class="brand__logo">
+      <span class="brand__name">Mind Fitness</span>
+    </a>
+    <button class="nav-toggle" id="mobile-nav-toggle" aria-expanded="false">☰</button>
+    <nav id="primary-nav" class="nav">
+      <ul class="nav__list">
+        <li><a href="index.html" class="nav__link" data-i18n="nav_home">หน้าแรก</a></li>
+        <li><a href="b2b-solutions.html" class="nav__link" data-i18n="nav_solutions">โซลูชัน</a></li>
+        <li><a href="school-assessment.html" class="nav__link active" data-i18n="nav_school">โรงเรียน</a></li>
+        <li><a href="mhl-assessment.html" class="nav__link" data-i18n="nav_mhl">ประเมิน MHL</a></li>
+        <li><a href="mindspace/index.html" class="nav__link" data-i18n="nav_mindspace">MindSpace</a></li>
+        <li><a href="about.html" class="nav__link" data-i18n="nav_about">เกี่ยวกับเรา</a></li>
+      </ul>
+      <div id="lang-switcher-placeholder"></div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" style="padding: 40px 0;">
+    <div class="container" style="text-align: center;">
+      <span class="tag" data-i18n="school_tag">🏫 School Mental Health</span>
+      <h1 class="hero__title" style="font-size: 36px;" data-i18n="school_title">School Mental Health Quality Assessment</h1>
+      <p class="hero__subtitle">
+        <span data-i18n="school_subtitle">ประเมินคุณภาพระบบสุขภาพจิตโรงเรียนตามมาตรฐาน NCSMH</span><br>
+        <span data-i18n="school_7domains">7 ด้าน 57 ข้อคำถาม</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 20px;">
+    <div class="container">
+      <div class="card" style="max-width: 900px; margin: 0 auto 40px;">
+        <h2 style="color: #0B1E47; margin-bottom: 20px; text-align: center;" data-i18n="school_domains_title">📊 7 ด้านของการประเมิน</h2>
+        <div class="grid--4" style="gap: 16px;">
+          <div style="text-align: center; padding: 16px; background: #E9F1FF; border-radius: 12px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">👥</div>
+            <strong data-i18n="domain_teaming">Teaming</strong>
+            <p style="font-size: 12px; color: #556070;">11 <span data-i18n="school_questions">ข้อ</span></p>
+          </div>
+          <div style="text-align: center; padding: 16px; background: #E9F1FF; border-radius: 12px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">📊</div>
+            <strong data-i18n="domain_needs">Needs Assessment</strong>
+            <p style="font-size: 12px; color: #556070;">6 <span data-i18n="school_questions">ข้อ</span></p>
+          </div>
+          <div style="text-align: center; padding: 16px; background: #E9F1FF; border-radius: 12px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">🔍</div>
+            <strong data-i18n="domain_screening">Screening</strong>
+            <p style="font-size: 12px; color: #556070;">6 <span data-i18n="school_questions">ข้อ</span></p>
+          </div>
+          <div style="text-align: center; padding: 16px; background: #E9F1FF; border-radius: 12px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">🌟</div>
+            <strong data-i18n="domain_tier1">Tier 1 Promotion</strong>
+            <p style="font-size: 12px; color: #556070;">16 <span data-i18n="school_questions">ข้อ</span></p>
+          </div>
+          <div style="text-align: center; padding: 16px; background: #E9F1FF; border-radius: 12px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">🤝</div>
+            <strong data-i18n="domain_tier23">Tier 2&3 Intervention</strong>
+            <p style="font-size: 12px; color: #556070;">12 <span data-i18n="school_questions">ข้อ</span></p>
+          </div>
+          <div style="text-align: center; padding: 16px; background: #E9F1FF; border-radius: 12px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">💰</div>
+            <strong data-i18n="domain_funding">Funding</strong>
+            <p style="font-size: 12px; color: #556070;">8 <span data-i18n="school_questions">ข้อ</span></p>
+          </div>
+          <div style="text-align: center; padding: 16px; background: #E9F1FF; border-radius: 12px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">📈</div>
+            <strong data-i18n="domain_impact">Impact</strong>
+            <p style="font-size: 12px; color: #556070;">4 <span data-i18n="school_questions">ข้อ</span></p>
+          </div>
+          <div style="text-align: center; padding: 16px; background: #fef3c7; border-radius: 12px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">📋</div>
+            <strong data-i18n="school_total">รวม</strong>
+            <p style="font-size: 12px; color: #92400e;">57 <span data-i18n="school_questions">ข้อ</span></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="cta-card" class="card" style="max-width: 700px; margin: 0 auto; text-align: center; background: linear-gradient(135deg, #0B1E47, #1a3366); color: white;">
+        <h2 style="margin-bottom: 16px;" data-i18n="school_ready">🏫 พร้อมประเมินโรงเรียนของคุณ?</h2>
+        <p style="opacity: 0.9; margin-bottom: 24px;">
+          <span data-i18n="school_time">แบบประเมิน SMHQA ใช้เวลาประมาณ 30-45 นาที</span><br>
+          <span data-i18n="school_autosave">มีระบบ Auto-save ไม่หายแม้ปิดหน้าเว็บ</span>
+        </p>
+        <button class="btn-secondary btn-lg" onclick="startAssessment()" data-i18n="school_start">เริ่มประเมินเลย</button>
+      </div>
+
+      <div id="assessment-container" style="display: none; max-width: 900px; margin: 40px auto 0;"></div>
+
+      <div style="max-width: 800px; margin: 60px auto 0;">
+        <h2 class="section__title" data-i18n="school_about">ℹ️ เกี่ยวกับ SMHQA</h2>
+        <div class="grid--2" style="margin-top: 30px;">
+          <div class="card">
+            <h3 style="color: #0B1E47; margin-bottom: 12px;" data-i18n="school_origin">📖 ที่มา</h3>
+            <p style="color: #556070; line-height: 1.8;" data-i18n="school_origin_desc">School Mental Health Quality Assessment (SMHQA) พัฒนาโดย National Center for School Mental Health (NCSMH) เป็นเครื่องมือมาตรฐานสำหรับประเมินคุณภาพระบบสุขภาพจิตในโรงเรียน</p>
+          </div>
+          <div class="card">
+            <h3 style="color: #0B1E47; margin-bottom: 12px;" data-i18n="school_purpose">🎯 วัตถุประสงค์</h3>
+            <p style="color: #556070; line-height: 1.8;" data-i18n="school_purpose_desc">ช่วยให้โรงเรียนสามารถประเมินจุดแข็งและจุดที่ต้องพัฒนาของระบบสุขภาพจิต เพื่อวางแผนพัฒนาอย่างเป็นระบบ</p>
+          </div>
+          <div class="card">
+            <h3 style="color: #0B1E47; margin-bottom: 12px;" data-i18n="school_scoring">📊 การให้คะแนน</h3>
+            <p style="color: #556070; line-height: 1.8;" data-i18n="school_scoring_desc">ใช้ Likert Scale 6 ระดับ ตั้งแต่ "ไม่เคย" (1) ถึง "เสมอ" (6) ผลลัพธ์แบ่งเป็น 3 ระดับ: Emerging, Progressing, Mastery</p>
+          </div>
+          <div class="card">
+            <h3 style="color: #0B1E47; margin-bottom: 12px;" data-i18n="school_respondent">👥 ผู้ตอบ</h3>
+            <p style="color: #556070; line-height: 1.8;" data-i18n="school_respondent_desc">ควรให้ทีมสุขภาพจิตของโรงเรียนร่วมกันตอบ เพื่อให้ได้มุมมองที่ครอบคลุม ได้แก่ ครู ผู้บริหาร นักจิตวิทยา</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer__bottom">
+    <p data-i18n="footer_copyright">© 2025 Mind Fitness | สายด่วนสุขภาพจิต 1323</p>
+  </div>
+</footer>
+
+<script src="js/i18n.js"></script>
+<script src="js/site.js"></script>
+<script src="js/mindbot.js"></script>
+<script src="js/mindbot-widget.js"></script>
+<script src="js/school-assessment.js"></script>
+<script src="js/protection.js"></script>
+<script src="js/cookie-consent.js"></script>
+</body>
+</html>

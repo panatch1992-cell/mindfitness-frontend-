@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ไม่พบหน้าที่ต้องการ | Mind Fitness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: linear-gradient(135deg, #0B1E47 0%, #1a3a6e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .error-container {
+            text-align: center;
+            color: white;
+            max-width: 500px;
+        }
+        .error-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .error-code {
+            font-size: 120px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #E4AA3A, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .error-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .error-message {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .error-btn {
+            display: inline-block;
+            background: #E4AA3A;
+            color: #0B1E47;
+            padding: 14px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .error-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(228, 170, 58, 0.3);
+        }
+        .crisis-info {
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+        }
+        .crisis-info p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        .crisis-info a {
+            color: #E4AA3A;
+            font-weight: 600;
+        }
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .lang-btn.active {
+            background: #E4AA3A;
+            color: #0B1E47;
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <button class="lang-btn" data-lang="th" onclick="setLanguage('th')">🇹🇭 TH</button>
+        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">🇬🇧 EN</button>
+        <button class="lang-btn" data-lang="cn" onclick="setLanguage('cn')">🇨🇳 CN</button>
+    </div>
+
+    <div class="error-container">
+        <div class="error-icon">🧠</div>
+        <div class="error-code">404</div>
+        <h1 class="error-title" data-i18n="error_title">ไม่พบหน้าที่ต้องการ</h1>
+        <p class="error-message" data-i18n="error_message">
+            ขออภัย หน้าที่คุณกำลังค้นหาอาจถูกย้ายหรือไม่มีอยู่<br>
+            ลองกลับไปหน้าแรกหรือใช้เมนูนำทาง
+        </p>
+        <a href="/" class="error-btn" data-i18n="error_btn">🏠 กลับหน้าแรก</a>
+        
+        <div class="crisis-info">
+            <p data-i18n="error_crisis">หากต้องการความช่วยเหลือด้านสุขภาพจิต<br>
+            โทร <a href="tel:1323">1323</a> สายด่วนสุขภาพจิต (24 ชม.)</p>
+        </div>
+    </div>
+
+<script src="js/i18n.js"></script>
+<script src="js/cookie-consent.js"></script>
+</body>
+</html>
