@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Stars/sparkles of hope -->
+  <path d="M18 22 L20 18 L22 22 L26 24 L22 26 L20 30 L18 26 L14 24 Z" fill="#E4AA3A"/>
+  <path d="M78 18 L79 15 L80 18 L83 19 L80 20 L79 23 L78 20 L75 19 Z" fill="#00A8A8"/>
+  <path d="M85 35 L86 33 L87 35 L89 36 L87 37 L86 39 L85 37 L83 36 Z" fill="#E4AA3A" opacity="0.7"/>
+  <!-- Head -->
+  <circle cx="50" cy="50" r="35" stroke="#0B1E47" stroke-width="3" fill="#fff"/>
+  <!-- Hopeful eyes - looking up -->
+  <circle cx="38" cy="45" r="5" fill="#0B1E47"/>
+  <circle cx="62" cy="45" r="5" fill="#0B1E47"/>
+  <circle cx="40" cy="43" r="2.5" fill="#fff"/>
+  <circle cx="64" cy="43" r="2.5" fill="#fff"/>
+  <!-- Subtle shine in eyes -->
+  <circle cx="36" cy="44" r="1" fill="#fff"/>
+  <circle cx="60" cy="44" r="1" fill="#fff"/>
+  <!-- Hopeful smile -->
+  <path d="M38 58 Q50 68 62 58" stroke="#0B1E47" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Blush -->
+  <circle cx="28" cy="54" r="5" fill="#FFE4E1" opacity="0.7"/>
+  <circle cx="72" cy="54" r="5" fill="#FFE4E1" opacity="0.7"/>
+  <!-- Antenna - reaching up -->
+  <path d="M50 15 Q55 5 52 18" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <circle cx="52" cy="8" r="4" fill="#E4AA3A"/>
+</svg>

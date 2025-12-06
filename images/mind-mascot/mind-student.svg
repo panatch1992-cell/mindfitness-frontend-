@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Graduation cap -->
+  <polygon points="50,5 15,20 50,35 85,20" fill="#0B1E47"/>
+  <rect x="45" y="5" width="10" height="4" fill="#0B1E47"/>
+  <line x1="85" y1="20" x2="85" y2="35" stroke="#E4AA3A" stroke-width="2"/>
+  <circle cx="85" cy="37" r="4" fill="#E4AA3A"/>
+  <!-- Head -->
+  <circle cx="50" cy="55" r="30" stroke="#0B1E47" stroke-width="3" fill="#fff"/>
+  <!-- Eyes - Eager student -->
+  <circle cx="40" cy="52" r="5" fill="#0B1E47"/>
+  <circle cx="60" cy="52" r="5" fill="#0B1E47"/>
+  <circle cx="42" cy="50" r="2" fill="#fff"/>
+  <circle cx="62" cy="50" r="2" fill="#fff"/>
+  <!-- Happy smile -->
+  <path d="M40 65 Q50 73 60 65" stroke="#0B1E47" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <!-- Blush -->
+  <circle cx="30" cy="58" r="5" fill="#FFE4E1" opacity="0.7"/>
+  <circle cx="70" cy="58" r="5" fill="#FFE4E1" opacity="0.7"/>
+</svg>

@@ -171,9 +171,23 @@ const API_BASE = window.location.hostname === 'localhost'
   : 'https://mindfitness-ai-backend.vercel.app';
 const CHAT_API = API_BASE + '/api/private-chat';
 
+// Avatar images
+const AVATAR_IMAGES = [
+  '../images/mind-mascot/avatar-1.svg',
+  '../images/mind-mascot/avatar-2.svg',
+  '../images/mind-mascot/avatar-3.svg',
+  '../images/mind-mascot/avatar-4.svg',
+  '../images/mind-mascot/avatar-5.svg',
+  '../images/mind-mascot/avatar-6.svg'
+];
+
+function getRandomAvatarImage() {
+  return AVATAR_IMAGES[Math.floor(Math.random() * AVATAR_IMAGES.length)];
+}
+
 // State
 let userId = localStorage.getItem('private_chat_user_id') || null;
-let myAvatar = '😊';
+let myAvatar = getRandomAvatarImage();
 let partnerAvatar = '';
 let partnerName = '';
 let chatId = null;
@@ -265,10 +279,15 @@ function startMatchPolling() {
 function handleMatchFound(result) {
   isMatching = false;
   chatId = result.chatId;
-  partnerAvatar = result.partner?.avatar || '🌸';
+  // Use image avatar or generate random one
+  partnerAvatar = (result.partner?.avatar && result.partner.avatar.startsWith('../'))
+    ? result.partner.avatar
+    : getRandomAvatarImage();
   partnerName = result.partner?.name || 'คนแปลกหน้า';
 
-  document.getElementById('partnerAvatar').textContent = partnerAvatar;
+  // Update partner avatar as image
+  const avatarEl = document.getElementById('partnerAvatar');
+  avatarEl.innerHTML = `<img src="${partnerAvatar}" alt="Partner" style="width:100%;height:100%;border-radius:50%">`;
   document.getElementById('partnerName').textContent = sanitize(partnerName);
   document.getElementById('chatMessagesArea').innerHTML = '';
   renderedMessageIds.clear();
@@ -340,9 +359,10 @@ function renderMessages(messages) {
       div.textContent = msg.content;
     } else {
       const isMine = msg.senderId === userId;
+      const avatarSrc = isMine ? myAvatar : (msg.senderAvatar?.startsWith('../') ? msg.senderAvatar : partnerAvatar);
       div.className = `chat-message ${isMine ? 'mine' : 'partner'}`;
       div.innerHTML = `
-        <div class="msg-avatar ${isMine ? 'mine' : ''}">${sanitize(isMine ? myAvatar : msg.senderAvatar || partnerAvatar)}</div>
+        <img src="${avatarSrc}" alt="Avatar" class="msg-avatar ${isMine ? 'mine' : ''}" style="width:32px;height:32px;border-radius:50%;flex-shrink:0">
         <div class="msg-bubble">${sanitize(msg.content)}</div>
       `;
     }
@@ -359,10 +379,11 @@ function addMessageOptimistic(content, isMine) {
   const div = document.createElement('div');
   const tempId = 'temp_' + Date.now();
 
+  const avatarSrc = isMine ? myAvatar : partnerAvatar;
   div.className = `chat-message ${isMine ? 'mine' : 'partner'}`;
   div.setAttribute('data-temp-id', tempId);
   div.innerHTML = `
-    <div class="msg-avatar ${isMine ? 'mine' : ''}">${sanitize(isMine ? myAvatar : partnerAvatar)}</div>
+    <img src="${avatarSrc}" alt="Avatar" class="msg-avatar ${isMine ? 'mine' : ''}" style="width:32px;height:32px;border-radius:50%;flex-shrink:0">
     <div class="msg-bubble">${sanitize(content)}</div>
   `;
 

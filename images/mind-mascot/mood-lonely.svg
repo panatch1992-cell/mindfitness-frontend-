@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Dotted circle around - feeling isolated -->
+  <circle cx="50" cy="50" r="45" stroke="#B0BEC5" stroke-width="2" stroke-dasharray="4 4" fill="none" opacity="0.5"/>
+  <!-- Head -->
+  <circle cx="50" cy="50" r="35" stroke="#0B1E47" stroke-width="3" fill="#fff"/>
+  <!-- Lonely eyes - looking down/sideways -->
+  <circle cx="38" cy="48" r="5" fill="#0B1E47"/>
+  <circle cx="62" cy="48" r="5" fill="#0B1E47"/>
+  <circle cx="36" cy="49" r="2" fill="#fff"/>
+  <circle cx="60" cy="49" r="2" fill="#fff"/>
+  <!-- Eyebrows - sad -->
+  <path d="M32 40 Q38 38 44 42" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M68 40 Q62 38 56 42" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Small sad mouth -->
+  <path d="M44 62 Q50 58 56 62" stroke="#0B1E47" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <!-- Single small tear -->
+  <ellipse cx="70" cy="55" rx="2" ry="3" fill="#E3F2FD"/>
+  <!-- Antenna - droopy -->
+  <path d="M50 15 Q42 12 48 20" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <circle cx="48" cy="13" r="4" fill="#90A4AE"/>
+</svg>

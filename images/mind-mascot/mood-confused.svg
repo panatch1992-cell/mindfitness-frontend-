@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Question marks -->
+  <text x="15" y="25" font-size="16" fill="#9575CD" opacity="0.7">?</text>
+  <text x="78" y="20" font-size="14" fill="#9575CD" opacity="0.7">?</text>
+  <text x="82" y="35" font-size="12" fill="#9575CD" opacity="0.5">?</text>
+  <!-- Head -->
+  <circle cx="50" cy="50" r="35" stroke="#0B1E47" stroke-width="3" fill="#fff"/>
+  <!-- Confused eyes - different directions -->
+  <circle cx="38" cy="45" r="5" fill="#0B1E47"/>
+  <circle cx="62" cy="45" r="5" fill="#0B1E47"/>
+  <!-- Looking different ways -->
+  <circle cx="36" cy="44" r="2" fill="#fff"/>
+  <circle cx="64" cy="46" r="2" fill="#fff"/>
+  <!-- Confused eyebrows - asymmetric -->
+  <path d="M30 38 L44 36" stroke="#0B1E47" stroke-width="2" stroke-linecap="round"/>
+  <path d="M56 40 L70 36" stroke="#0B1E47" stroke-width="2" stroke-linecap="round"/>
+  <!-- Confused wavy mouth -->
+  <path d="M40 60 Q45 64 50 58 Q55 52 60 58" stroke="#0B1E47" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <!-- Spiral/dizzy mark -->
+  <path d="M75 50 Q78 48 76 52 Q74 56 78 54" stroke="#9575CD" stroke-width="2" fill="none"/>
+  <!-- Antenna - wobbly -->
+  <path d="M48 15 Q52 8 55 15 Q52 12 50 18" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <circle cx="50" cy="12" r="4" fill="#9575CD"/>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Head -->
+  <circle cx="50" cy="45" r="35" stroke="#0B1E47" stroke-width="3" fill="#fff"/>
+  <!-- Eyes - Expressive/venting -->
+  <circle cx="38" cy="42" r="5" fill="#0B1E47"/>
+  <circle cx="62" cy="42" r="5" fill="#0B1E47"/>
+  <circle cx="40" cy="40" r="2" fill="#fff"/>
+  <circle cx="64" cy="40" r="2" fill="#fff"/>
+  <!-- Talking/venting mouth -->
+  <ellipse cx="50" cy="58" rx="10" ry="8" stroke="#0B1E47" stroke-width="3" fill="#FFE4E1"/>
+  <!-- Speech bubbles -->
+  <circle cx="82" cy="25" r="6" stroke="#00A8A8" stroke-width="2" fill="#fff"/>
+  <circle cx="75" cy="35" r="4" stroke="#00A8A8" stroke-width="1.5" fill="#fff"/>
+  <circle cx="20" cy="28" r="5" stroke="#00A8A8" stroke-width="2" fill="#fff"/>
+  <!-- Antenna/hair tuft -->
+  <path d="M50 10 Q55 5 52 15" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <circle cx="50" cy="8" r="4" fill="#00A8A8"/>
+</svg>

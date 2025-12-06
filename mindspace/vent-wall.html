@@ -99,12 +99,12 @@ body{font-family:'Sarabun',sans-serif;background:#f0f2f5;min-height:100vh}
 <div class="feed-container">
   <div class="post-composer">
     <div class="composer-header">
-      <div class="composer-avatar">😊</div>
+      <img src="../images/mind-mascot/mind-happy.svg" alt="Avatar" class="composer-avatar" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00A8A8,#0B1E47);padding:4px">
       <button class="composer-input" onclick="openModal()">วันนี้คุณรู้สึกอย่างไร?</button>
     </div>
     <div class="composer-actions">
-      <button class="composer-btn" onclick="openModal()">😊 ความรู้สึก</button>
-      <button class="composer-btn" onclick="openModal()">💭 ระบาย</button>
+      <button class="composer-btn" onclick="openModal()"><img src="../images/mind-mascot/mood-hopeful.svg" alt="" style="width:18px;height:18px;vertical-align:middle;margin-right:4px"> ความรู้สึก</button>
+      <button class="composer-btn" onclick="openModal()"><img src="../images/mind-mascot/mind-vent.svg" alt="" style="width:18px;height:18px;vertical-align:middle;margin-right:4px"> ระบาย</button>
     </div>
   </div>
 
@@ -124,16 +124,16 @@ body{font-family:'Sarabun',sans-serif;background:#f0f2f5;min-height:100vh}
     </div>
     <div class="modal-body">
       <div class="modal-composer">
-        <div class="composer-avatar">😊</div>
+        <img src="../images/mind-mascot/mind-happy.svg" alt="Avatar" class="composer-avatar" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00A8A8,#0B1E47);padding:4px">
         <textarea class="modal-textarea" id="postContent" placeholder="วันนี้คุณรู้สึกอย่างไร? อยากระบายเรื่องอะไร?"></textarea>
       </div>
       <div class="mood-selector">
-        <button class="mood-btn" data-mood="sad" onclick="selectMood(this)">😢 เศร้า</button>
-        <button class="mood-btn" data-mood="anxious" onclick="selectMood(this)">😰 กังวล</button>
-        <button class="mood-btn" data-mood="angry" onclick="selectMood(this)">😤 โกรธ</button>
-        <button class="mood-btn" data-mood="lonely" onclick="selectMood(this)">🥺 เหงา</button>
-        <button class="mood-btn" data-mood="confused" onclick="selectMood(this)">😵 สับสน</button>
-        <button class="mood-btn" data-mood="hopeful" onclick="selectMood(this)">🤞 หวัง</button>
+        <button class="mood-btn" data-mood="sad" onclick="selectMood(this)"><img src="../images/mind-mascot/mood-sad.svg" alt="เศร้า" style="width:20px;height:20px;vertical-align:middle;margin-right:4px"> เศร้า</button>
+        <button class="mood-btn" data-mood="anxious" onclick="selectMood(this)"><img src="../images/mind-mascot/mood-anxious.svg" alt="กังวล" style="width:20px;height:20px;vertical-align:middle;margin-right:4px"> กังวล</button>
+        <button class="mood-btn" data-mood="angry" onclick="selectMood(this)"><img src="../images/mind-mascot/mood-angry.svg" alt="โกรธ" style="width:20px;height:20px;vertical-align:middle;margin-right:4px"> โกรธ</button>
+        <button class="mood-btn" data-mood="lonely" onclick="selectMood(this)"><img src="../images/mind-mascot/mood-lonely.svg" alt="เหงา" style="width:20px;height:20px;vertical-align:middle;margin-right:4px"> เหงา</button>
+        <button class="mood-btn" data-mood="confused" onclick="selectMood(this)"><img src="../images/mind-mascot/mood-confused.svg" alt="สับสน" style="width:20px;height:20px;vertical-align:middle;margin-right:4px"> สับสน</button>
+        <button class="mood-btn" data-mood="hopeful" onclick="selectMood(this)"><img src="../images/mind-mascot/mood-hopeful.svg" alt="หวัง" style="width:20px;height:20px;vertical-align:middle;margin-right:4px"> หวัง</button>
       </div>
     </div>
     <div class="modal-footer">
@@ -148,15 +148,22 @@ let selectedMood = '';
 let posts = [];
 
 const MOOD_LABELS = {
-  sad: '😢 เศร้า',
-  anxious: '😰 กังวล',
-  angry: '😤 โกรธ',
-  lonely: '🥺 เหงา',
-  confused: '😵 สับสน',
-  hopeful: '🤞 หวัง'
+  sad: '<img src="../images/mind-mascot/mood-sad.svg" style="width:16px;height:16px;vertical-align:middle"> เศร้า',
+  anxious: '<img src="../images/mind-mascot/mood-anxious.svg" style="width:16px;height:16px;vertical-align:middle"> กังวล',
+  angry: '<img src="../images/mind-mascot/mood-angry.svg" style="width:16px;height:16px;vertical-align:middle"> โกรธ',
+  lonely: '<img src="../images/mind-mascot/mood-lonely.svg" style="width:16px;height:16px;vertical-align:middle"> เหงา',
+  confused: '<img src="../images/mind-mascot/mood-confused.svg" style="width:16px;height:16px;vertical-align:middle"> สับสน',
+  hopeful: '<img src="../images/mind-mascot/mood-hopeful.svg" style="width:16px;height:16px;vertical-align:middle"> หวัง'
 };
 
-const AVATARS = ['😊', '🌸', '🌈', '🌙', '⭐', '🦋', '🌻', '🍀', '🎈', '🐱'];
+const AVATARS = [
+  '../images/mind-mascot/avatar-1.svg',
+  '../images/mind-mascot/avatar-2.svg',
+  '../images/mind-mascot/avatar-3.svg',
+  '../images/mind-mascot/avatar-4.svg',
+  '../images/mind-mascot/avatar-5.svg',
+  '../images/mind-mascot/avatar-6.svg'
+];
 
 function getRandomAvatar() {
   return AVATARS[Math.floor(Math.random() * AVATARS.length)];
@@ -262,10 +269,12 @@ function sanitize(text) {
 
 function renderPosts() {
   const container = document.getElementById('feedPosts');
-  container.innerHTML = posts.map(post => `
+  container.innerHTML = posts.map(post => {
+    const avatarSrc = post.avatar && post.avatar.startsWith('../') ? post.avatar : getRandomAvatar();
+    return `
     <div class="post-card" data-id="${sanitize(post.id)}">
       <div class="post-header">
-        <div class="post-avatar">${sanitize(post.avatar) || getRandomAvatar()}</div>
+        <img src="${avatarSrc}" alt="Avatar" class="post-avatar" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);padding:4px">
         <div class="post-meta">
           <h4>${sanitize(post.name) || getRandomName()} ${post.mood ? `<span class="post-mood">${MOOD_LABELS[post.mood] || sanitize(post.mood)}</span>` : ''}</h4>
           <span>${timeAgo(post.createdAt)}</span>
@@ -275,25 +284,25 @@ function renderPosts() {
       ${post.aiResponse ? `
         <div class="ai-response">
           <div class="ai-response-header">
-            <span class="ai-badge">AI</span>
-            <span style="font-size:13px;color:#65676b">น้องมายด์ตอบกลับ</span>
+            <img src="../images/mind-mascot/mind-support.svg" alt="AI" style="width:24px;height:24px;border-radius:50%;background:#00A8A8;padding:2px">
+            <span style="font-size:13px;color:#65676b;margin-left:6px">น้องมายด์ตอบกลับ</span>
           </div>
           <p>${sanitize(post.aiResponse)}</p>
         </div>
       ` : ''}
       <div class="post-reactions">
-        ${parseInt(post.likes) || 0} คนให้กำลังใจ
+        <img src="../images/mind-mascot/mind-support.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> ${parseInt(post.likes) || 0} คนให้กำลังใจ
       </div>
       <div class="post-actions">
         <button class="action-btn ${post.liked ? 'liked' : ''}" onclick="likePost('${sanitize(post.id)}')">
-          ${post.liked ? '❤️' : '🤍'} ให้กำลังใจ
+          <img src="../images/mind-mascot/mind-support.svg" style="width:16px;height:16px;vertical-align:middle"> ให้กำลังใจ
         </button>
         <button class="action-btn" onclick="replyPost('${sanitize(post.id)}')">
-          💬 ตอบกลับ
+          <img src="../images/mind-mascot/mind-vent.svg" style="width:16px;height:16px;vertical-align:middle"> ตอบกลับ
         </button>
       </div>
     </div>
-  `).join('');
+  `}).join('');
 }
 
 async function likePost(postId) {

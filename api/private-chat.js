@@ -16,7 +16,15 @@
 // Note: Vercel serverless functions are stateless, so we use KV or external DB
 // For this demo, we'll use a simple approach with Vercel KV or fallback
 
-const AVATARS = ['🌸', '🌈', '🌙', '⭐', '🦋', '🌻', '🍀', '🎈', '🐱', '🐰', '🦊', '🐻'];
+// Mascot avatar images instead of emojis
+const AVATARS = [
+  '../images/mind-mascot/avatar-1.svg',
+  '../images/mind-mascot/avatar-2.svg',
+  '../images/mind-mascot/avatar-3.svg',
+  '../images/mind-mascot/avatar-4.svg',
+  '../images/mind-mascot/avatar-5.svg',
+  '../images/mind-mascot/avatar-6.svg'
+];
 const NAMES = ['เพื่อนร่วมทาง', 'คนแปลกหน้า', 'ผู้ฟังที่ดี', 'เพื่อนใหม่', 'ใครบางคน', 'ผู้เดินทาง'];
 
 // Simple in-memory store (resets on cold start - use Redis for production)

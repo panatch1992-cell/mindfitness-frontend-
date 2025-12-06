@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Head -->
+  <circle cx="50" cy="35" r="28" stroke="#0B1E47" stroke-width="3" fill="#fff"/>
+  <!-- Eyes - Analytical -->
+  <circle cx="42" cy="33" r="4" fill="#0B1E47"/>
+  <circle cx="58" cy="33" r="4" fill="#0B1E47"/>
+  <circle cx="43" cy="32" r="1.5" fill="#fff"/>
+  <circle cx="59" cy="32" r="1.5" fill="#fff"/>
+  <!-- Smile -->
+  <path d="M44 44 Q50 48 56 44" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Dashboard/Chart -->
+  <rect x="20" y="65" width="60" height="30" rx="3" stroke="#0B1E47" stroke-width="2" fill="#fff"/>
+  <!-- Bar chart -->
+  <rect x="28" y="80" width="8" height="10" fill="#00A8A8"/>
+  <rect x="40" y="75" width="8" height="15" fill="#00A8A8"/>
+  <rect x="52" y="72" width="8" height="18" fill="#00A8A8"/>
+  <rect x="64" y="78" width="8" height="12" fill="#00A8A8"/>
+  <!-- Antenna/hair tuft -->
+  <path d="M50 7 Q55 2 52 11" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <circle cx="50" cy="5" r="3" fill="#00A8A8"/>
+</svg>
