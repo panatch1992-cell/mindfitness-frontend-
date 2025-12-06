@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Psychoeducation Comics | Mind Fitness</title>
+  <meta name="description" content="เรียนรู้เรื่องสุขภาพจิตผ่านการ์ตูน 6 ตอน">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="../images/logo.jpg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
+.site-header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:1000}
+.header__inner{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand__logo{width:40px;height:40px;border-radius:10px}
+.brand__name{font-size:20px;font-weight:700;color:#0B1E47}
+.nav__list{display:flex;gap:24px;list-style:none}
+.nav__link{text-decoration:none;color:#64748b;font-weight:500}
+.nav__link:hover{color:#00A8A8}
+
+.page-hero{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:60px 20px;text-align:center}
+.page-hero h1{font-size:32px;margin-bottom:12px}
+.page-hero p{opacity:0.9;font-size:16px}
+
+.comics-container{max-width:1000px;margin:40px auto;padding:0 20px}
+.comics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
+.comic-card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08);transition:all 0.3s;cursor:pointer}
+.comic-card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,0.12)}
+.comic-thumb{height:180px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:60px}
+.comic-info{padding:20px}
+.comic-info h3{font-size:18px;color:#0B1E47;margin-bottom:8px}
+.comic-info p{color:#64748b;font-size:14px;line-height:1.6}
+.comic-badge{display:inline-block;background:#d1fae5;color:#047857;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:600;margin-top:12px}
+
+.comic-viewer{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:white;z-index:9999;overflow-y:auto}
+.comic-viewer.active{display:block}
+.viewer-header{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.viewer-header h2{font-size:18px}
+.close-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:14px}
+.close-btn:hover{background:rgba(255,255,255,0.3)}
+.viewer-content{max-width:900px;margin:0 auto;padding:20px}
+.viewer-content iframe{width:100%;height:80vh;border:none;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+
+.loading{text-align:center;padding:60px 20px}
+.loading-spinner{width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#667eea;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.no-access{text-align:center;padding:80px 20px}
+.no-access h2{color:#0B1E47;margin-bottom:16px}
+.no-access p{color:#64748b;margin-bottom:24px}
+.btn-primary{display:inline-block;padding:14px 28px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;text-decoration:none;border-radius:10px;font-weight:600}
+.btn-primary:hover{opacity:0.9}
+
+@media(max-width:768px){
+  .comics-grid{grid-template-columns:1fr}
+  .nav__list{display:none}
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header__inner">
+    <a class="brand" href="../index.html">
+      <img src="../images/logo.jpg" alt="Mind Fitness" class="brand__logo">
+      <span class="brand__name">Mind Fitness</span>
+    </a>
+    <nav>
+      <ul class="nav__list">
+        <li><a href="../index.html" class="nav__link">หน้าแรก</a></li>
+        <li><a href="../mhl-assessment.html" class="nav__link">ประเมิน MHL</a></li>
+        <li><a href="index.html" class="nav__link">MindSpace</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <h1>Psychoeducation Comics</h1>
+  <p>เรียนรู้เรื่องสุขภาพจิตผ่านการ์ตูนที่เข้าใจง่าย</p>
+</section>
+
+<div id="loadingSection" class="loading">
+  <div class="loading-spinner"></div>
+  <p>กำลังโหลดเนื้อหา...</p>
+</div>
+
+<div id="noAccessSection" class="no-access" style="display:none">
+  <h2>คุณยังไม่ได้ปลดล็อกเนื้อหา</h2>
+  <p>ชำระเงินเพื่อเข้าถึง Psychoeducation Comics ทั้ง 6 ตอน</p>
+  <a href="payment-comic.html" class="btn-primary">ปลดล็อกเนื้อหา</a>
+</div>
+
+<div id="comicsContainer" class="comics-container" style="display:none">
+  <div class="comics-grid" id="comicsGrid"></div>
+</div>
+
+<div id="comicViewer" class="comic-viewer">
+  <div class="viewer-header">
+    <h2 id="viewerTitle">กำลังโหลด...</h2>
+    <button class="close-btn" onclick="closeViewer()">ปิด ✕</button>
+  </div>
+  <div class="viewer-content">
+    <iframe id="viewerFrame" src=""></iframe>
+  </div>
+</div>
+
+<script>
+const API_BASE = 'https://mindfitness-ai-backend.vercel.app';
+
+const COMICS = [
+  { id: 'vol1', title: 'Vol 1: ทำไมฟ้าไม่เหมือนเดิม?', desc: 'เรียนรู้เรื่องโรคซึมเศร้าในเด็ก', icon: '🌧️' },
+  { id: 'vol2', title: 'Vol 2: เมื่อหัวใจไม่เข้มแข็ง', desc: 'ทำความเข้าใจภาวะซึมเศร้า', icon: '💔' },
+  { id: 'vol3', title: 'Vol 3: ถูกกลั่นแกล้ง', desc: 'รับมือกับ Bullying', icon: '😢' },
+  { id: 'vol4', title: 'Vol 4: ความกลัวที่มองไม่เห็น', desc: 'เรียนรู้เรื่องโรควิตกกังวล', icon: '😰' },
+  { id: 'vol5', title: 'Vol 5: เพื่อนของฉัน', desc: 'การช่วยเหลือเพื่อนที่มีปัญหา', icon: '🤝' },
+  { id: 'vol6', title: 'Vol 6: ก้าวข้ามความมืด', desc: 'การฟื้นตัวและความหวัง', icon: '🌈' }
+];
+
+function checkAccess() {
+  const saved = localStorage.getItem('comic_access');
+  if (!saved) return false;
+  try {
+    const access = JSON.parse(saved);
+    return !!(access.phone || access.tokens);
+  } catch (e) {
+    return false;
+  }
+}
+
+function renderComics() {
+  const grid = document.getElementById('comicsGrid');
+  grid.innerHTML = COMICS.map(comic => `
+    <div class="comic-card" onclick="openComic('${comic.id}', '${comic.title}')">
+      <div class="comic-thumb">${comic.icon}</div>
+      <div class="comic-info">
+        <h3>${comic.title}</h3>
+        <p>${comic.desc}</p>
+        <span class="comic-badge">อ่านเลย</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function openComic(id, title) {
+  document.getElementById('comicViewer').classList.add('active');
+  document.getElementById('viewerTitle').textContent = title;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/psychoeducation`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'getVolume', volumeId: id })
+    });
+    const data = await res.json();
+
+    if (data.success && data.content) {
+      const frame = document.getElementById('viewerFrame');
+      frame.srcdoc = data.content;
+    } else {
+      alert('ไม่สามารถโหลดเนื้อหาได้');
+      closeViewer();
+    }
+  } catch (e) {
+    console.error(e);
+    alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
+    closeViewer();
+  }
+}
+
+function closeViewer() {
+  document.getElementById('comicViewer').classList.remove('active');
+  document.getElementById('viewerFrame').srcdoc = '';
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('loadingSection').style.display = 'none';
+
+  if (checkAccess()) {
+    document.getElementById('comicsContainer').style.display = 'block';
+    renderComics();
+  } else {
+    document.getElementById('noAccessSection').style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>
