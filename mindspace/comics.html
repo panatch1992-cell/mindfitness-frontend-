@@ -35,9 +35,17 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
 .dsm-filter{max-width:1200px;margin:0 auto;padding:16px 20px}
 .dsm-filter h3{font-size:14px;color:#64748b;margin-bottom:12px}
 .dsm-tags{display:flex;gap:8px;flex-wrap:wrap}
-.dsm-tag-btn{padding:8px 16px;background:#f1f5f9;border:none;border-radius:20px;font-size:13px;cursor:pointer;transition:all 0.2s;font-family:inherit}
+.dsm-tag-btn{padding:8px 16px;background:#f1f5f9;border:none;border-radius:20px;font-size:13px;cursor:pointer;transition:all 0.2s;font-family:inherit;white-space:nowrap}
 .dsm-tag-btn:hover{background:#e2e8f0}
 .dsm-tag-btn.active{background:#667eea;color:white}
+
+/* Mobile: horizontal scroll for DSM tags */
+@media(max-width:768px){
+  .dsm-tags{flex-wrap:nowrap;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+  .dsm-tags::-webkit-scrollbar{height:4px}
+  .dsm-tags::-webkit-scrollbar-track{background:#f1f5f9;border-radius:4px}
+  .dsm-tags::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+}
 
 .comics-container{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
 .category-section{margin-bottom:48px}
