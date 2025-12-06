@@ -10,6 +10,19 @@
   <link rel="icon" href="images/logo.jpg">
   <link rel="stylesheet" href="css/mobile-fix.css">
 <style>
+body{margin:0;font-family:'Sarabun',sans-serif}
+.site-header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:1000}
+.header__inner{max-width:1200px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand__logo{width:40px;height:40px;border-radius:10px}
+.brand__name{font-size:20px;font-weight:700;color:#0B1E47}
+.nav__list{display:flex;gap:32px;list-style:none;margin:0;padding:0}
+.nav__link{text-decoration:none;color:#64748b;font-weight:500;transition:color 0.2s}
+.nav__link:hover,.nav__link.active{color:#00A8A8}
+.nav-toggle{display:none}
+.btn-primary{display:inline-block;padding:16px 32px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;text-decoration:none;border-radius:12px;font-weight:700;font-size:18px;transition:transform 0.2s;border:none;cursor:pointer}
+.btn-primary:hover{transform:translateY(-2px)}
+
 @media(max-width:768px){
   .nav-toggle{display:block!important;background:#0B1E47!important;color:#fff!important;border:none!important;padding:12px 16px!important;font-size:24px!important;border-radius:10px!important;cursor:pointer!important;z-index:10000!important}
   #primary-nav,.nav{display:none!important;position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;background:#fff!important;z-index:9999!important;padding:80px 20px 20px!important;flex-direction:column!important;overflow-y:auto!important}
