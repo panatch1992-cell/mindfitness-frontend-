@@ -21,10 +21,29 @@ Disallow: /api/
 Disallow: /config/
 Disallow: /logs/
 Disallow: /uploads/
+Disallow: /tests/
+Disallow: /.github/
+
+# Disallow sensitive file types
 Disallow: /*.php$
 Disallow: /*.sql$
 Disallow: /*.log$
 Disallow: /*.env$
+Disallow: /*.bak$
+Disallow: /*.backup$
+Disallow: /*.old$
+Disallow: /*.orig$
+Disallow: /*.tmp$
+
+# Disallow version control and build files
+Disallow: /.git/
+Disallow: /.gitignore
+Disallow: /node_modules/
+Disallow: /package-lock.json
+
+# Disallow security-related files
+Disallow: /SECURITY.md
+Disallow: /security.js
 
 # Disallow error pages
 Disallow: /error.html

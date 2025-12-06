@@ -1,0 +1,55 @@
+{
+  "name": "mindfitness-frontend",
+  "version": "1.1.0",
+  "description": "Mind Fitness - Mental Health Ecosystem Frontend",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -p 8000",
+    "test": "jest --coverage",
+    "test:e2e": "playwright test",
+    "test:security": "jest tests/security.test.js",
+    "lint": "eslint js/**/*.js",
+    "lint:html": "htmlhint **/*.html",
+    "security:audit": "npm audit",
+    "security:check": "npx is-website-vulnerable",
+    "serve": "python3 -m http.server 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/panatch1992-cell/mindfitness-frontend-.git"
+  },
+  "keywords": [
+    "mental-health",
+    "thai",
+    "ai-chatbot",
+    "wellness",
+    "psychology"
+  ],
+  "author": "Mind Fitness Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "eslint": "^8.55.0",
+    "htmlhint": "^1.1.4",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "js/**/*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 70,
+        "functions": 70,
+        "lines": 70,
+        "statements": 70
+      }
+    }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
