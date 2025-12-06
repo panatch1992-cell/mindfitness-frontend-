@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Anger marks -->
+  <path d="M78 20 L85 20 M81.5 16 L81.5 24" stroke="#FF5252" stroke-width="3" stroke-linecap="round"/>
+  <path d="M15 25 L22 25 M18.5 21 L18.5 29" stroke="#FF5252" stroke-width="3" stroke-linecap="round"/>
+  <!-- Head - slightly red tinted -->
+  <circle cx="50" cy="50" r="35" stroke="#0B1E47" stroke-width="3" fill="#fff"/>
+  <!-- Blush - angry red -->
+  <circle cx="28" cy="52" r="6" fill="#FFCDD2" opacity="0.8"/>
+  <circle cx="72" cy="52" r="6" fill="#FFCDD2" opacity="0.8"/>
+  <!-- Angry eyes -->
+  <circle cx="38" cy="47" r="5" fill="#0B1E47"/>
+  <circle cx="62" cy="47" r="5" fill="#0B1E47"/>
+  <circle cx="39" cy="46" r="1.5" fill="#fff"/>
+  <circle cx="63" cy="46" r="1.5" fill="#fff"/>
+  <!-- Angry eyebrows -->
+  <path d="M28 38 L46 44" stroke="#0B1E47" stroke-width="3" stroke-linecap="round"/>
+  <path d="M72 38 L54 44" stroke="#0B1E47" stroke-width="3" stroke-linecap="round"/>
+  <!-- Frustrated mouth -->
+  <path d="M40 62 L60 62" stroke="#0B1E47" stroke-width="3" stroke-linecap="round"/>
+  <!-- Antenna - tense -->
+  <path d="M50 15 Q58 8 52 18" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <circle cx="52" cy="11" r="4" fill="#FF5252"/>
+</svg>

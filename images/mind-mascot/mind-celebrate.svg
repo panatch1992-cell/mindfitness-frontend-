@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Confetti -->
+  <rect x="15" y="10" width="6" height="6" fill="#FF6B6B" transform="rotate(15 15 10)"/>
+  <rect x="80" y="15" width="5" height="5" fill="#00A8A8" transform="rotate(-20 80 15)"/>
+  <rect x="25" y="25" width="4" height="4" fill="#E4AA3A" transform="rotate(30 25 25)"/>
+  <rect x="75" y="5" width="4" height="4" fill="#667eea" transform="rotate(-15 75 5)"/>
+  <!-- Head -->
+  <circle cx="50" cy="50" r="35" stroke="#0B1E47" stroke-width="3" fill="#fff"/>
+  <!-- Eyes - Super happy -->
+  <path d="M32 45 Q38 38 44 45" stroke="#0B1E47" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M56 45 Q62 38 68 45" stroke="#0B1E47" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Big celebratory smile -->
+  <path d="M32 58 Q50 78 68 58" stroke="#0B1E47" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Blush -->
+  <circle cx="28" cy="55" r="6" fill="#FFE4E1" opacity="0.8"/>
+  <circle cx="72" cy="55" r="6" fill="#FFE4E1" opacity="0.8"/>
+  <!-- Party hat or stars -->
+  <polygon points="50,10 45,25 55,25" fill="#E4AA3A" stroke="#0B1E47" stroke-width="1"/>
+  <circle cx="50" cy="8" r="4" fill="#FF6B6B"/>
+</svg>

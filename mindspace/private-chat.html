@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://mindfitness-ai-backend.vercel.app;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <title>Private Chat - Mind Fitness</title>
+  <meta name="description" content="Private Chat - พูดคุยส่วนตัวกับคนแปลกหน้าที่พร้อมรับฟัง">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="../images/logo.jpg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh;display:flex;flex-direction:column}
+.site-header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:1000}
+.header__inner{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand__logo{width:40px;height:40px;border-radius:10px}
+.brand__name{font-size:20px;font-weight:700;color:#0B1E47}
+.back-link{color:#64748b;text-decoration:none;display:flex;align-items:center;gap:6px}
+.back-link:hover{color:#00A8A8}
+
+.main-content{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+
+/* Matching Screen */
+.matching-screen{text-align:center;max-width:500px}
+.matching-icon{width:120px;height:120px;margin:0 auto 24px}
+.matching-screen h1{font-size:28px;color:#0B1E47;margin-bottom:12px}
+.matching-screen p{color:#64748b;margin-bottom:32px;line-height:1.7}
+.match-btn{display:inline-block;padding:16px 48px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:30px;font-size:18px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:inherit}
+.match-btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,168,168,0.3)}
+.match-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.rules{margin-top:40px;text-align:left;background:white;padding:24px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)}
+.rules h3{font-size:16px;color:#0B1E47;margin-bottom:12px}
+.rules ul{color:#64748b;font-size:14px;line-height:2;padding-left:20px}
+
+/* Searching Screen */
+.searching-screen{text-align:center;display:none}
+.search-animation{width:100px;height:100px;margin:0 auto 24px;position:relative}
+.search-ring{position:absolute;top:0;left:0;right:0;bottom:0;border:4px solid #e2e8f0;border-top-color:#00A8A8;border-radius:50%;animation:spin 1s linear infinite}
+.search-ring:nth-child(2){animation-delay:-0.3s;transform:scale(0.8)}
+.search-ring:nth-child(3){animation-delay:-0.6s;transform:scale(0.6)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.searching-screen h2{font-size:24px;color:#0B1E47;margin-bottom:12px}
+.searching-screen p{color:#64748b}
+.cancel-btn{margin-top:24px;padding:12px 32px;background:#f1f5f9;color:#64748b;border:none;border-radius:25px;font-size:16px;cursor:pointer;font-family:inherit}
+.cancel-btn:hover{background:#e2e8f0}
+.ai-option{margin-top:20px;padding:20px;background:linear-gradient(135deg,#f0fdf4,#ecfeff);border-radius:16px;display:none}
+.ai-option.show{display:block}
+.ai-option p{font-size:14px;color:#64748b;margin-bottom:12px}
+.ai-chat-btn{padding:12px 32px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:25px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;margin:0 auto}
+.ai-chat-btn:hover{opacity:0.9}
+.ai-badge-tag{background:#00A8A8;color:white;padding:2px 8px;border-radius:10px;font-size:11px}
+
+/* Chat Screen */
+.chat-screen{display:none;flex-direction:column;width:100%;max-width:800px;height:calc(100vh - 100px)}
+.chat-header-bar{background:white;padding:16px 20px;border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,0.05)}
+.partner-info{display:flex;align-items:center;gap:12px}
+.partner-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:20px}
+.partner-info h3{font-size:16px;color:#0B1E47}
+.partner-info span{font-size:13px;color:#10b981}
+.end-chat-btn{padding:10px 20px;background:#fee2e2;color:#dc2626;border:none;border-radius:20px;font-size:14px;cursor:pointer;font-family:inherit}
+.end-chat-btn:hover{background:#fecaca}
+
+.chat-messages-area{flex:1;background:#f8fafc;padding:20px;overflow-y:auto}
+.chat-message{margin-bottom:16px;display:flex;gap:10px}
+.chat-message.mine{flex-direction:row-reverse}
+.msg-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;flex-shrink:0}
+.msg-avatar.mine{background:linear-gradient(135deg,#00A8A8,#0B1E47)}
+.msg-bubble{max-width:70%;padding:12px 16px;border-radius:18px;font-size:15px;line-height:1.5}
+.chat-message.mine .msg-bubble{background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border-bottom-right-radius:4px}
+.chat-message.partner .msg-bubble{background:white;color:#0B1E47;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.system-msg{text-align:center;color:#64748b;font-size:13px;margin:16px 0}
+
+.chat-input-area{background:white;padding:16px;border-radius:0 0 16px 16px;display:flex;gap:12px}
+.chat-input-area input{flex:1;padding:14px 18px;border:2px solid #e2e8f0;border-radius:25px;font-size:16px;font-family:inherit}
+.chat-input-area input:focus{outline:none;border-color:#00A8A8}
+.send-msg-btn{width:50px;height:50px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:50%;cursor:pointer;font-size:20px}
+.send-msg-btn:hover{opacity:0.9}
+
+/* Ended Screen */
+.ended-screen{text-align:center;display:none}
+.ended-screen h2{font-size:24px;color:#0B1E47;margin-bottom:12px}
+.ended-screen p{color:#64748b;margin-bottom:24px}
+.new-chat-btn{padding:16px 40px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:30px;font-size:18px;font-weight:700;cursor:pointer;font-family:inherit}
+
+@media(max-width:768px){
+  .matching-screen h1{font-size:24px}
+  .rules{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header__inner">
+    <a class="brand" href="../index.html">
+      <img src="../images/logo.jpg" alt="Mind Fitness" class="brand__logo">
+      <span class="brand__name">Mind Fitness</span>
+    </a>
+    <a href="index.html" class="back-link">← กลับ MindSpace</a>
+  </div>
+</header>
+
+<div class="main-content">
+  <!-- Matching Screen -->
+  <div class="matching-screen" id="matchingScreen">
+    <img src="../images/mind-mascot/mind-calm.svg" alt="Private Chat" class="matching-icon">
+    <h1>Private Chat</h1>
+    <p>พูดคุยส่วนตัวกับคนแปลกหน้าที่พร้อมรับฟังคุณ<br>ทุกอย่างเป็นความลับ ไม่มีการบันทึก</p>
+    <button class="match-btn" id="startMatchBtn" onclick="startMatching()">เริ่มหาคู่สนทนา</button>
+
+    <div class="rules">
+      <h3>กฎการใช้งาน</h3>
+      <ul>
+        <li>เคารพซึ่งกันและกัน ไม่ด่าทอหรือข่มขู่</li>
+        <li>ไม่เปิดเผยข้อมูลส่วนตัว (ชื่อ, เบอร์โทร, social)</li>
+        <li>ไม่ส่งรูปหรือลิงก์ที่ไม่เหมาะสม</li>
+        <li>หากรู้สึกไม่สบายใจ สามารถจบการสนทนาได้ทุกเมื่อ</li>
+        <li>หากต้องการความช่วยเหลือเร่งด่วน โทร 1323</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Searching Screen -->
+  <div class="searching-screen" id="searchingScreen">
+    <div class="search-animation">
+      <div class="search-ring"></div>
+      <div class="search-ring"></div>
+      <div class="search-ring"></div>
+    </div>
+    <h2>กำลังหาคู่สนทนา...</h2>
+    <p id="searchingStatus">โปรดรอสักครู่</p>
+    <button class="cancel-btn" onclick="cancelMatching()">ยกเลิก</button>
+
+    <!-- AI Option - shows after waiting -->
+    <div class="ai-option" id="aiOption">
+      <p>ยังไม่พบคู่สนทนา? ลองคุยกับน้องมายด์ AI แทนก่อนได้นะ</p>
+      <button class="ai-chat-btn" onclick="startAIChat()">
+        <img src="../images/mind-mascot/mind-support.svg" alt="AI" style="width:24px;height:24px;border-radius:50%">
+        คุยกับน้องมายด์ AI
+        <span class="ai-badge-tag">AI</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Chat Screen -->
+  <div class="chat-screen" id="chatScreen">
+    <div class="chat-header-bar">
+      <div class="partner-info">
+        <div class="partner-avatar" id="partnerAvatar">🌸</div>
+        <div>
+          <h3 id="partnerName">คนแปลกหน้า</h3>
+          <span>กำลังพูดคุย</span>
+        </div>
+      </div>
+      <button class="report-btn" onclick="reportUser()" style="padding:10px 16px;background:#f1f5f9;color:#64748b;border:none;border-radius:20px;font-size:14px;cursor:pointer;margin-right:8px" title="รายงานผู้ใช้">⚠️</button>
+      <button class="end-chat-btn" onclick="endChat()">จบการสนทนา</button>
+    </div>
+
+    <div class="chat-messages-area" id="chatMessagesArea">
+      <div class="system-msg">เริ่มการสนทนาแล้ว - พูดคุยอย่างสุภาพนะคะ</div>
+    </div>
+
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="พิมพ์ข้อความ..." autocomplete="off">
+      <button class="send-msg-btn" onclick="sendChatMessage()">➤</button>
+    </div>
+  </div>
+
+  <!-- Ended Screen -->
+  <div class="ended-screen" id="endedScreen">
+    <img src="../images/mind-mascot/mind-happy.svg" alt="Chat Ended" style="width:100px;margin-bottom:24px">
+    <h2>จบการสนทนาแล้ว</h2>
+    <p>ขอบคุณที่ใช้เวลาพูดคุย หวังว่าคุณจะรู้สึกดีขึ้นนะคะ</p>
+    <button class="new-chat-btn" onclick="resetToMatching()">เริ่มสนทนาใหม่</button>
+  </div>
+</div>
+
+<script>
+// API Configuration
+const API_BASE = window.location.hostname === 'localhost'
+  ? ''
+  : 'https://mindfitness-ai-backend.vercel.app';
+const CHAT_API = API_BASE + '/api/private-chat';
+
+// Avatar images
+const AVATAR_IMAGES = [
+  '../images/mind-mascot/avatar-1.svg',
+  '../images/mind-mascot/avatar-2.svg',
+  '../images/mind-mascot/avatar-3.svg',
+  '../images/mind-mascot/avatar-4.svg',
+  '../images/mind-mascot/avatar-5.svg',
+  '../images/mind-mascot/avatar-6.svg'
+];
+
+function getRandomAvatarImage() {
+  return AVATAR_IMAGES[Math.floor(Math.random() * AVATAR_IMAGES.length)];
+}
+
+// State
+let userId = localStorage.getItem('private_chat_user_id') || null;
+let myAvatar = getRandomAvatarImage();
+let partnerAvatar = '';
+let partnerName = '';
+let chatId = null;
+let isMatching = false;
+let isAIChat = false;
+let pollingInterval = null;
+let matchCheckInterval = null;
+let aiOptionTimeout = null;
+let lastMessageId = null;
+let renderedMessageIds = new Set();
+
+// Sanitize for XSS prevention
+function sanitize(text) {
+  if (typeof text !== 'string') return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// API Helper
+async function apiCall(action, data = {}) {
+  try {
+    const res = await fetch(CHAT_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, userId, chatId, ...data })
+    });
+    return await res.json();
+  } catch (e) {
+    console.error('API Error:', e);
+    return { error: e.message };
+  }
+}
+
+// Screen Management
+function showScreen(screenId) {
+  document.getElementById('matchingScreen').style.display = 'none';
+  document.getElementById('searchingScreen').style.display = 'none';
+  document.getElementById('chatScreen').style.display = 'none';
+  document.getElementById('endedScreen').style.display = 'none';
+  document.getElementById(screenId).style.display = screenId === 'chatScreen' ? 'flex' : 'block';
+}
+
+// Start Matching
+async function startMatching() {
+  showScreen('searchingScreen');
+  isMatching = true;
+  isAIChat = false;
+  document.getElementById('aiOption').classList.remove('show');
+  document.getElementById('searchingStatus').textContent = 'โปรดรอสักครู่';
+
+  // Join queue
+  const result = await apiCall('join_queue');
+
+  if (result.error) {
+    alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
+    showScreen('matchingScreen');
+    return;
+  }
+
+  // Save userId
+  userId = result.userId;
+  localStorage.setItem('private_chat_user_id', userId);
+
+  if (result.matched) {
+    // Matched immediately
+    handleMatchFound(result);
+  } else {
+    // Start polling for match
+    startMatchPolling();
+
+    // Show AI option after 10 seconds of waiting
+    aiOptionTimeout = setTimeout(() => {
+      if (isMatching) {
+        document.getElementById('searchingStatus').textContent = 'ยังไม่พบคู่สนทนา...';
+        document.getElementById('aiOption').classList.add('show');
+      }
+    }, 10000);
+  }
+}
+
+// Start AI Chat
+async function startAIChat() {
+  if (matchCheckInterval) clearInterval(matchCheckInterval);
+  if (aiOptionTimeout) clearTimeout(aiOptionTimeout);
+  isMatching = false;
+  isAIChat = true;
+
+  // Request AI partner
+  const result = await apiCall('request_ai');
+
+  if (result.error) {
+    alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
+    showScreen('matchingScreen');
+    return;
+  }
+
+  // Save userId if new
+  if (result.userId) {
+    userId = result.userId;
+    localStorage.setItem('private_chat_user_id', userId);
+  }
+
+  // Set AI partner info
+  chatId = result.chatId;
+  partnerAvatar = result.partner?.avatar || '../images/mind-mascot/mind-support.svg';
+  partnerName = result.partner?.name || 'น้องมายด์ AI';
+
+  // Update partner info in UI
+  const avatarEl = document.getElementById('partnerAvatar');
+  avatarEl.innerHTML = `<img src="${partnerAvatar}" alt="AI Partner" style="width:100%;height:100%;border-radius:50%">`;
+  document.getElementById('partnerName').innerHTML = sanitize(partnerName) + ' <span class="ai-badge-tag" style="font-size:10px;padding:2px 6px;background:#00A8A8;color:white;border-radius:8px;margin-left:4px">AI</span>';
+  document.getElementById('chatMessagesArea').innerHTML = '';
+  renderedMessageIds.clear();
+
+  showScreen('chatScreen');
+
+  // Start message polling
+  startMessagePolling();
+}
+
+// Poll for match
+function startMatchPolling() {
+  if (matchCheckInterval) clearInterval(matchCheckInterval);
+
+  matchCheckInterval = setInterval(async () => {
+    if (!isMatching) {
+      clearInterval(matchCheckInterval);
+      return;
+    }
+
+    const result = await apiCall('check_match');
+
+    if (result.matched) {
+      clearInterval(matchCheckInterval);
+      handleMatchFound(result);
+    }
+  }, 2000); // Check every 2 seconds
+}
+
+// Handle match found
+function handleMatchFound(result) {
+  isMatching = false;
+  chatId = result.chatId;
+  // Use image avatar or generate random one
+  partnerAvatar = (result.partner?.avatar && result.partner.avatar.startsWith('../'))
+    ? result.partner.avatar
+    : getRandomAvatarImage();
+  partnerName = result.partner?.name || 'คนแปลกหน้า';
+
+  // Update partner avatar as image
+  const avatarEl = document.getElementById('partnerAvatar');
+  avatarEl.innerHTML = `<img src="${partnerAvatar}" alt="Partner" style="width:100%;height:100%;border-radius:50%">`;
+  document.getElementById('partnerName').textContent = sanitize(partnerName);
+  document.getElementById('chatMessagesArea').innerHTML = '';
+  renderedMessageIds.clear();
+
+  showScreen('chatScreen');
+
+  // Start message polling
+  startMessagePolling();
+}
+
+// Cancel matching
+async function cancelMatching() {
+  isMatching = false;
+  if (matchCheckInterval) clearInterval(matchCheckInterval);
+  if (aiOptionTimeout) clearTimeout(aiOptionTimeout);
+
+  await apiCall('leave_queue');
+  showScreen('matchingScreen');
+}
+
+// Poll for new messages
+function startMessagePolling() {
+  if (pollingInterval) clearInterval(pollingInterval);
+
+  // Initial fetch
+  fetchMessages();
+
+  // Poll every 1.5 seconds
+  pollingInterval = setInterval(fetchMessages, 1500);
+}
+
+// Fetch messages
+async function fetchMessages() {
+  if (!chatId) return;
+
+  const result = await apiCall('get_messages');
+
+  if (result.error || result.ended) {
+    clearInterval(pollingInterval);
+    if (result.ended || result.sessionStatus === 'ended') {
+      showScreen('endedScreen');
+    }
+    return;
+  }
+
+  if (result.sessionStatus === 'ended') {
+    clearInterval(pollingInterval);
+    showScreen('endedScreen');
+    return;
+  }
+
+  // Render new messages
+  if (result.messages) {
+    renderMessages(result.messages);
+  }
+}
+
+// Render messages
+function renderMessages(messages) {
+  const area = document.getElementById('chatMessagesArea');
+
+  messages.forEach(msg => {
+    if (renderedMessageIds.has(msg.id)) return;
+    renderedMessageIds.add(msg.id);
+
+    const div = document.createElement('div');
+
+    if (msg.type === 'system') {
+      div.className = 'system-msg';
+      div.textContent = msg.content;
+    } else {
+      const isMine = msg.senderId === userId;
+      const avatarSrc = isMine ? myAvatar : (msg.senderAvatar?.startsWith('../') ? msg.senderAvatar : partnerAvatar);
+      div.className = `chat-message ${isMine ? 'mine' : 'partner'}`;
+      div.innerHTML = `
+        <img src="${avatarSrc}" alt="Avatar" class="msg-avatar ${isMine ? 'mine' : ''}" style="width:32px;height:32px;border-radius:50%;flex-shrink:0">
+        <div class="msg-bubble">${sanitize(msg.content)}</div>
+      `;
+    }
+
+    area.appendChild(div);
+  });
+
+  area.scrollTop = area.scrollHeight;
+}
+
+// Add message to UI (optimistic update)
+function addMessageOptimistic(content, isMine) {
+  const area = document.getElementById('chatMessagesArea');
+  const div = document.createElement('div');
+  const tempId = 'temp_' + Date.now();
+
+  const avatarSrc = isMine ? myAvatar : partnerAvatar;
+  div.className = `chat-message ${isMine ? 'mine' : 'partner'}`;
+  div.setAttribute('data-temp-id', tempId);
+  div.innerHTML = `
+    <img src="${avatarSrc}" alt="Avatar" class="msg-avatar ${isMine ? 'mine' : ''}" style="width:32px;height:32px;border-radius:50%;flex-shrink:0">
+    <div class="msg-bubble">${sanitize(content)}</div>
+  `;
+
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+
+  return tempId;
+}
+
+// Send message
+async function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const message = input.value.trim();
+  if (!message || !chatId) return;
+
+  // Rate limiting
+  if (typeof MFSecurity !== 'undefined' && !MFSecurity.RateLimiter.check('private_chat', 20, 60000)) {
+    alert('กรุณารอสักครู่ก่อนส่งข้อความถัดไป');
+    return;
+  }
+
+  input.value = '';
+
+  // Optimistic update
+  const tempId = addMessageOptimistic(message, true);
+  renderedMessageIds.add(tempId);
+
+  // Send to API
+  const result = await apiCall('send_message', { message });
+
+  if (result.error) {
+    // Remove optimistic message on error
+    const tempEl = document.querySelector(`[data-temp-id="${tempId}"]`);
+    if (tempEl) tempEl.remove();
+    renderedMessageIds.delete(tempId);
+
+    if (result.error.includes('ended')) {
+      showScreen('endedScreen');
+    } else {
+      input.value = message; // Restore message
+      alert('ส่งข้อความไม่สำเร็จ กรุณาลองใหม่');
+    }
+  } else if (result.message) {
+    // Mark the real message as rendered
+    renderedMessageIds.add(result.message.id);
+  }
+}
+
+// End chat
+async function endChat() {
+  if (!confirm('ต้องการจบการสนทนาใช่ไหม?')) return;
+
+  if (pollingInterval) clearInterval(pollingInterval);
+
+  await apiCall('end_chat');
+  chatId = null;
+  showScreen('endedScreen');
+}
+
+// Reset to matching screen
+function resetToMatching() {
+  chatId = null;
+  isAIChat = false;
+  renderedMessageIds.clear();
+  if (pollingInterval) clearInterval(pollingInterval);
+  if (matchCheckInterval) clearInterval(matchCheckInterval);
+  if (aiOptionTimeout) clearTimeout(aiOptionTimeout);
+  showScreen('matchingScreen');
+}
+
+// Report user
+async function reportUser() {
+  const reason = prompt('กรุณาระบุเหตุผลในการรายงาน:');
+  if (!reason) return;
+
+  await apiCall('report', { reason });
+  alert('ขอบคุณสำหรับการรายงาน ทีมงานจะตรวจสอบโดยเร็ว');
+}
+
+// Keyboard event
+document.getElementById('chatInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') sendChatMessage();
+});
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+  if (chatId) {
+    navigator.sendBeacon(CHAT_API, JSON.stringify({
+      action: 'end_chat',
+      userId,
+      chatId
+    }));
+  } else if (isMatching) {
+    navigator.sendBeacon(CHAT_API, JSON.stringify({
+      action: 'leave_queue',
+      userId
+    }));
+  }
+});
+</script>
+<script src="../js/security.js"></script>
+</body>
+</html>

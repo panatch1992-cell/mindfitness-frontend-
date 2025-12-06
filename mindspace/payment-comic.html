@@ -3,6 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://mindfitness-ai-backend.vercel.app;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <title>ชำระเงิน - Psychoeducation Comics | Mind Fitness</title>
   <meta name="description" content="ชำระเงินเพื่อเข้าถึง Psychoeducation Comics ทั้ง 6 ตอน">
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
@@ -96,7 +101,7 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
 <div class="otp-section" id="otpSection"><p class="auto-verify-badge" id="verifyStatus"><span>⏳</span> กำลังตรวจสอบสลิปอัตโนมัติ...</p><div class="form-group"><label class="form-label">กรอก OTP (6 หลัก)</label><input type="text" class="form-input otp-input" id="otpInput" placeholder="000000" maxlength="6" pattern="[0-9]*"></div><button class="btn btn-primary" id="verifyBtn">ยืนยัน OTP</button></div>
 <div class="login-link"><p>เคยซื้อแล้ว? <a href="#" id="loginLink">เข้าสู่ระบบด้วยเบอร์โทร</a></p></div>
 </div>
-<div class="success-section" id="successSection"><div class="success-icon">✓</div><h2>ชำระเงินสำเร็จ!</h2><p id="successMessage">คุณสามารถเข้าถึง Psychoeducation Comics ได้แล้ว</p><button class="btn btn-primary" onclick="window.location.href='psychoeducation.html'">เข้าสู่เนื้อหา</button></div>
+<div class="success-section" id="successSection"><div class="success-icon">✓</div><h2>ชำระเงินสำเร็จ!</h2><p id="successMessage">คุณสามารถเข้าถึง Psychoeducation Comics ได้แล้ว</p><button class="btn btn-primary" onclick="window.location.href='comics.html'">เข้าสู่เนื้อหา</button></div>
 </div></div>
 <script>
 const API_BASE='https://mindfitness-ai-backend.vercel.app';
@@ -113,7 +118,8 @@ otpInput.addEventListener('input',e=>{e.target.value=e.target.value.replace(/[^0
 verifyBtn.addEventListener('click',async()=>{const otp=otpInput.value.trim(),phone=phoneInput.value.trim();if(otp.length!==6){showError('กรุณากรอก OTP 6 หลัก');return}verifyBtn.disabled=true;verifyBtn.textContent='กำลังยืนยัน...';try{const res=await fetch(`${API_BASE}/api/payment`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify_otp',orderId,otp,phone})});const data=await res.json();if(data.success){saveAccess(data.access,phone,selectedProduct);paymentForm.style.display='none';successSection.classList.add('show')}else throw new Error(data.error||'OTP ไม่ถูกต้อง')}catch(e){showError(e.message);verifyBtn.disabled=false;verifyBtn.textContent='ยืนยัน OTP'}});
 function saveAccess(accessData,phone,productId){localStorage.setItem('comic_access',JSON.stringify({tokens:accessData.tokens||[{token:accessData.token||accessData}],phone,productId,grantedAt:new Date().toISOString()}))}
 loginLink.addEventListener('click',async e=>{e.preventDefault();const phone=phoneInput.value.trim();if(!/^0[0-9]{9}$/.test(phone)){showError('กรุณากรอกเบอร์โทรศัพท์ก่อน');phoneInput.focus();return}loginLink.textContent='กำลังตรวจสอบ...';try{const res=await fetch(`${API_BASE}/api/payment`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'check_access',phone})});const data=await res.json();if(data.hasAccess){localStorage.setItem('comic_access',JSON.stringify({phone,products:data.products,grantedAt:new Date().toISOString()}));successMessage.textContent=`ยินดีต้อนรับกลับ! คุณมีสิทธิ์เข้าถึง ${data.accessCount} รายการ`;paymentForm.style.display='none';successSection.classList.add('show')}else{showError('ไม่พบประวัติการซื้อสำหรับเบอร์นี้');loginLink.innerHTML='เคยซื้อแล้ว? <a href="#" id="loginLink">เข้าสู่ระบบด้วยเบอร์โทร</a>'}}catch(e){showError('เกิดข้อผิดพลาด กรุณาลองใหม่');loginLink.innerHTML='เคยซื้อแล้ว? <a href="#" id="loginLink">เข้าสู่ระบบด้วยเบอร์โทร</a>'}});
-const savedAccess=localStorage.getItem('comic_access');if(savedAccess){try{const access=JSON.parse(savedAccess);if(access.phone||access.tokens){if(confirm('คุณมีสิทธิ์เข้าถึงเนื้อหาแล้ว ต้องการเข้าสู่เนื้อหาเลยไหม?'))window.location.href='psychoeducation.html'}}catch(e){}}
+const savedAccess=localStorage.getItem('comic_access');if(savedAccess){try{const access=JSON.parse(savedAccess);if(access.phone||access.tokens){if(confirm('คุณมีสิทธิ์เข้าถึงเนื้อหาแล้ว ต้องการเข้าสู่เนื้อหาเลยไหม?'))window.location.href='comics.html'}}catch(e){}}
 </script>
+<script src="../js/security.js"></script>
 </body>
 </html>

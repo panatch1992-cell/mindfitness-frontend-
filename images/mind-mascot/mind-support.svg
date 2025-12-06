@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Head -->
+  <circle cx="50" cy="45" r="35" stroke="#0B1E47" stroke-width="3" fill="#fff"/>
+  <!-- Blush -->
+  <circle cx="30" cy="50" r="6" fill="#FFE4E1" opacity="0.8"/>
+  <circle cx="70" cy="50" r="6" fill="#FFE4E1" opacity="0.8"/>
+  <!-- Eyes - Caring -->
+  <circle cx="38" cy="42" r="5" fill="#0B1E47"/>
+  <circle cx="62" cy="42" r="5" fill="#0B1E47"/>
+  <circle cx="40" cy="40" r="2" fill="#fff"/>
+  <circle cx="64" cy="40" r="2" fill="#fff"/>
+  <!-- Warm smile -->
+  <path d="M38 55 Q50 65 62 55" stroke="#0B1E47" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Heart -->
+  <path d="M82 25 C82 20 76 20 76 25 C76 20 70 20 70 25 C70 32 76 38 76 38 C76 38 82 32 82 25" fill="#FF6B6B"/>
+  <!-- Open arms gesture (simplified as lines) -->
+  <path d="M18 60 Q12 50 20 45" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M82 60 Q88 50 80 45" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Antenna/hair tuft -->
+  <path d="M50 10 Q55 5 52 15" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <circle cx="50" cy="8" r="4" fill="#00A8A8"/>
+</svg>

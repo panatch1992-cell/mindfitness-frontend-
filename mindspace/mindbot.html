@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://mindfitness-ai-backend.vercel.app;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <title>น้องมายด์ AI - Mind Fitness</title>
+  <meta name="description" content="พูดคุยกับน้องมายด์ AI ที่พร้อมรับฟังคุณ 24 ชั่วโมง">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="../images/logo.jpg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh;display:flex;flex-direction:column}
+.site-header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:1000}
+.header__inner{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand__logo{width:40px;height:40px;border-radius:10px}
+.brand__name{font-size:20px;font-weight:700;color:#0B1E47}
+.back-link{color:#64748b;text-decoration:none;display:flex;align-items:center;gap:6px}
+.back-link:hover{color:#00A8A8}
+
+.chat-container{flex:1;display:flex;flex-direction:column;max-width:800px;margin:0 auto;width:100%;padding:20px}
+.chat-header{background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;padding:24px;border-radius:20px 20px 0 0;text-align:center}
+.chat-header img{width:80px;height:80px;margin-bottom:12px}
+.chat-header h1{font-size:24px;margin-bottom:8px}
+.chat-header p{opacity:0.9;font-size:14px}
+
+.chat-messages{flex:1;background:white;padding:20px;overflow-y:auto;min-height:400px;max-height:60vh}
+.message{margin-bottom:16px;display:flex;gap:12px}
+.message.user{flex-direction:row-reverse}
+.message-avatar{width:36px;height:36px;border-radius:50%;flex-shrink:0}
+.message-content{max-width:70%;padding:14px 18px;border-radius:18px;font-size:15px;line-height:1.6}
+.message.bot .message-content{background:#f1f5f9;color:#0B1E47}
+.message.user .message-content{background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white}
+.message-time{font-size:11px;color:#94a3b8;margin-top:4px}
+
+.chat-input{background:white;padding:16px;border-top:1px solid #e2e8f0;border-radius:0 0 20px 20px}
+.input-wrapper{display:flex;gap:12px}
+.chat-input input{flex:1;padding:14px 18px;border:2px solid #e2e8f0;border-radius:25px;font-size:16px;font-family:inherit}
+.chat-input input:focus{outline:none;border-color:#00A8A8}
+.send-btn{width:50px;height:50px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:50%;cursor:pointer;font-size:20px;transition:transform 0.2s}
+.send-btn:hover{transform:scale(1.05)}
+.send-btn:disabled{opacity:0.5;cursor:not-allowed}
+
+.typing-indicator{display:none;padding:14px 18px;background:#f1f5f9;border-radius:18px;max-width:80px}
+.typing-indicator.show{display:flex;gap:4px}
+.typing-dot{width:8px;height:8px;background:#94a3b8;border-radius:50%;animation:typing 1s infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typing{0%,100%{opacity:0.3}50%{opacity:1}}
+
+.crisis-banner{background:#fee2e2;color:#dc2626;padding:12px 16px;text-align:center;font-size:14px;display:none}
+.crisis-banner.show{display:block}
+.crisis-banner a{color:#dc2626;font-weight:700}
+
+.suggestions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.suggestion{background:#f1f5f9;color:#64748b;padding:8px 16px;border-radius:20px;font-size:13px;cursor:pointer;border:none;transition:all 0.2s}
+.suggestion:hover{background:#00A8A8;color:white}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header__inner">
+    <a class="brand" href="../index.html">
+      <img src="../images/logo.jpg" alt="Mind Fitness" class="brand__logo">
+      <span class="brand__name">Mind Fitness</span>
+    </a>
+    <a href="index.html" class="back-link">← กลับ MindSpace</a>
+  </div>
+</header>
+
+<div class="crisis-banner" id="crisisBanner">
+  หากคุณมีความคิดทำร้ายตัวเอง โปรดโทร <a href="tel:1323">1323</a> สายด่วนสุขภาพจิต (24 ชม.)
+</div>
+
+<div class="chat-container">
+  <div class="chat-header">
+    <img src="../images/mind-mascot/mind-support.svg" alt="น้องมายด์">
+    <h1>น้องมายด์ AI</h1>
+    <p>พร้อมรับฟังคุณ 24 ชั่วโมง</p>
+  </div>
+
+  <div class="chat-messages" id="chatMessages">
+    <div class="message bot">
+      <img src="../images/mind-mascot/mind-happy.svg" alt="น้องมายด์" class="message-avatar">
+      <div>
+        <div class="message-content">สวัสดีค่ะ ฉันคือน้องมายด์ พร้อมรับฟังและให้กำลังใจคุณเสมอ วันนี้คุณเป็นอย่างไรบ้างคะ?</div>
+        <div class="message-time">เมื่อสักครู่</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <div class="suggestions" id="suggestions">
+      <button class="suggestion" onclick="sendSuggestion('รู้สึกเครียด')">รู้สึกเครียด</button>
+      <button class="suggestion" onclick="sendSuggestion('อยากระบาย')">อยากระบาย</button>
+      <button class="suggestion" onclick="sendSuggestion('นอนไม่หลับ')">นอนไม่หลับ</button>
+      <button class="suggestion" onclick="sendSuggestion('ต้องการกำลังใจ')">ต้องการกำลังใจ</button>
+    </div>
+    <div class="input-wrapper">
+      <input type="text" id="messageInput" placeholder="พิมพ์ข้อความ..." autocomplete="off">
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/security.js"></script>
+<script>
+const API_BASE = 'https://mindfitness-ai-backend.vercel.app';
+const chatMessages = document.getElementById('chatMessages');
+const messageInput = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
+const suggestions = document.getElementById('suggestions');
+const crisisBanner = document.getElementById('crisisBanner');
+
+let conversationHistory = [];
+
+// Sanitize function for XSS prevention
+function sanitize(text) {
+  if (typeof text !== 'string') return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// Security audit log
+function auditLog(action, details = {}) {
+  const log = {
+    timestamp: new Date().toISOString(),
+    action,
+    details,
+    userAgent: navigator.userAgent.substring(0, 100)
+  };
+  const logs = JSON.parse(sessionStorage.getItem('mf_audit_log') || '[]');
+  logs.push(log);
+  if (logs.length > 100) logs.shift(); // Keep last 100 entries
+  sessionStorage.setItem('mf_audit_log', JSON.stringify(logs));
+}
+
+function addMessage(content, isUser = false) {
+  const div = document.createElement('div');
+  div.className = `message ${isUser ? 'user' : 'bot'}`;
+
+  const time = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+  const safeContent = sanitize(content);
+
+  div.innerHTML = isUser ? `
+    <div>
+      <div class="message-content">${safeContent}</div>
+      <div class="message-time">${time}</div>
+    </div>
+  ` : `
+    <img src="../images/mind-mascot/mind-happy.svg" alt="น้องมายด์" class="message-avatar">
+    <div>
+      <div class="message-content">${safeContent}</div>
+      <div class="message-time">${time}</div>
+    </div>
+  `;
+
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'message bot';
+  div.id = 'typingIndicator';
+  div.innerHTML = `
+    <img src="../images/mind-mascot/mind-thinking.svg" alt="น้องมายด์" class="message-avatar">
+    <div class="typing-indicator show">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  `;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideTyping() {
+  const indicator = document.getElementById('typingIndicator');
+  if (indicator) indicator.remove();
+}
+
+async function sendMessage() {
+  const message = messageInput.value.trim();
+  if (!message) return;
+
+  // Rate limiting check
+  if (typeof MFSecurity !== 'undefined' && !MFSecurity.RateLimiter.check('chat', 30, 60000)) {
+    addMessage('กรุณารอสักครู่ก่อนส่งข้อความถัดไปค่ะ');
+    return;
+  }
+
+  // Sanitize input
+  const sanitizedMessage = sanitize(message);
+
+  addMessage(sanitizedMessage, true);
+  messageInput.value = '';
+  sendBtn.disabled = true;
+  suggestions.style.display = 'none';
+
+  conversationHistory.push({ role: 'user', content: sanitizedMessage });
+  auditLog('chat_message_sent', { messageLength: message.length });
+
+  showTyping();
+
+  try {
+    const res = await fetch(`${API_BASE}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: sanitizedMessage,
+        history: conversationHistory.slice(-10)
+      })
+    });
+
+    const data = await res.json();
+    hideTyping();
+
+    if (data.success) {
+      addMessage(data.reply);
+      conversationHistory.push({ role: 'assistant', content: data.reply });
+      auditLog('chat_response_received', { success: true });
+
+      if (data.crisis) {
+        crisisBanner.classList.add('show');
+        auditLog('crisis_detected', { timestamp: new Date().toISOString() });
+      }
+    } else {
+      addMessage('ขอโทษค่ะ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งนะคะ');
+      auditLog('chat_error', { error: 'API error' });
+    }
+  } catch (e) {
+    hideTyping();
+    addMessage('ขอโทษค่ะ ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้งนะคะ');
+    auditLog('chat_error', { error: 'Network error' });
+  }
+
+  sendBtn.disabled = false;
+}
+
+function sendSuggestion(text) {
+  messageInput.value = text;
+  sendMessage();
+}
+
+messageInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') sendMessage();
+});
+</script>
+</body>
+</html>

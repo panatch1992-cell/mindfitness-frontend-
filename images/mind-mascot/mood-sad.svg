@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Head -->
+  <circle cx="50" cy="50" r="35" stroke="#0B1E47" stroke-width="3" fill="#fff"/>
+  <!-- Sad eyes with tears -->
+  <circle cx="38" cy="45" r="5" fill="#0B1E47"/>
+  <circle cx="62" cy="45" r="5" fill="#0B1E47"/>
+  <circle cx="40" cy="43" r="2" fill="#fff"/>
+  <circle cx="64" cy="43" r="2" fill="#fff"/>
+  <!-- Tear drops -->
+  <path d="M38 52 Q36 58 38 62" stroke="#64B5F6" stroke-width="2" fill="#E3F2FD"/>
+  <path d="M62 52 Q64 58 62 62" stroke="#64B5F6" stroke-width="2" fill="#E3F2FD"/>
+  <!-- Sad frown -->
+  <path d="M38 65 Q50 58 62 65" stroke="#0B1E47" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Droopy antenna -->
+  <path d="M50 15 Q45 10 48 20" stroke="#0B1E47" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <circle cx="50" cy="13" r="4" fill="#64B5F6"/>
+</svg>
