@@ -110,32 +110,8 @@ CREATE TABLE IF NOT EXISTS `chat_reports` (
 -- PSYCHOLOGIST BOOKING TABLES
 -- =====================================================
 
--- Psychologists Table
-CREATE TABLE IF NOT EXISTS `psychologists` (
-  `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `fullname_th` VARCHAR(200) NOT NULL,
-  `fullname_en` VARCHAR(200),
-  `title_th` VARCHAR(100),
-  `title_en` VARCHAR(100),
-  `email` VARCHAR(255),
-  `phone` VARCHAR(20),
-  `avatar_url` VARCHAR(255),
-  `specialties` JSON,
-  `specialties_en` JSON,
-  `experience_years` INT UNSIGNED DEFAULT 0,
-  `rating` DECIMAL(3,2) DEFAULT 4.50,
-  `review_count` INT UNSIGNED DEFAULT 0,
-  `rate_per_session` INT UNSIGNED DEFAULT 1500,
-  `bio_th` TEXT,
-  `bio_en` TEXT,
-  `availability` JSON,
-  `status` ENUM('active', 'inactive', 'pending') DEFAULT 'active',
-  `is_verified` BOOLEAN DEFAULT FALSE,
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX `idx_status` (`status`),
-  INDEX `idx_rating` (`rating`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- NOTE: psychologists table already exists with full schema
+-- This migration only creates the appointments table
 
 -- Appointments Table
 CREATE TABLE IF NOT EXISTS `psy_appointments` (
@@ -162,13 +138,10 @@ CREATE TABLE IF NOT EXISTS `psy_appointments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =====================================================
--- SAMPLE DATA - นักจิตวิทยา (ยังไม่ระบุชื่อจริง)
--- เฉพาะนักจิตวิทยาคลินิก และนักจิตวิทยาการปรึกษา (ไม่รับจิตแพทย์)
+-- NOTE: psychologists table data should be managed via admin panel
+-- The existing psychologists table has a registration workflow:
+-- status: 'pending' -> 'reviewing' -> 'approved' / 'rejected'
 -- =====================================================
-
-INSERT INTO `psychologists` (`fullname_th`, `fullname_en`, `title_th`, `title_en`, `specialties`, `specialties_en`, `experience_years`, `rating`, `review_count`, `rate_per_session`, `bio_th`, `bio_en`, `availability`, `status`, `is_verified`) VALUES
-('นักจิตวิทยา A', 'Psychologist A', 'นักจิตวิทยาคลินิก', 'Clinical Psychologist', '["วิตกกังวล", "ซึมเศร้า", "ความเครียด"]', '["Anxiety", "Depression", "Stress"]', 8, 4.90, 127, 1500, 'นักจิตวิทยาคลินิกผู้เชี่ยวชาญด้านการบำบัดความวิตกกังวลและภาวะซึมเศร้า', 'Clinical psychologist specializing in anxiety and depression therapy', '{"monday":["09:00","10:00","11:00","14:00","15:00","16:00"],"tuesday":["09:00","10:00","14:00","15:00"],"wednesday":["09:00","10:00","11:00","14:00","15:00","16:00"],"thursday":["10:00","11:00","14:00","15:00"],"friday":["09:00","10:00","11:00","14:00"],"saturday":["10:00","11:00"],"sunday":[]}', 'active', TRUE),
-('นักจิตวิทยา B', 'Psychologist B', 'นักจิตวิทยาการปรึกษา', 'Counseling Psychologist', '["ความสัมพันธ์", "การทำงาน", "การพัฒนาตนเอง"]', '["Relationships", "Work Issues", "Self-development"]', 5, 4.70, 89, 1200, 'นักจิตวิทยาการปรึกษาผู้เชี่ยวชาญด้านปัญหาความสัมพันธ์และการพัฒนาศักยภาพ', 'Counseling psychologist expert in relationship issues and personal development', '{"monday":["10:00","11:00","15:00","16:00","17:00"],"tuesday":["09:00","10:00","11:00","15:00","16:00"],"wednesday":["15:00","16:00","17:00"],"thursday":["09:00","10:00","11:00","15:00","16:00","17:00"],"friday":["10:00","11:00","15:00","16:00"],"saturday":["09:00","10:00","11:00"],"sunday":[]}', 'active', TRUE);
 
 -- =====================================================
 -- END OF MIGRATION

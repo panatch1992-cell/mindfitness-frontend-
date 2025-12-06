@@ -30,7 +30,7 @@ function getDayName(date) {
 async function isSlotAvailable(therapistId, date, time) {
   try {
     const therapist = await db.queryOne(
-      'SELECT * FROM psychologists WHERE id = ? AND status = "active"',
+      'SELECT * FROM psychologists WHERE id = ? AND status = "approved"',
       [therapistId]
     );
     if (!therapist) return false;
@@ -60,7 +60,7 @@ async function isSlotAvailable(therapistId, date, time) {
 async function getAvailableSlots(therapistId, date) {
   try {
     const therapist = await db.queryOne(
-      'SELECT * FROM psychologists WHERE id = ? AND status = "active"',
+      'SELECT * FROM psychologists WHERE id = ? AND status = "approved"',
       [therapistId]
     );
     if (!therapist) return [];
@@ -111,12 +111,12 @@ function generateVideoRoom(bookingId) {
 // Handler: List therapists
 async function handleListTherapists(res, filters = {}) {
   try {
-    let sql = 'SELECT * FROM psychologists WHERE status = "active"';
+    let sql = 'SELECT * FROM psychologists WHERE status = "approved"';
     const params = [];
 
     if (filters.specialization) {
-      sql += ' AND (specialties LIKE ? OR specialties_en LIKE ?)';
-      params.push(`%${filters.specialization}%`, `%${filters.specialization}%`);
+      sql += ' AND specialties LIKE ?';
+      params.push(`%${filters.specialization}%`);
     }
 
     if (filters.maxPrice) {
@@ -124,26 +124,44 @@ async function handleListTherapists(res, filters = {}) {
       params.push(parseInt(filters.maxPrice));
     }
 
-    sql += ' ORDER BY rating DESC';
+    sql += ' ORDER BY experience_years DESC';
 
     const therapists = await db.query(sql, params);
 
-    const formattedTherapists = therapists.map(t => ({
-      id: t.id,
-      name: t.fullname_th,
-      nameEn: t.fullname_en,
-      title: t.title_th,
-      titleEn: t.title_en,
-      avatar: t.avatar_url || `../images/mind-mascot/avatar-${(t.id % 6) + 1}.svg`,
-      specializations: JSON.parse(t.specialties || '[]'),
-      specializationsEn: JSON.parse(t.specialties_en || '[]'),
-      experience: t.experience_years,
-      rating: parseFloat(t.rating) || 4.5,
-      reviewCount: t.review_count || 0,
-      price: t.rate_per_session,
-      bio: t.bio_th,
-      bioEn: t.bio_en
-    }));
+    const formattedTherapists = therapists.map(t => {
+      // Parse specialties - handle both JSON array and comma-separated string
+      let specializations = [];
+      try {
+        if (t.specialties) {
+          specializations = typeof t.specialties === 'string' && t.specialties.startsWith('[')
+            ? JSON.parse(t.specialties)
+            : t.specialties.split(',').map(s => s.trim());
+        }
+      } catch (e) {
+        specializations = [];
+      }
+
+      // Derive title from education_level
+      const titleMap = {
+        'master': 'นักจิตวิทยา',
+        'phd': 'ดร.'
+      };
+      const title = titleMap[t.education_level] || 'นักจิตวิทยา';
+
+      return {
+        id: t.id,
+        name: t.fullname_th,
+        nameEn: t.fullname_en,
+        title: title,
+        avatar: t.photo_url || `../images/mind-mascot/avatar-${(t.id % 6) + 1}.svg`,
+        specializations: specializations,
+        experience: parseInt(t.experience_years) || 0,
+        rating: 4.5, // Default rating (can be calculated from psy_reviews later)
+        reviewCount: 0, // Can be calculated from psy_reviews later
+        price: parseFloat(t.rate_per_session) || 1500,
+        bio: t.bio
+      };
+    });
 
     return res.status(200).json({
       success: true,
@@ -170,23 +188,39 @@ async function handleGetTherapist(res, therapistId) {
       });
     }
 
+    // Parse specialties
+    let specializations = [];
+    try {
+      if (therapist.specialties) {
+        specializations = typeof therapist.specialties === 'string' && therapist.specialties.startsWith('[')
+          ? JSON.parse(therapist.specialties)
+          : therapist.specialties.split(',').map(s => s.trim());
+      }
+    } catch (e) {
+      specializations = [];
+    }
+
+    // Derive title from education_level
+    const titleMap = {
+      'master': 'นักจิตวิทยา',
+      'phd': 'ดร.'
+    };
+    const title = titleMap[therapist.education_level] || 'นักจิตวิทยา';
+
     return res.status(200).json({
       success: true,
       therapist: {
         id: therapist.id,
         name: therapist.fullname_th,
         nameEn: therapist.fullname_en,
-        title: therapist.title_th,
-        titleEn: therapist.title_en,
-        avatar: therapist.avatar_url || `../images/mind-mascot/avatar-${(therapist.id % 6) + 1}.svg`,
-        specializations: JSON.parse(therapist.specialties || '[]'),
-        specializationsEn: JSON.parse(therapist.specialties_en || '[]'),
-        experience: therapist.experience_years,
-        rating: parseFloat(therapist.rating) || 4.5,
-        reviewCount: therapist.review_count || 0,
-        price: therapist.rate_per_session,
-        bio: therapist.bio_th,
-        bioEn: therapist.bio_en
+        title: title,
+        avatar: therapist.photo_url || `../images/mind-mascot/avatar-${(therapist.id % 6) + 1}.svg`,
+        specializations: specializations,
+        experience: parseInt(therapist.experience_years) || 0,
+        rating: 4.5,
+        reviewCount: 0,
+        price: parseFloat(therapist.rate_per_session) || 1500,
+        bio: therapist.bio
       }
     });
   } catch (error) {
@@ -302,11 +336,11 @@ async function handleCreateBooking(res, userId, therapistId, date, time, notes =
         id: bookingId,
         bookingRef: bookingRef,
         therapistName: therapist.fullname_th,
-        therapistAvatar: therapist.avatar_url || `../images/mind-mascot/avatar-${(therapist.id % 6) + 1}.svg`,
+        therapistAvatar: therapist.photo_url || `../images/mind-mascot/avatar-${(therapist.id % 6) + 1}.svg`,
         date: date,
         time: time,
         endTime: `${parseInt(time.split(':')[0]) + 1}:00`,
-        price: therapist.rate_per_session,
+        price: parseFloat(therapist.rate_per_session) || 1500,
         status: 'confirmed'
       }
     });
@@ -330,7 +364,7 @@ async function handleGetUserBookings(res, userId) {
 
   try {
     const bookings = await db.query(
-      `SELECT a.*, p.fullname_th as therapist_name, p.avatar_url as therapist_avatar
+      `SELECT a.*, p.fullname_th as therapist_name, p.photo_url as therapist_avatar
        FROM psy_appointments a
        LEFT JOIN psychologists p ON a.psychologist_id = p.id
        WHERE a.client_id = ?
@@ -347,7 +381,7 @@ async function handleGetUserBookings(res, userId) {
       date: b.scheduled_date,
       time: b.scheduled_time,
       endTime: b.end_time,
-      price: b.amount,
+      price: parseFloat(b.amount) || 0,
       status: b.status,
       hasVideoRoom: !!b.video_room_id
     }));
