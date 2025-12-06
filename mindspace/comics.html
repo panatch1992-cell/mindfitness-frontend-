@@ -272,6 +272,7 @@ const DSM_CATEGORIES = {
 };
 
 // Comics data - ชุดที่ 1: Depression (เด็ก focus)
+// Vol.1 = Preview ฟรี, ต้องซื้อเพื่อดูเต็ม
 const COMICS = {
   child: [
     {
@@ -281,7 +282,7 @@ const COMICS = {
       icon: '🌧️',
       dsm: 'depression',
       dsmLabel: 'Major Depressive Disorder - Children',
-      free: true
+      hasPreview: true  // มี Preview ฟรี แต่ต้องซื้อดูเต็ม
     },
     {
       id: 'vol2',
@@ -290,7 +291,7 @@ const COMICS = {
       icon: '🤝',
       dsm: 'depression',
       dsmLabel: 'Psychological First Aid - Children',
-      free: false
+      hasPreview: false
     }
   ],
   teen: [
@@ -301,7 +302,7 @@ const COMICS = {
       icon: '💔',
       dsm: 'depression',
       dsmLabel: 'Major Depressive Disorder - Adolescent',
-      free: false
+      hasPreview: false
     },
     {
       id: 'vol4',
@@ -310,7 +311,7 @@ const COMICS = {
       icon: '🌑',
       dsm: 'depression',
       dsmLabel: 'Persistent Depressive Disorder',
-      free: false
+      hasPreview: false
     },
     {
       id: 'vol5',
@@ -319,7 +320,7 @@ const COMICS = {
       icon: '🌱',
       dsm: 'depression',
       dsmLabel: 'Depression Treatment & Recovery',
-      free: false
+      hasPreview: false
     }
   ],
   elder: [
@@ -330,7 +331,7 @@ const COMICS = {
       icon: '🌈',
       dsm: 'depression',
       dsmLabel: 'Late-Life Depression',
-      free: false
+      hasPreview: false
     }
   ]
 };
@@ -366,13 +367,26 @@ function renderCategory(category, gridId) {
   }
 
   grid.innerHTML = comics.map(comic => {
-    const isLocked = !comic.free && !userHasAccess;
+    const isLocked = !userHasAccess;
+    const canPreview = comic.hasPreview;
+
+    // Determine click action
+    let clickAction;
+    if (userHasAccess) {
+      clickAction = `openComic('${comic.id}', '${comic.title}', 'full')`;
+    } else if (canPreview) {
+      clickAction = `openComic('${comic.id}', '${comic.title}', 'preview')`;
+    } else {
+      clickAction = 'showPaymentPrompt()';
+    }
+
     return `
-      <div class="comic-card ${isLocked ? 'locked' : ''}" data-dsm="${comic.dsm}" onclick="${isLocked ? 'showPaymentPrompt()' : `openComic('${comic.id}', '${comic.title}')`}">
+      <div class="comic-card ${isLocked && !canPreview ? 'locked' : ''}" data-dsm="${comic.dsm}" onclick="${clickAction}">
         <div class="comic-thumb ${category}">
           ${comic.icon}
-          ${comic.free ? '<span class="free-badge">ดูฟรี</span>' : ''}
-          ${isLocked ? '<div class="lock-overlay">🔒</div>' : ''}
+          ${canPreview && !userHasAccess ? '<span class="free-badge">ดู Preview ฟรี</span>' : ''}
+          ${userHasAccess ? '<span class="free-badge" style="background:#667eea">ปลดล็อกแล้ว</span>' : ''}
+          ${isLocked && !canPreview ? '<div class="lock-overlay">🔒</div>' : ''}
         </div>
         <div class="comic-info">
           <h3>${comic.title}</h3>
@@ -418,34 +432,81 @@ function showPaymentPrompt() {
 }
 
 // Open comic viewer
-async function openComic(id, title) {
+async function openComic(id, title, mode = 'full') {
   document.getElementById('comicViewer').classList.add('active');
-  document.getElementById('viewerTitle').textContent = title;
+  document.getElementById('viewerTitle').textContent = mode === 'preview' ? `${title} (Preview)` : title;
   document.body.style.overflow = 'hidden';
 
   const frame = document.getElementById('viewerFrame');
-  frame.srcdoc = `
-    <html>
-    <head>
-      <style>
-        body { font-family: 'Sarabun', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-        .content { text-align: center; padding: 40px; }
-        h1 { margin-bottom: 16px; }
-        p { opacity: 0.9; }
-        .loader { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-      </style>
-    </head>
-    <body>
-      <div class="content">
-        <div class="loader"></div>
-        <h1>${title}</h1>
-        <p>กำลังโหลดเนื้อหา...</p>
-        <p style="margin-top: 20px; font-size: 14px; opacity: 0.7;">เนื้อหาจะแสดงที่นี่เมื่อพร้อม</p>
-      </div>
-    </body>
-    </html>
-  `;
+
+  if (mode === 'preview') {
+    // Show preview with purchase prompt
+    frame.srcdoc = `
+      <html>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+        <style>
+          body { font-family: 'Sarabun', sans-serif; margin: 0; background: #f8fafc; }
+          .preview-header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 40px 20px; text-align: center; }
+          .preview-header h1 { margin: 0 0 8px; }
+          .preview-header p { opacity: 0.9; margin: 0; }
+          .preview-content { max-width: 600px; margin: 40px auto; padding: 0 20px; }
+          .preview-page { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 24px; }
+          .preview-page h2 { color: #0B1E47; margin-top: 0; }
+          .preview-page p { color: #64748b; line-height: 1.8; }
+          .preview-end { text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 16px; color: white; }
+          .preview-end h3 { margin: 0 0 12px; }
+          .preview-end p { opacity: 0.9; margin: 0 0 20px; }
+          .btn-buy { display: inline-block; padding: 14px 32px; background: white; color: #d97706; border-radius: 10px; text-decoration: none; font-weight: 700; }
+        </style>
+      </head>
+      <body>
+        <div class="preview-header">
+          <h1>${title}</h1>
+          <p>Preview - ตัวอย่างเนื้อหา</p>
+        </div>
+        <div class="preview-content">
+          <div class="preview-page">
+            <h2>🌧️ บทนำ</h2>
+            <p>ฟ้าเป็นเด็กหญิงวัย 10 ขวบที่เคยร่าเริงสดใส ชอบเล่นกับเพื่อน และทำกิจกรรมต่างๆ มากมาย แต่วันหนึ่ง ฟ้าเริ่มเปลี่ยนไป...</p>
+            <p>เธอไม่อยากไปโรงเรียน ไม่อยากเล่นกับเพื่อน และมักจะนั่งเหม่อลอยอยู่คนเดียว แม่ของฟ้าสังเกตเห็นว่าลูกสาวไม่เหมือนเดิม...</p>
+          </div>
+          <div class="preview-page">
+            <h2>📖 ตัวอย่างหน้าที่ 1</h2>
+            <p style="font-style: italic; color: #94a3b8;">[ภาพประกอบการ์ตูน: ฟ้านั่งมองออกไปนอกหน้าต่าง ท้องฟ้าเป็นสีเทา]</p>
+            <p>"ทำไมฟ้าถึงรู้สึกเศร้าตลอดเวลา ทั้งที่ไม่มีอะไรเกิดขึ้น..."</p>
+          </div>
+          <div class="preview-end">
+            <h3>🔒 ต้องการอ่านต่อ?</h3>
+            <p>ปลดล็อกเนื้อหาทั้ง 6 ตอน ราคา ฿399</p>
+            <a href="payment-comic.html" class="btn-buy">ซื้อชุดที่ 1: Depression</a>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+  } else {
+    // Full content
+    frame.srcdoc = `
+      <html>
+      <head>
+        <style>
+          body { font-family: 'Sarabun', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+          .content { text-align: center; padding: 40px; }
+          h1 { margin-bottom: 16px; }
+          p { opacity: 0.9; }
+        </style>
+      </head>
+      <body>
+        <div class="content">
+          <h1>${title}</h1>
+          <p>✅ เนื้อหาเต็มจะแสดงที่นี่</p>
+          <p style="margin-top: 20px; font-size: 14px; opacity: 0.7;">กำลังพัฒนา...</p>
+        </div>
+      </body>
+      </html>
+    `;
+  }
 }
 
 // Close viewer
