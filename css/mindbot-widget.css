@@ -1,0 +1,251 @@
+/**
+ * Mind Fitness - Chatbot Widget Styles
+ * Floating chat widget for AI assistant
+ */
+
+/* Widget Container */
+.mindbot-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  font-family: 'Sarabun', sans-serif;
+}
+
+/* Toggle Button */
+.mindbot-toggle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00A8A8, #0B1E47);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 168, 168, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.mindbot-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(0, 168, 168, 0.5);
+}
+
+.mindbot-toggle img {
+  width: 40px;
+  height: 40px;
+}
+
+.mindbot-toggle .close-icon {
+  display: none;
+  font-size: 28px;
+  color: white;
+}
+
+.mindbot-widget.open .mindbot-toggle img {
+  display: none;
+}
+
+.mindbot-widget.open .mindbot-toggle .close-icon {
+  display: block;
+}
+
+/* Chat Window */
+.mindbot-chat {
+  display: none;
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 380px;
+  height: 520px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.mindbot-widget.open .mindbot-chat {
+  display: flex;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Chat Header */
+.mindbot-header {
+  background: linear-gradient(135deg, #00A8A8, #0B1E47);
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mindbot-header img {
+  width: 44px;
+  height: 44px;
+}
+
+.mindbot-header-info h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.mindbot-header-info p {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* Chat Messages */
+.mindbot-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f8fafc;
+}
+
+.mindbot-message {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.mindbot-message.bot {
+  background: white;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.mindbot-message.user {
+  background: linear-gradient(135deg, #00A8A8, #0B1E47);
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.mindbot-message.typing {
+  background: white;
+  align-self: flex-start;
+}
+
+.typing-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.typing-dots span {
+  width: 8px;
+  height: 8px;
+  background: #00A8A8;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(1) { animation-delay: 0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.6; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* Chat Input */
+.mindbot-input {
+  padding: 12px 16px;
+  background: white;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  gap: 8px;
+}
+
+.mindbot-input input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 24px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.mindbot-input input:focus {
+  border-color: #00A8A8;
+}
+
+.mindbot-input button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00A8A8, #0B1E47);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.mindbot-input button:hover {
+  transform: scale(1.05);
+}
+
+.mindbot-input button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Disclaimer */
+.mindbot-disclaimer {
+  padding: 8px 16px;
+  background: #fef3c7;
+  font-size: 11px;
+  color: #92400e;
+  text-align: center;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .mindbot-chat {
+    width: calc(100vw - 32px);
+    height: calc(100vh - 120px);
+    bottom: 76px;
+    right: -8px;
+  }
+
+  .mindbot-widget {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .mindbot-toggle {
+    width: 56px;
+    height: 56px;
+  }
+
+  .mindbot-toggle img {
+    width: 32px;
+    height: 32px;
+  }
+}
