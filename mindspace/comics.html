@@ -124,16 +124,32 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
 </div>
 
 <div class="dsm-filter">
-  <h3>กรองตามหมวด DSM-5:</h3>
+  <h3>กรองตามหมวด DSM-5 / Psychoeducation:</h3>
   <div class="dsm-tags">
     <button class="dsm-tag-btn active" onclick="filterDSM('all')">ทั้งหมด</button>
     <button class="dsm-tag-btn" onclick="filterDSM('depression')">Depression</button>
     <button class="dsm-tag-btn" onclick="filterDSM('anxiety')">Anxiety</button>
-    <button class="dsm-tag-btn" onclick="filterDSM('trauma')">Trauma & Stress</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('gad')">GAD</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('social-anxiety')">Social Anxiety</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('panic')">Panic Disorder</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('ptsd')">PTSD & Trauma</button>
     <button class="dsm-tag-btn" onclick="filterDSM('eating')">Eating Disorders</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('anorexia')">Anorexia</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('bulimia')">Bulimia</button>
     <button class="dsm-tag-btn" onclick="filterDSM('bipolar')">Bipolar</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('psychosis')">Psychosis</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('personality')">Personality Disorders</button>
     <button class="dsm-tag-btn" onclick="filterDSM('autism')">Autism</button>
     <button class="dsm-tag-btn" onclick="filterDSM('addiction')">Addiction</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('dissociation')">Dissociation</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('bdd')">BDD</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('grief')">Grief & Loss</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('sleep')">Sleep</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('stress')">Stress</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('anger')">Anger</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('self-esteem')">Self-Esteem</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('suicide')">Suicide & Self-harm</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('perinatal')">Perinatal Mental Health</button>
   </div>
 </div>
 
@@ -213,16 +229,46 @@ const API_BASE = 'https://mindfitness-ai-backend.vercel.app';
 
 // DSM-5 Categories Reference (based on psychologytools.com)
 const DSM_CATEGORIES = {
+  // Mood Disorders
   depression: 'Depressive Disorders',
-  anxiety: 'Anxiety Disorders',
-  trauma: 'Trauma & Stressor-Related Disorders',
-  eating: 'Eating Disorders',
   bipolar: 'Bipolar & Related Disorders',
-  autism: 'Autism Spectrum Disorder',
-  addiction: 'Substance-Related & Addictive Disorders',
+
+  // Anxiety Disorders
+  anxiety: 'Anxiety Disorders',
+  gad: 'Generalized Anxiety Disorder',
+  'social-anxiety': 'Social Anxiety Disorder',
+  panic: 'Panic Disorder',
+
+  // Trauma & Stress
+  ptsd: 'PTSD & Trauma-Related Disorders',
+  stress: 'Stress-Related Disorders',
   dissociation: 'Dissociative Disorders',
-  anger: 'Disruptive, Impulse-Control Disorders',
-  grief: 'Persistent Complex Bereavement Disorder'
+
+  // Eating Disorders
+  eating: 'Eating Disorders',
+  anorexia: 'Anorexia Nervosa',
+  bulimia: 'Bulimia Nervosa',
+
+  // Psychotic Disorders
+  psychosis: 'Schizophrenia & Psychotic Disorders',
+
+  // Personality Disorders
+  personality: 'Personality Disorders',
+
+  // Neurodevelopmental
+  autism: 'Autism Spectrum Disorder',
+
+  // Substance Use
+  addiction: 'Substance-Related & Addictive Disorders',
+
+  // Other Disorders
+  bdd: 'Body Dysmorphic Disorder',
+  grief: 'Grief & Loss',
+  sleep: 'Sleep-Wake Disorders',
+  anger: 'Anger & Impulse Control',
+  'self-esteem': 'Self-Esteem & Self-Criticism',
+  suicide: 'Suicide & Self-harm Prevention',
+  perinatal: 'Perinatal Mental Health'
 };
 
 // Comics data - ชุดที่ 1: Depression (เด็ก focus)
