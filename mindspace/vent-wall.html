@@ -3,6 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://mindfitness-ai-backend.vercel.app;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <title>Vent Wall - Mind Fitness</title>
   <meta name="description" content="Vent Wall - ระบายความรู้สึกแบบ Anonymous รับกำลังใจจากชุมชน">
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
@@ -247,35 +252,43 @@ async function loadPosts() {
   }
 }
 
+// Sanitize function for XSS prevention
+function sanitize(text) {
+  if (typeof text !== 'string') return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
 function renderPosts() {
   const container = document.getElementById('feedPosts');
   container.innerHTML = posts.map(post => `
-    <div class="post-card" data-id="${post.id}">
+    <div class="post-card" data-id="${sanitize(post.id)}">
       <div class="post-header">
-        <div class="post-avatar">${post.avatar || getRandomAvatar()}</div>
+        <div class="post-avatar">${sanitize(post.avatar) || getRandomAvatar()}</div>
         <div class="post-meta">
-          <h4>${post.name || getRandomName()} ${post.mood ? `<span class="post-mood">${MOOD_LABELS[post.mood] || post.mood}</span>` : ''}</h4>
+          <h4>${sanitize(post.name) || getRandomName()} ${post.mood ? `<span class="post-mood">${MOOD_LABELS[post.mood] || sanitize(post.mood)}</span>` : ''}</h4>
           <span>${timeAgo(post.createdAt)}</span>
         </div>
       </div>
-      <div class="post-content">${post.content}</div>
+      <div class="post-content">${sanitize(post.content)}</div>
       ${post.aiResponse ? `
         <div class="ai-response">
           <div class="ai-response-header">
             <span class="ai-badge">AI</span>
             <span style="font-size:13px;color:#65676b">น้องมายด์ตอบกลับ</span>
           </div>
-          <p>${post.aiResponse}</p>
+          <p>${sanitize(post.aiResponse)}</p>
         </div>
       ` : ''}
       <div class="post-reactions">
-        ${post.likes || 0} คนให้กำลังใจ
+        ${parseInt(post.likes) || 0} คนให้กำลังใจ
       </div>
       <div class="post-actions">
-        <button class="action-btn ${post.liked ? 'liked' : ''}" onclick="likePost('${post.id}')">
+        <button class="action-btn ${post.liked ? 'liked' : ''}" onclick="likePost('${sanitize(post.id)}')">
           ${post.liked ? '❤️' : '🤍'} ให้กำลังใจ
         </button>
-        <button class="action-btn" onclick="replyPost('${post.id}')">
+        <button class="action-btn" onclick="replyPost('${sanitize(post.id)}')">
           💬 ตอบกลับ
         </button>
       </div>

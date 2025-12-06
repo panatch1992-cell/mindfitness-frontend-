@@ -3,6 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://mindfitness-ai-backend.vercel.app;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <title>Mind Fitness - Mental Health Ecosystem</title>
   <meta name="description" content="Mind Fitness - ระบบนิเวศสุขภาพจิตครบวงจร AI Chat, Assessment, Psychoeducation และ Self-Care Tools สำหรับโรงเรียนและบุคคลทั่วไป">
   <meta property="og:title" content="Mind Fitness - Mental Health Ecosystem">
@@ -261,6 +266,7 @@ document.getElementById('mobile-nav-toggle').addEventListener('click', function(
 });
 </script>
 
+<script src="js/security.js"></script>
 <script src="js/mindbot.js"></script>
 <script src="js/mindbot-widget.js"></script>
 </body>
