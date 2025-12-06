@@ -48,6 +48,12 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh;displa
 .searching-screen p{color:#64748b}
 .cancel-btn{margin-top:24px;padding:12px 32px;background:#f1f5f9;color:#64748b;border:none;border-radius:25px;font-size:16px;cursor:pointer;font-family:inherit}
 .cancel-btn:hover{background:#e2e8f0}
+.ai-option{margin-top:20px;padding:20px;background:linear-gradient(135deg,#f0fdf4,#ecfeff);border-radius:16px;display:none}
+.ai-option.show{display:block}
+.ai-option p{font-size:14px;color:#64748b;margin-bottom:12px}
+.ai-chat-btn{padding:12px 32px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:25px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;margin:0 auto}
+.ai-chat-btn:hover{opacity:0.9}
+.ai-badge-tag{background:#00A8A8;color:white;padding:2px 8px;border-radius:10px;font-size:11px}
 
 /* Chat Screen */
 .chat-screen{display:none;flex-direction:column;width:100%;max-width:800px;height:calc(100vh - 100px)}
@@ -127,8 +133,18 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh;displa
       <div class="search-ring"></div>
     </div>
     <h2>กำลังหาคู่สนทนา...</h2>
-    <p>โปรดรอสักครู่</p>
+    <p id="searchingStatus">โปรดรอสักครู่</p>
     <button class="cancel-btn" onclick="cancelMatching()">ยกเลิก</button>
+
+    <!-- AI Option - shows after waiting -->
+    <div class="ai-option" id="aiOption">
+      <p>ยังไม่พบคู่สนทนา? ลองคุยกับน้องมายด์ AI แทนก่อนได้นะ</p>
+      <button class="ai-chat-btn" onclick="startAIChat()">
+        <img src="../images/mind-mascot/mind-support.svg" alt="AI" style="width:24px;height:24px;border-radius:50%">
+        คุยกับน้องมายด์ AI
+        <span class="ai-badge-tag">AI</span>
+      </button>
+    </div>
   </div>
 
   <!-- Chat Screen -->
@@ -192,8 +208,10 @@ let partnerAvatar = '';
 let partnerName = '';
 let chatId = null;
 let isMatching = false;
+let isAIChat = false;
 let pollingInterval = null;
 let matchCheckInterval = null;
+let aiOptionTimeout = null;
 let lastMessageId = null;
 let renderedMessageIds = new Set();
 
@@ -233,6 +251,9 @@ function showScreen(screenId) {
 async function startMatching() {
   showScreen('searchingScreen');
   isMatching = true;
+  isAIChat = false;
+  document.getElementById('aiOption').classList.remove('show');
+  document.getElementById('searchingStatus').textContent = 'โปรดรอสักครู่';
 
   // Join queue
   const result = await apiCall('join_queue');
@@ -253,7 +274,55 @@ async function startMatching() {
   } else {
     // Start polling for match
     startMatchPolling();
+
+    // Show AI option after 10 seconds of waiting
+    aiOptionTimeout = setTimeout(() => {
+      if (isMatching) {
+        document.getElementById('searchingStatus').textContent = 'ยังไม่พบคู่สนทนา...';
+        document.getElementById('aiOption').classList.add('show');
+      }
+    }, 10000);
   }
+}
+
+// Start AI Chat
+async function startAIChat() {
+  if (matchCheckInterval) clearInterval(matchCheckInterval);
+  if (aiOptionTimeout) clearTimeout(aiOptionTimeout);
+  isMatching = false;
+  isAIChat = true;
+
+  // Request AI partner
+  const result = await apiCall('request_ai');
+
+  if (result.error) {
+    alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
+    showScreen('matchingScreen');
+    return;
+  }
+
+  // Save userId if new
+  if (result.userId) {
+    userId = result.userId;
+    localStorage.setItem('private_chat_user_id', userId);
+  }
+
+  // Set AI partner info
+  chatId = result.chatId;
+  partnerAvatar = result.partner?.avatar || '../images/mind-mascot/mind-support.svg';
+  partnerName = result.partner?.name || 'น้องมายด์ AI';
+
+  // Update partner info in UI
+  const avatarEl = document.getElementById('partnerAvatar');
+  avatarEl.innerHTML = `<img src="${partnerAvatar}" alt="AI Partner" style="width:100%;height:100%;border-radius:50%">`;
+  document.getElementById('partnerName').innerHTML = sanitize(partnerName) + ' <span class="ai-badge-tag" style="font-size:10px;padding:2px 6px;background:#00A8A8;color:white;border-radius:8px;margin-left:4px">AI</span>';
+  document.getElementById('chatMessagesArea').innerHTML = '';
+  renderedMessageIds.clear();
+
+  showScreen('chatScreen');
+
+  // Start message polling
+  startMessagePolling();
 }
 
 // Poll for match
@@ -302,6 +371,7 @@ function handleMatchFound(result) {
 async function cancelMatching() {
   isMatching = false;
   if (matchCheckInterval) clearInterval(matchCheckInterval);
+  if (aiOptionTimeout) clearTimeout(aiOptionTimeout);
 
   await apiCall('leave_queue');
   showScreen('matchingScreen');
@@ -446,9 +516,11 @@ async function endChat() {
 // Reset to matching screen
 function resetToMatching() {
   chatId = null;
+  isAIChat = false;
   renderedMessageIds.clear();
   if (pollingInterval) clearInterval(pollingInterval);
   if (matchCheckInterval) clearInterval(matchCheckInterval);
+  if (aiOptionTimeout) clearTimeout(aiOptionTimeout);
   showScreen('matchingScreen');
 }
 

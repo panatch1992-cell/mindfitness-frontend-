@@ -77,6 +77,26 @@ body{font-family:'Sarabun',sans-serif;background:#f0f2f5;min-height:100vh}
 .loading-spinner{width:40px;height:40px;border:3px solid #e4e6e9;border-top-color:#00A8A8;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* Reply Modal */
+.reply-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.reply-modal.show{display:flex}
+.reply-modal-content{background:white;border-radius:12px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto}
+.reply-modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid #e4e6e9}
+.reply-modal-header h3{font-size:18px;color:#0B1E47}
+.replies-list{max-height:300px;overflow-y:auto;padding:16px;background:#f8fafc}
+.reply-item{background:white;border-radius:10px;padding:12px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.reply-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.reply-avatar{width:28px;height:28px;border-radius:50%}
+.reply-time{font-size:12px;color:#65676b}
+.reply-content{font-size:14px;color:#1c1e21;line-height:1.5}
+.ai-encouragement{margin-top:8px;padding:8px 10px;background:linear-gradient(135deg,#f0fdf4,#ecfeff);border-radius:8px;font-size:12px;color:#00A8A8;display:flex;align-items:center}
+.reply-input-area{padding:16px;border-top:1px solid #e4e6e9}
+.reply-input{width:100%;padding:12px;border:2px solid #e4e6e9;border-radius:10px;font-size:14px;font-family:inherit;resize:none;min-height:60px}
+.reply-input:focus{outline:none;border-color:#00A8A8}
+.reply-submit-btn{width:100%;margin-top:10px;padding:12px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+.reply-submit-btn:hover{opacity:0.9}
+.reply-submit-btn:disabled{opacity:0.5;cursor:not-allowed}
+
 @media(max-width:768px){
   .feed-container{padding:12px}
   .composer-actions{flex-wrap:wrap}
@@ -138,6 +158,23 @@ body{font-family:'Sarabun',sans-serif;background:#f0f2f5;min-height:100vh}
     </div>
     <div class="modal-footer">
       <button class="post-btn" id="submitPostBtn" onclick="submitPost()">โพสต์</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reply Modal -->
+<div class="reply-modal" id="replyModal">
+  <div class="reply-modal-content">
+    <div class="reply-modal-header">
+      <h3>ความคิดเห็น</h3>
+      <button class="close-btn" onclick="closeReplyModal()">&times;</button>
+    </div>
+    <div class="replies-list" id="repliesList">
+      <p style="text-align:center;color:#65676b;padding:20px">กำลังโหลด...</p>
+    </div>
+    <div class="reply-input-area">
+      <textarea class="reply-input" id="replyContent" placeholder="เขียนความคิดเห็นให้กำลังใจ..."></textarea>
+      <button class="reply-submit-btn" id="submitReplyBtn" onclick="submitReply()">ส่งความคิดเห็น</button>
     </div>
   </div>
 </div>
@@ -322,8 +359,92 @@ async function likePost(postId) {
   }
 }
 
+// Reply Modal
+let currentReplyPostId = null;
+
 function replyPost(postId) {
-  alert('ฟีเจอร์นี้กำลังพัฒนา');
+  currentReplyPostId = postId;
+  document.getElementById('replyModal').classList.add('show');
+  document.getElementById('replyContent').value = '';
+  document.getElementById('replyContent').focus();
+  loadReplies(postId);
+}
+
+function closeReplyModal() {
+  document.getElementById('replyModal').classList.remove('show');
+  currentReplyPostId = null;
+}
+
+async function loadReplies(postId) {
+  const container = document.getElementById('repliesList');
+  container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>กำลังโหลด...</p></div>';
+
+  try {
+    const res = await fetch(`${API_BASE}/api/vent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'get_replies', postId })
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.replies && data.replies.length > 0) {
+      container.innerHTML = data.replies.map(reply => `
+        <div class="reply-item">
+          <div class="reply-header">
+            <img src="${reply.avatar || getRandomAvatar()}" alt="Avatar" class="reply-avatar">
+            <span class="reply-time">${timeAgo(reply.createdAt)}</span>
+          </div>
+          <p class="reply-content">${sanitize(reply.content)}</p>
+          ${reply.aiEncouragement ? `
+            <div class="ai-encouragement">
+              <img src="../images/mind-mascot/mind-support.svg" alt="AI" style="width:18px;height:18px;margin-right:6px">
+              <span>${sanitize(reply.aiEncouragement)}</span>
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+    } else {
+      container.innerHTML = '<p style="text-align:center;color:#65676b;padding:20px">ยังไม่มีความคิดเห็น เป็นคนแรกที่ให้กำลังใจ!</p>';
+    }
+  } catch (e) {
+    container.innerHTML = '<p style="text-align:center;color:#65676b;padding:20px">ไม่สามารถโหลดความคิดเห็นได้</p>';
+  }
+}
+
+async function submitReply() {
+  const content = document.getElementById('replyContent').value.trim();
+  if (!content || !currentReplyPostId) return;
+
+  const btn = document.getElementById('submitReplyBtn');
+  btn.disabled = true;
+  btn.textContent = 'กำลังส่ง...';
+
+  try {
+    const res = await fetch(`${API_BASE}/api/vent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'reply',
+        postId: currentReplyPostId,
+        content
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      document.getElementById('replyContent').value = '';
+      loadReplies(currentReplyPostId);
+    } else {
+      alert(data.error || 'เกิดข้อผิดพลาด');
+    }
+  } catch (e) {
+    alert('ไม่สามารถส่งความคิดเห็นได้ กรุณาลองใหม่');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'ส่งความคิดเห็น';
 }
 
 // Init

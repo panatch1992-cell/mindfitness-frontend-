@@ -77,6 +77,41 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
 .footer{background:#0B1E47;color:white;padding:40px 20px;text-align:center}
 .footer p{opacity:0.8}
 
+/* Booking Modal */
+.booking-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.booking-modal.show{display:flex}
+.booking-modal-content{background:white;border-radius:16px;width:100%;max-width:450px;max-height:90vh;overflow-y:auto}
+.booking-modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px;border-bottom:1px solid #e4e6e9}
+.booking-modal-header h3{font-size:18px;color:#0B1E47}
+.close-modal-btn{width:36px;height:36px;border:none;background:#e4e6e9;border-radius:50%;font-size:20px;cursor:pointer}
+.booking-modal-body{padding:20px}
+.booking-info{background:#f8fafc;border-radius:10px;padding:16px;margin-bottom:20px}
+.booking-info p{margin-bottom:8px;font-size:14px;color:#64748b}
+.booking-info .price{font-size:24px;font-weight:700;color:#00A8A8}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:14px;color:#0B1E47;margin-bottom:6px;font-weight:500}
+.form-group input,.form-group textarea{width:100%;padding:12px;border:2px solid #e4e6e9;border-radius:10px;font-size:14px;font-family:inherit}
+.form-group input:focus,.form-group textarea:focus{outline:none;border-color:#00A8A8}
+.time-slots{display:flex;flex-wrap:wrap;gap:8px}
+.time-slot-btn{padding:10px 16px;border:2px solid #e4e6e9;border-radius:8px;background:white;font-size:14px;cursor:pointer;font-family:inherit;transition:all 0.2s}
+.time-slot-btn:hover{border-color:#00A8A8}
+.time-slot-btn.selected{background:#00A8A8;color:white;border-color:#00A8A8}
+.booking-modal-footer{padding:20px;border-top:1px solid #e4e6e9}
+.confirm-booking-btn{width:100%;padding:14px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit}
+.confirm-booking-btn:hover{opacity:0.9}
+.confirm-booking-btn:disabled{opacity:0.5;cursor:not-allowed}
+
+/* Success Modal */
+.success-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.success-modal.show{display:flex}
+.success-modal-content{background:white;border-radius:16px;width:100%;max-width:400px;padding:32px;text-align:center}
+.success-icon{width:80px;height:80px;margin:0 auto 20px}
+.success-modal h3{font-size:22px;color:#0B1E47;margin-bottom:8px}
+.success-modal p{color:#64748b;margin-bottom:16px}
+.success-details{background:#f8fafc;border-radius:10px;padding:16px;text-align:left;margin-bottom:20px}
+.success-details p{margin-bottom:8px;font-size:14px;color:#0B1E47}
+.done-btn{padding:12px 32px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:25px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit}
+
 @media(max-width:768px){
   .hero h1{font-size:26px}
   .why-grid{grid-template-columns:1fr}
@@ -105,17 +140,17 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
     <h2 class="section-title">ทำไมควรปรึกษานักจิตวิทยา?</h2>
     <div class="why-grid">
       <div class="why-card">
-        <div class="icon">🔒</div>
+        <div class="icon"><img src="../images/mind-mascot/mind-calm.svg" alt="ปลอดภัย" style="width:60px;height:60px"></div>
         <h3>ปลอดภัยและเป็นความลับ</h3>
         <p>การสนทนาทั้งหมดเป็นความลับ ไม่มีการเปิดเผยข้อมูลโดยไม่ได้รับอนุญาต</p>
       </div>
       <div class="why-card">
-        <div class="icon">🎓</div>
+        <div class="icon"><img src="../images/mind-mascot/mind-support.svg" alt="ผู้เชี่ยวชาญ" style="width:60px;height:60px"></div>
         <h3>ผู้เชี่ยวชาญที่ได้รับการรับรอง</h3>
         <p>นักจิตวิทยาทุกคนมีใบอนุญาตและประสบการณ์มากกว่า 600 ชั่วโมง</p>
       </div>
       <div class="why-card">
-        <div class="icon">📱</div>
+        <div class="icon"><img src="../images/mind-mascot/mind-happy.svg" alt="สะดวก" style="width:60px;height:60px"></div>
         <h3>สะดวกสบาย ทุกที่ทุกเวลา</h3>
         <p>ปรึกษาผ่าน Video Call หรือ Chat ได้ตามความสะดวก</p>
       </div>
@@ -125,65 +160,7 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
   <div class="psychologists-section">
     <h2 class="section-title">นักจิตวิทยาของเรา</h2>
     <div class="psychologists-grid">
-      <div class="psychologist-card">
-        <div class="psychologist-header">
-          <div class="psychologist-avatar">👩‍⚕️</div>
-          <h3>พี่แนน</h3>
-          <p>นักจิตวิทยาการปรึกษา</p>
-        </div>
-        <div class="psychologist-body">
-          <div class="specialties">
-            <span class="specialty-tag">ความเครียด</span>
-            <span class="specialty-tag">ความสัมพันธ์</span>
-            <span class="specialty-tag">วัยรุ่น</span>
-          </div>
-          <div class="psychologist-info">
-            <strong>ประสบการณ์:</strong> 5+ ปี<br>
-            <strong>ภาษา:</strong> ไทย, อังกฤษ
-          </div>
-          <button class="book-btn" onclick="bookConsultation('pee-nan')">นัดพบ</button>
-        </div>
-      </div>
-
-      <div class="psychologist-card">
-        <div class="psychologist-header">
-          <div class="psychologist-avatar">👨‍⚕️</div>
-          <h3>พี่บอส</h3>
-          <p>นักจิตวิทยาคลินิก</p>
-        </div>
-        <div class="psychologist-body">
-          <div class="specialties">
-            <span class="specialty-tag">ซึมเศร้า</span>
-            <span class="specialty-tag">วิตกกังวล</span>
-            <span class="specialty-tag">LGBTQ+</span>
-          </div>
-          <div class="psychologist-info">
-            <strong>ประสบการณ์:</strong> 8+ ปี<br>
-            <strong>ภาษา:</strong> ไทย
-          </div>
-          <button class="book-btn" onclick="bookConsultation('pee-boss')">นัดพบ</button>
-        </div>
-      </div>
-
-      <div class="psychologist-card">
-        <div class="psychologist-header">
-          <div class="psychologist-avatar">👩‍⚕️</div>
-          <h3>พี่มิ้น</h3>
-          <p>นักจิตวิทยาการปรึกษา</p>
-        </div>
-        <div class="psychologist-body">
-          <div class="specialties">
-            <span class="specialty-tag">ครอบครัว</span>
-            <span class="specialty-tag">การทำงาน</span>
-            <span class="specialty-tag">Burnout</span>
-          </div>
-          <div class="psychologist-info">
-            <strong>ประสบการณ์:</strong> 3+ ปี<br>
-            <strong>ภาษา:</strong> ไทย, อังกฤษ
-          </div>
-          <button class="book-btn" onclick="bookConsultation('pee-mint')">นัดพบ</button>
-        </div>
-      </div>
+      <!-- Therapist cards will be loaded dynamically -->
     </div>
   </div>
 
@@ -225,6 +202,50 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
   </div>
 </div>
 
+<!-- Booking Modal -->
+<div class="booking-modal" id="bookingModal">
+  <div class="booking-modal-content">
+    <div class="booking-modal-header">
+      <h3>นัดพบนักจิตวิทยา</h3>
+      <button class="close-modal-btn" onclick="closeBookingModal()">&times;</button>
+    </div>
+    <div class="booking-modal-body">
+      <div class="booking-info">
+        <p><strong>นักจิตวิทยา:</strong> <span id="bookingTherapistName"></span></p>
+        <p class="price"><span id="bookingPrice"></span> <span style="font-size:14px;color:#64748b;font-weight:400">/ 50 นาที</span></p>
+      </div>
+      <div class="form-group">
+        <label>เลือกวันที่</label>
+        <input type="date" id="bookingDate" onchange="onDateSelect(event)" min="">
+      </div>
+      <div class="form-group">
+        <label>เลือกเวลา</label>
+        <div id="slotsContainer">
+          <p style="color:#64748b;font-size:14px">เลือกวันที่ก่อน</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>หมายเหตุ (ถ้ามี)</label>
+        <textarea id="bookingNotes" placeholder="เรื่องที่อยากปรึกษา หรือข้อมูลเพิ่มเติม..." rows="3"></textarea>
+      </div>
+    </div>
+    <div class="booking-modal-footer">
+      <button class="confirm-booking-btn" id="confirmBookingBtn" onclick="confirmBooking()" disabled>ยืนยันการจอง</button>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="success-modal" id="successModal">
+  <div class="success-modal-content">
+    <img src="../images/mind-mascot/mind-happy.svg" alt="Success" class="success-icon">
+    <h3>จองสำเร็จ!</h3>
+    <p>ขอบคุณที่ไว้วางใจใช้บริการ</p>
+    <div class="success-details" id="successDetails"></div>
+    <button class="done-btn" onclick="closeSuccessModal()">เสร็จสิ้น</button>
+  </div>
+</div>
+
 <footer class="footer">
   <p>© 2025 Mind Fitness | Mental Health Ecosystem</p>
   <p style="margin-top:8px;opacity:0.6;">สายด่วนสุขภาพจิต 1323 (24 ชั่วโมง)</p>
@@ -236,8 +257,254 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
 </footer>
 
 <script>
-function bookConsultation(psychologistId) {
-  alert('ระบบนัดพบนักจิตวิทยากำลังพัฒนา\n\nกรุณาติดต่อ contact@mindfitness.co เพื่อนัดพบ');
+const BOOKING_API = window.location.hostname === 'localhost'
+  ? '/api/booking'
+  : 'https://mindfitness-ai-backend.vercel.app/api/booking';
+
+let selectedTherapist = null;
+let selectedDate = null;
+let selectedTime = null;
+
+// Load therapists on page load
+document.addEventListener('DOMContentLoaded', () => {
+  loadTherapists();
+  // Set min date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('bookingDate').setAttribute('min', today);
+});
+
+async function loadTherapists() {
+  const grid = document.querySelector('.psychologists-grid');
+  grid.innerHTML = '<p style="text-align:center;padding:40px;color:#64748b">กำลังโหลด...</p>';
+
+  try {
+    const res = await fetch(BOOKING_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'list_therapists' })
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.therapists.length > 0) {
+      grid.innerHTML = data.therapists.map(t => `
+        <div class="psychologist-card">
+          <div class="psychologist-header">
+            <div class="psychologist-avatar">
+              <img src="${t.avatar}" alt="${t.name}" style="width:60px;height:60px;border-radius:50%">
+            </div>
+            <h3>${t.name}</h3>
+            <p>${t.title}</p>
+          </div>
+          <div class="psychologist-body">
+            <div class="specialties">
+              ${t.specializations.map(s => `<span class="specialty-tag">${s}</span>`).join('')}
+            </div>
+            <div class="psychologist-info">
+              <strong>ประสบการณ์:</strong> ${t.experience}+ ปี<br>
+              <strong>Rating:</strong> ${t.rating} (${t.reviewCount} รีวิว)<br>
+              <strong>ราคา:</strong> ฿${t.price.toLocaleString()} / 50 นาที
+            </div>
+            <button class="book-btn" onclick="openBookingModal('${t.id}', '${t.name}', ${t.price})">นัดพบ</button>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      // Show default static content
+      renderDefaultTherapists();
+    }
+  } catch (e) {
+    console.error('Failed to load therapists:', e);
+    renderDefaultTherapists();
+  }
+}
+
+function renderDefaultTherapists() {
+  const grid = document.querySelector('.psychologists-grid');
+  grid.innerHTML = `
+    <div class="psychologist-card">
+      <div class="psychologist-header">
+        <div class="psychologist-avatar"><img src="../images/mind-mascot/avatar-1.svg" style="width:60px;height:60px;border-radius:50%"></div>
+        <h3>พี่แนน</h3>
+        <p>นักจิตวิทยาการปรึกษา</p>
+      </div>
+      <div class="psychologist-body">
+        <div class="specialties">
+          <span class="specialty-tag">ความเครียด</span>
+          <span class="specialty-tag">ความสัมพันธ์</span>
+          <span class="specialty-tag">วัยรุ่น</span>
+        </div>
+        <div class="psychologist-info">
+          <strong>ประสบการณ์:</strong> 5+ ปี<br>
+          <strong>ภาษา:</strong> ไทย, อังกฤษ
+        </div>
+        <button class="book-btn" onclick="openBookingModal('demo_1', 'พี่แนน', 800)">นัดพบ</button>
+      </div>
+    </div>
+    <div class="psychologist-card">
+      <div class="psychologist-header">
+        <div class="psychologist-avatar"><img src="../images/mind-mascot/avatar-2.svg" style="width:60px;height:60px;border-radius:50%"></div>
+        <h3>พี่บอส</h3>
+        <p>นักจิตวิทยาคลินิก</p>
+      </div>
+      <div class="psychologist-body">
+        <div class="specialties">
+          <span class="specialty-tag">ซึมเศร้า</span>
+          <span class="specialty-tag">วิตกกังวล</span>
+          <span class="specialty-tag">LGBTQ+</span>
+        </div>
+        <div class="psychologist-info">
+          <strong>ประสบการณ์:</strong> 8+ ปี<br>
+          <strong>ภาษา:</strong> ไทย
+        </div>
+        <button class="book-btn" onclick="openBookingModal('demo_2', 'พี่บอส', 800)">นัดพบ</button>
+      </div>
+    </div>
+    <div class="psychologist-card">
+      <div class="psychologist-header">
+        <div class="psychologist-avatar"><img src="../images/mind-mascot/avatar-3.svg" style="width:60px;height:60px;border-radius:50%"></div>
+        <h3>พี่มิ้น</h3>
+        <p>นักจิตวิทยาการปรึกษา</p>
+      </div>
+      <div class="psychologist-body">
+        <div class="specialties">
+          <span class="specialty-tag">ครอบครัว</span>
+          <span class="specialty-tag">การทำงาน</span>
+          <span class="specialty-tag">Burnout</span>
+        </div>
+        <div class="psychologist-info">
+          <strong>ประสบการณ์:</strong> 3+ ปี<br>
+          <strong>ภาษา:</strong> ไทย, อังกฤษ
+        </div>
+        <button class="book-btn" onclick="openBookingModal('demo_3', 'พี่มิ้น', 800)">นัดพบ</button>
+      </div>
+    </div>
+  `;
+}
+
+function openBookingModal(therapistId, therapistName, price) {
+  selectedTherapist = { id: therapistId, name: therapistName, price };
+  selectedDate = null;
+  selectedTime = null;
+
+  document.getElementById('bookingModal').classList.add('show');
+  document.getElementById('bookingTherapistName').textContent = therapistName;
+  document.getElementById('bookingPrice').textContent = `฿${price.toLocaleString()}`;
+  document.getElementById('slotsContainer').innerHTML = '<p style="color:#64748b;font-size:14px">เลือกวันที่ก่อน</p>';
+  document.getElementById('bookingNotes').value = '';
+  updateBookingButton();
+}
+
+function closeBookingModal() {
+  document.getElementById('bookingModal').classList.remove('show');
+}
+
+async function onDateSelect(e) {
+  selectedDate = e.target.value;
+  selectedTime = null;
+  updateBookingButton();
+
+  if (!selectedDate || !selectedTherapist) return;
+
+  const container = document.getElementById('slotsContainer');
+  container.innerHTML = '<p style="color:#64748b;font-size:14px">กำลังโหลด...</p>';
+
+  try {
+    const res = await fetch(BOOKING_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'get_slots',
+        therapistId: selectedTherapist.id,
+        date: selectedDate
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.slots.length > 0) {
+      container.innerHTML = `
+        <p style="margin-bottom:10px;font-size:14px;color:#0B1E47">เลือกเวลา:</p>
+        <div class="time-slots">
+          ${data.slots.map(s => `
+            <button class="time-slot-btn" data-time="${s.time}" onclick="selectTime('${s.time}', this)">
+              ${s.display}
+            </button>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      container.innerHTML = '<p style="color:#64748b;font-size:14px">ไม่มีช่วงเวลาว่างในวันนี้</p>';
+    }
+  } catch (e) {
+    container.innerHTML = '<p style="color:#dc2626;font-size:14px">ไม่สามารถโหลดเวลาได้</p>';
+  }
+}
+
+function selectTime(time, btn) {
+  selectedTime = time;
+  document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  updateBookingButton();
+}
+
+function updateBookingButton() {
+  const btn = document.getElementById('confirmBookingBtn');
+  btn.disabled = !selectedDate || !selectedTime;
+}
+
+async function confirmBooking() {
+  if (!selectedTherapist || !selectedDate || !selectedTime) return;
+
+  const btn = document.getElementById('confirmBookingBtn');
+  btn.disabled = true;
+  btn.textContent = 'กำลังจอง...';
+
+  const userId = localStorage.getItem('mindfitness_user_id') || 'user_' + Date.now();
+  localStorage.setItem('mindfitness_user_id', userId);
+
+  try {
+    const res = await fetch(BOOKING_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'create_booking',
+        userId: userId,
+        therapistId: selectedTherapist.id,
+        date: selectedDate,
+        time: selectedTime,
+        notes: document.getElementById('bookingNotes').value
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      closeBookingModal();
+      showBookingSuccess(data.booking);
+    } else {
+      alert(data.error || 'เกิดข้อผิดพลาด กรุณาลองใหม่');
+    }
+  } catch (e) {
+    alert('ไม่สามารถจองได้ กรุณาลองใหม่');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'ยืนยันการจอง';
+}
+
+function showBookingSuccess(booking) {
+  document.getElementById('successModal').classList.add('show');
+  document.getElementById('successDetails').innerHTML = `
+    <p><strong>นักจิตวิทยา:</strong> ${booking.therapistName}</p>
+    <p><strong>วันที่:</strong> ${new Date(booking.date).toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+    <p><strong>เวลา:</strong> ${booking.time} - ${booking.endTime}</p>
+    <p><strong>ราคา:</strong> ฿${booking.price.toLocaleString()}</p>
+  `;
+}
+
+function closeSuccessModal() {
+  document.getElementById('successModal').classList.remove('show');
 }
 </script>
 <script src="../js/security.js"></script>
