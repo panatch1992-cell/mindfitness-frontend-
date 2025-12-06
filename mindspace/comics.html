@@ -3,13 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://mindfitness-ai-backend.vercel.app;">
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <title>Psychoeducation Comics | Mind Fitness</title>
-  <meta name="description" content="เรียนรู้เรื่องสุขภาพจิตผ่านการ์ตูน 6 ตอน">
+  <meta name="description" content="เรียนรู้เรื่องสุขภาพจิตผ่านการ์ตูน จัดหมวดหมู่ตาม DSM-5 แบ่งตามช่วงวัย">
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
   <link rel="icon" href="../images/logo.jpg">
 <style>
@@ -20,46 +15,89 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .brand__logo{width:40px;height:40px;border-radius:10px}
 .brand__name{font-size:20px;font-weight:700;color:#0B1E47}
-.nav__list{display:flex;gap:24px;list-style:none}
-.nav__link{text-decoration:none;color:#64748b;font-weight:500}
-.nav__link:hover{color:#00A8A8}
+.back-btn{display:flex;align-items:center;gap:8px;color:#64748b;text-decoration:none;font-weight:500}
+.back-btn:hover{color:#00A8A8}
 
 .page-hero{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:60px 20px;text-align:center}
 .page-hero h1{font-size:32px;margin-bottom:12px}
-.page-hero p{opacity:0.9;font-size:16px}
+.page-hero p{opacity:0.9;font-size:16px;max-width:600px;margin:0 auto}
 
-.comics-container{max-width:1000px;margin:40px auto;padding:0 20px}
+.price-banner{background:linear-gradient(135deg,#f59e0b,#d97706);color:white;padding:16px 20px;text-align:center}
+.price-banner h3{font-size:18px;margin-bottom:4px}
+.price-banner p{opacity:0.9;font-size:14px}
+
+.category-tabs{max-width:1200px;margin:0 auto;padding:24px 20px 0}
+.tabs-container{display:flex;gap:12px;overflow-x:auto;padding-bottom:12px}
+.tab-btn{padding:12px 24px;border:2px solid #e2e8f0;background:white;border-radius:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s;font-family:inherit}
+.tab-btn:hover{border-color:#667eea}
+.tab-btn.active{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border-color:transparent}
+
+.dsm-filter{max-width:1200px;margin:0 auto;padding:16px 20px}
+.dsm-filter h3{font-size:14px;color:#64748b;margin-bottom:12px}
+.dsm-tags{display:flex;gap:8px;flex-wrap:wrap}
+.dsm-tag-btn{padding:8px 16px;background:#f1f5f9;border:none;border-radius:20px;font-size:13px;cursor:pointer;transition:all 0.2s;font-family:inherit;white-space:nowrap}
+.dsm-tag-btn:hover{background:#e2e8f0}
+.dsm-tag-btn.active{background:#667eea;color:white}
+
+/* Mobile: horizontal scroll for DSM tags */
+@media(max-width:768px){
+  .dsm-tags{flex-wrap:nowrap;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+  .dsm-tags::-webkit-scrollbar{height:4px}
+  .dsm-tags::-webkit-scrollbar-track{background:#f1f5f9;border-radius:4px}
+  .dsm-tags::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+}
+
+.comics-container{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
+.category-section{margin-bottom:48px}
+.category-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.category-icon{font-size:32px}
+.category-title h2{font-size:22px;color:#0B1E47;margin-bottom:4px}
+.category-title p{color:#64748b;font-size:14px}
+
 .comics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
-.comic-card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08);transition:all 0.3s;cursor:pointer}
+.comic-card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08);transition:all 0.3s;cursor:pointer;position:relative}
 .comic-card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,0.12)}
-.comic-thumb{height:180px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:60px}
-.comic-info{padding:20px}
-.comic-info h3{font-size:18px;color:#0B1E47;margin-bottom:8px}
-.comic-info p{color:#64748b;font-size:14px;line-height:1.6}
-.comic-badge{display:inline-block;background:#d1fae5;color:#047857;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:600;margin-top:12px}
+.comic-card.locked{opacity:0.7}
+.comic-card.locked:hover{opacity:1}
+.comic-thumb{height:160px;display:flex;align-items:center;justify-content:center;font-size:50px;position:relative}
+.comic-thumb.child{background:linear-gradient(135deg,#fcd34d,#f59e0b)}
+.comic-thumb.teen{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+.comic-thumb.elder{background:linear-gradient(135deg,#a78bfa,#7c3aed)}
+.lock-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-size:32px}
+.free-badge{position:absolute;top:12px;right:12px;background:#22c55e;color:white;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600}
+.comic-info{padding:16px 20px}
+.comic-info h3{font-size:16px;color:#0B1E47;margin-bottom:6px}
+.comic-info p{color:#64748b;font-size:13px;line-height:1.5}
+.dsm-tag{display:inline-block;background:#f1f5f9;color:#475569;padding:4px 10px;border-radius:8px;font-size:11px;margin-top:10px}
 
-.comic-viewer{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:white;z-index:9999;overflow-y:auto}
-.comic-viewer.active{display:block}
+.book-section{background:linear-gradient(135deg,#0B1E47,#1e3a5f);padding:60px 20px;color:white;text-align:center}
+.book-card{max-width:800px;margin:0 auto;display:grid;grid-template-columns:200px 1fr;gap:40px;align-items:center;text-align:left}
+.book-cover{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:16px;height:280px;display:flex;align-items:center;justify-content:center;font-size:80px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.book-info h2{font-size:28px;margin-bottom:12px}
+.book-info p{opacity:0.8;line-height:1.7;margin-bottom:20px}
+.book-features{list-style:none;margin-bottom:24px}
+.book-features li{padding:8px 0;display:flex;align-items:center;gap:10px}
+.book-features li::before{content:'✓';color:#22c55e}
+.book-price{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.price-old{font-size:20px;text-decoration:line-through;opacity:0.5}
+.price-new{font-size:36px;font-weight:700;color:#fcd34d}
+.btn-buy{display:inline-block;padding:16px 32px;background:linear-gradient(135deg,#00A8A8,#047857);color:white;text-decoration:none;border-radius:12px;font-weight:700;font-size:18px;transition:transform 0.2s}
+.btn-buy:hover{transform:translateY(-2px)}
+
+.viewer{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:white;z-index:9999;overflow-y:auto}
+.viewer.active{display:block}
 .viewer-header{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
 .viewer-header h2{font-size:18px}
 .close-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:14px}
 .close-btn:hover{background:rgba(255,255,255,0.3)}
 .viewer-content{max-width:900px;margin:0 auto;padding:20px}
-.viewer-content iframe{width:100%;height:80vh;border:none;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
-
-.loading{text-align:center;padding:60px 20px}
-.loading-spinner{width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#667eea;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.no-access{text-align:center;padding:80px 20px}
-.no-access h2{color:#0B1E47;margin-bottom:16px}
-.no-access p{color:#64748b;margin-bottom:24px}
-.btn-primary{display:inline-block;padding:14px 28px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;text-decoration:none;border-radius:10px;font-weight:600}
-.btn-primary:hover{opacity:0.9}
+.viewer-content iframe{width:100%;height:80vh;border:none;border-radius:12px}
 
 @media(max-width:768px){
   .comics-grid{grid-template-columns:1fr}
-  .nav__list{display:none}
+  .book-card{grid-template-columns:1fr;text-align:center}
+  .book-cover{height:200px;max-width:200px;margin:0 auto}
+  .tabs-container{justify-content:flex-start}
 }
 </style>
 </head>
@@ -70,37 +108,121 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
       <img src="../images/logo.jpg" alt="Mind Fitness" class="brand__logo">
       <span class="brand__name">Mind Fitness</span>
     </a>
-    <nav>
-      <ul class="nav__list">
-        <li><a href="../index.html" class="nav__link">หน้าแรก</a></li>
-        <li><a href="../mhl-assessment.html" class="nav__link">ประเมิน MHL</a></li>
-        <li><a href="index.html" class="nav__link">MindSpace</a></li>
-      </ul>
-    </nav>
+    <a href="index.html" class="back-btn">← กลับ MindSpace</a>
   </div>
 </header>
 
 <section class="page-hero">
   <h1>Psychoeducation Comics</h1>
-  <p>เรียนรู้เรื่องสุขภาพจิตผ่านการ์ตูนที่เข้าใจง่าย</p>
+  <p>เรียนรู้เรื่องสุขภาพจิตผ่านการ์ตูน จัดหมวดหมู่ตาม DSM-5 แบ่งตามช่วงวัย</p>
 </section>
 
-<div id="loadingSection" class="loading">
-  <div class="loading-spinner"></div>
-  <p>กำลังโหลดเนื้อหา...</p>
+<div class="price-banner">
+  <h3>ชุดที่ 1: Depression - รวม 6 ตอน ราคาพิเศษ ฿399</h3>
+  <p>ดูตัวอย่าง Vol.1 ฟรี | ปลดล็อกทั้งชุดเพียงครั้งเดียว</p>
 </div>
 
-<div id="noAccessSection" class="no-access" style="display:none">
-  <h2>คุณยังไม่ได้ปลดล็อกเนื้อหา</h2>
-  <p>ชำระเงินเพื่อเข้าถึง Psychoeducation Comics ทั้ง 6 ตอน</p>
-  <a href="payment-comic.html" class="btn-primary">ปลดล็อกเนื้อหา</a>
+<div class="category-tabs">
+  <div class="tabs-container">
+    <button class="tab-btn active" onclick="showCategory('all')">ทั้งหมด</button>
+    <button class="tab-btn" onclick="showCategory('child')">🧒 เด็ก (6-12 ปี)</button>
+    <button class="tab-btn" onclick="showCategory('teen')">🧑 วัยรุ่น-ผู้ใหญ่</button>
+    <button class="tab-btn" onclick="showCategory('elder')">👴 ผู้สูงอายุ</button>
+  </div>
 </div>
 
-<div id="comicsContainer" class="comics-container" style="display:none">
-  <div class="comics-grid" id="comicsGrid"></div>
+<div class="dsm-filter">
+  <h3>กรองตามหมวด DSM-5 / Psychoeducation:</h3>
+  <div class="dsm-tags">
+    <button class="dsm-tag-btn active" onclick="filterDSM('all')">ทั้งหมด</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('depression')">Depression</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('anxiety')">Anxiety</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('gad')">GAD</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('social-anxiety')">Social Anxiety</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('panic')">Panic Disorder</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('ptsd')">PTSD & Trauma</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('eating')">Eating Disorders</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('anorexia')">Anorexia</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('bulimia')">Bulimia</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('bipolar')">Bipolar</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('psychosis')">Psychosis</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('personality')">Personality Disorders</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('autism')">Autism</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('addiction')">Addiction</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('dissociation')">Dissociation</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('bdd')">BDD</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('grief')">Grief & Loss</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('sleep')">Sleep</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('stress')">Stress</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('anger')">Anger</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('self-esteem')">Self-Esteem</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('suicide')">Suicide & Self-harm</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('perinatal')">Perinatal Mental Health</button>
+  </div>
 </div>
 
-<div id="comicViewer" class="comic-viewer">
+<div class="comics-container">
+  <!-- Children Category -->
+  <div class="category-section" id="category-child" data-category="child">
+    <div class="category-header">
+      <span class="category-icon">🧒</span>
+      <div class="category-title">
+        <h2>ช่วงวัยเด็ก (6-12 ปี)</h2>
+        <p>โรคและความผิดปกติที่มักพบในช่วงวัยเด็ก ตาม DSM-5</p>
+      </div>
+    </div>
+    <div class="comics-grid" id="grid-child"></div>
+  </div>
+
+  <!-- Teen/Adult Category -->
+  <div class="category-section" id="category-teen" data-category="teen">
+    <div class="category-header">
+      <span class="category-icon">🧑</span>
+      <div class="category-title">
+        <h2>ช่วงวัยรุ่น-ผู้ใหญ่</h2>
+        <p>โรคและความผิดปกติที่พบบ่อยในวัยรุ่นและผู้ใหญ่ ตาม DSM-5</p>
+      </div>
+    </div>
+    <div class="comics-grid" id="grid-teen"></div>
+  </div>
+
+  <!-- Elderly Category -->
+  <div class="category-section" id="category-elder" data-category="elder">
+    <div class="category-header">
+      <span class="category-icon">👴</span>
+      <div class="category-title">
+        <h2>ช่วงผู้สูงอายุ</h2>
+        <p>โรคและความผิดปกติที่พบในผู้สูงอายุ ตาม DSM-5</p>
+      </div>
+    </div>
+    <div class="comics-grid" id="grid-elder"></div>
+  </div>
+</div>
+
+<!-- Book Bundle Section -->
+<section class="book-section">
+  <div class="book-card">
+    <div class="book-cover">📚</div>
+    <div class="book-info">
+      <h2>ชุดที่ 1: Depression</h2>
+      <p>รวม 6 ตอนในชุดเดียว เรียนรู้เรื่องภาวะซึมเศร้าในทุกช่วงวัย ตั้งแต่เด็กจนถึงผู้สูงอายุ พร้อมความรู้ตามมาตรฐาน DSM-5</p>
+      <ul class="book-features">
+        <li>Vol.1 - Vol.6 ครบทั้ง 6 ตอน</li>
+        <li>เนื้อหา Depression ตาม DSM-5</li>
+        <li>แบ่งตามช่วงวัย: เด็ก / วัยรุ่น-ผู้ใหญ่ / ผู้สูงอายุ</li>
+        <li>อ่านได้ไม่จำกัดครั้ง</li>
+      </ul>
+      <div class="book-price">
+        <span class="price-old">฿599</span>
+        <span class="price-new">฿399</span>
+      </div>
+      <a href="payment-comic.html" class="btn-buy" id="buyBtn">ซื้อชุดที่ 1: Depression</a>
+    </div>
+  </div>
+</section>
+
+<!-- Comic Viewer -->
+<div id="comicViewer" class="viewer">
   <div class="viewer-header">
     <h2 id="viewerTitle">กำลังโหลด...</h2>
     <button class="close-btn" onclick="closeViewer()">ปิด ✕</button>
@@ -113,83 +235,318 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
 <script>
 const API_BASE = 'https://mindfitness-ai-backend.vercel.app';
 
-const COMICS = [
-  { id: 'vol1', title: 'Vol 1: ทำไมฟ้าไม่เหมือนเดิม?', desc: 'เรียนรู้เรื่องโรคซึมเศร้าในเด็ก', icon: '🌧️' },
-  { id: 'vol2', title: 'Vol 2: เมื่อหัวใจไม่เข้มแข็ง', desc: 'ทำความเข้าใจภาวะซึมเศร้า', icon: '💔' },
-  { id: 'vol3', title: 'Vol 3: ถูกกลั่นแกล้ง', desc: 'รับมือกับ Bullying', icon: '😢' },
-  { id: 'vol4', title: 'Vol 4: ความกลัวที่มองไม่เห็น', desc: 'เรียนรู้เรื่องโรควิตกกังวล', icon: '😰' },
-  { id: 'vol5', title: 'Vol 5: เพื่อนของฉัน', desc: 'การช่วยเหลือเพื่อนที่มีปัญหา', icon: '🤝' },
-  { id: 'vol6', title: 'Vol 6: ก้าวข้ามความมืด', desc: 'การฟื้นตัวและความหวัง', icon: '🌈' }
-];
+// DSM-5 Categories Reference (based on psychologytools.com)
+const DSM_CATEGORIES = {
+  // Mood Disorders
+  depression: 'Depressive Disorders',
+  bipolar: 'Bipolar & Related Disorders',
 
-function checkAccess() {
+  // Anxiety Disorders
+  anxiety: 'Anxiety Disorders',
+  gad: 'Generalized Anxiety Disorder',
+  'social-anxiety': 'Social Anxiety Disorder',
+  panic: 'Panic Disorder',
+
+  // Trauma & Stress
+  ptsd: 'PTSD & Trauma-Related Disorders',
+  stress: 'Stress-Related Disorders',
+  dissociation: 'Dissociative Disorders',
+
+  // Eating Disorders
+  eating: 'Eating Disorders',
+  anorexia: 'Anorexia Nervosa',
+  bulimia: 'Bulimia Nervosa',
+
+  // Psychotic Disorders
+  psychosis: 'Schizophrenia & Psychotic Disorders',
+
+  // Personality Disorders
+  personality: 'Personality Disorders',
+
+  // Neurodevelopmental
+  autism: 'Autism Spectrum Disorder',
+
+  // Substance Use
+  addiction: 'Substance-Related & Addictive Disorders',
+
+  // Other Disorders
+  bdd: 'Body Dysmorphic Disorder',
+  grief: 'Grief & Loss',
+  sleep: 'Sleep-Wake Disorders',
+  anger: 'Anger & Impulse Control',
+  'self-esteem': 'Self-Esteem & Self-Criticism',
+  suicide: 'Suicide & Self-harm Prevention',
+  perinatal: 'Perinatal Mental Health'
+};
+
+// Comics data - ชุดที่ 1: Depression (เด็ก focus)
+// Vol.1 = Preview ฟรี, ต้องซื้อเพื่อดูเต็ม
+const COMICS = {
+  child: [
+    {
+      id: 'vol1',
+      title: 'Vol.1: ทำไมฟ้าไม่เหมือนเดิม?',
+      desc: 'ทำความเข้าใจภาวะซึมเศร้าในเด็ก สาเหตุ อาการ และวิธีช่วยเหลือ',
+      icon: '🌧️',
+      dsm: 'depression',
+      dsmLabel: 'Major Depressive Disorder - Children',
+      hasPreview: true  // มี Preview ฟรี แต่ต้องซื้อดูเต็ม
+    },
+    {
+      id: 'vol2',
+      title: 'Vol.2: เมื่อเพื่อนของหนูเศร้า',
+      desc: 'วิธีช่วยเหลือเพื่อนที่มีภาวะซึมเศร้า สำหรับเด็ก',
+      icon: '🤝',
+      dsm: 'depression',
+      dsmLabel: 'Psychological First Aid - Children',
+      hasPreview: false
+    }
+  ],
+  teen: [
+    {
+      id: 'vol3',
+      title: 'Vol.3: เมื่อหัวใจไม่เข้มแข็ง',
+      desc: 'รู้จักโรคซึมเศร้าในวัยรุ่น อาการ สาเหตุ และการรักษา',
+      icon: '💔',
+      dsm: 'depression',
+      dsmLabel: 'Major Depressive Disorder - Adolescent',
+      hasPreview: false
+    },
+    {
+      id: 'vol4',
+      title: 'Vol.4: ความมืดในใจวัยรุ่น',
+      desc: 'ปัจจัยเสี่ยงและการป้องกันภาวะซึมเศร้าในวัยรุ่น',
+      icon: '🌑',
+      dsm: 'depression',
+      dsmLabel: 'Persistent Depressive Disorder',
+      hasPreview: false
+    },
+    {
+      id: 'vol5',
+      title: 'Vol.5: ก้าวออกจากความเศร้า',
+      desc: 'การรักษาและฟื้นตัวจากภาวะซึมเศร้า ทางเลือกในการรักษา',
+      icon: '🌱',
+      dsm: 'depression',
+      dsmLabel: 'Depression Treatment & Recovery',
+      hasPreview: false
+    }
+  ],
+  elder: [
+    {
+      id: 'vol6',
+      title: 'Vol.6: สายรุ้งหลังฝน',
+      desc: 'ภาวะซึมเศร้าในผู้สูงอายุ อาการที่ต่างจากวัยอื่น และการดูแล',
+      icon: '🌈',
+      dsm: 'depression',
+      dsmLabel: 'Late-Life Depression',
+      hasPreview: false
+    }
+  ]
+};
+
+let currentDSMFilter = 'all';
+
+// Check if user has access
+function hasAccess() {
   const saved = localStorage.getItem('comic_access');
   if (!saved) return false;
   try {
     const access = JSON.parse(saved);
-    return !!(access.phone || access.tokens);
+    return !!(access.phone || access.tokens || access.purchased);
   } catch (e) {
     return false;
   }
 }
 
-function renderComics() {
-  const grid = document.getElementById('comicsGrid');
-  grid.innerHTML = COMICS.map(comic => `
-    <div class="comic-card" onclick="openComic('${comic.id}', '${comic.title}')">
-      <div class="comic-thumb">${comic.icon}</div>
-      <div class="comic-info">
-        <h3>${comic.title}</h3>
-        <p>${comic.desc}</p>
-        <span class="comic-badge">อ่านเลย</span>
+// Render comics for a category
+function renderCategory(category, gridId) {
+  const grid = document.getElementById(gridId);
+  let comics = COMICS[category] || [];
+  const userHasAccess = hasAccess();
+
+  // Filter by DSM if not 'all'
+  if (currentDSMFilter !== 'all') {
+    comics = comics.filter(c => c.dsm === currentDSMFilter);
+  }
+
+  if (comics.length === 0) {
+    grid.innerHTML = '<p style="color:#94a3b8;grid-column:1/-1;text-align:center;padding:40px">ไม่มีเนื้อหาในหมวดนี้</p>';
+    return;
+  }
+
+  grid.innerHTML = comics.map(comic => {
+    const isLocked = !userHasAccess;
+    const canPreview = comic.hasPreview;
+
+    // Determine click action
+    let clickAction;
+    if (userHasAccess) {
+      clickAction = `openComic('${comic.id}', '${comic.title}', 'full')`;
+    } else if (canPreview) {
+      clickAction = `openComic('${comic.id}', '${comic.title}', 'preview')`;
+    } else {
+      clickAction = 'showPaymentPrompt()';
+    }
+
+    return `
+      <div class="comic-card ${isLocked && !canPreview ? 'locked' : ''}" data-dsm="${comic.dsm}" onclick="${clickAction}">
+        <div class="comic-thumb ${category}">
+          ${comic.icon}
+          ${canPreview && !userHasAccess ? '<span class="free-badge">ดู Preview ฟรี</span>' : ''}
+          ${userHasAccess ? '<span class="free-badge" style="background:#667eea">ปลดล็อกแล้ว</span>' : ''}
+          ${isLocked && !canPreview ? '<div class="lock-overlay">🔒</div>' : ''}
+        </div>
+        <div class="comic-info">
+          <h3>${comic.title}</h3>
+          <p>${comic.desc}</p>
+          <span class="dsm-tag">DSM-5: ${comic.dsmLabel}</span>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
-async function openComic(id, title) {
-  document.getElementById('comicViewer').classList.add('active');
-  document.getElementById('viewerTitle').textContent = title;
+// Show/hide categories by age
+function showCategory(category) {
+  document.querySelectorAll('.category-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
 
-  try {
-    const res = await fetch(`${API_BASE}/api/psychoeducation`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'getVolume', volumeId: id })
-    });
-    const data = await res.json();
-
-    if (data.success && data.content) {
-      const frame = document.getElementById('viewerFrame');
-      frame.srcdoc = data.content;
+  document.querySelectorAll('.category-section').forEach(section => {
+    if (category === 'all' || section.dataset.category === category) {
+      section.style.display = 'block';
     } else {
-      alert('ไม่สามารถโหลดเนื้อหาได้');
-      closeViewer();
+      section.style.display = 'none';
     }
-  } catch (e) {
-    console.error(e);
-    alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
-    closeViewer();
+  });
+}
+
+// Filter by DSM category
+function filterDSM(dsm) {
+  currentDSMFilter = dsm;
+
+  document.querySelectorAll('.dsm-tag-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+
+  renderCategory('child', 'grid-child');
+  renderCategory('teen', 'grid-teen');
+  renderCategory('elder', 'grid-elder');
+}
+
+// Show payment prompt
+function showPaymentPrompt() {
+  if (confirm('ต้องการปลดล็อก Psychoeducation Comics ชุดที่ 1: Depression ทั้ง 6 ตอน?\n\nราคา ฿399 (จากปกติ ฿599)')) {
+    window.location.href = 'payment-comic.html';
   }
 }
 
+// Open comic viewer
+async function openComic(id, title, mode = 'full') {
+  document.getElementById('comicViewer').classList.add('active');
+  document.getElementById('viewerTitle').textContent = mode === 'preview' ? `${title} (Preview)` : title;
+  document.body.style.overflow = 'hidden';
+
+  const frame = document.getElementById('viewerFrame');
+
+  if (mode === 'preview') {
+    // Show preview with purchase prompt
+    frame.srcdoc = `
+      <html>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+        <style>
+          body { font-family: 'Sarabun', sans-serif; margin: 0; background: #f8fafc; }
+          .preview-header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 40px 20px; text-align: center; }
+          .preview-header h1 { margin: 0 0 8px; }
+          .preview-header p { opacity: 0.9; margin: 0; }
+          .preview-content { max-width: 600px; margin: 40px auto; padding: 0 20px; }
+          .preview-page { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 24px; }
+          .preview-page h2 { color: #0B1E47; margin-top: 0; }
+          .preview-page p { color: #64748b; line-height: 1.8; }
+          .preview-end { text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 16px; color: white; }
+          .preview-end h3 { margin: 0 0 12px; }
+          .preview-end p { opacity: 0.9; margin: 0 0 20px; }
+          .btn-buy { display: inline-block; padding: 14px 32px; background: white; color: #d97706; border-radius: 10px; text-decoration: none; font-weight: 700; }
+        </style>
+      </head>
+      <body>
+        <div class="preview-header">
+          <h1>${title}</h1>
+          <p>Preview - ตัวอย่างเนื้อหา</p>
+        </div>
+        <div class="preview-content">
+          <div class="preview-page">
+            <h2>🌧️ บทนำ</h2>
+            <p>ฟ้าเป็นเด็กหญิงวัย 10 ขวบที่เคยร่าเริงสดใส ชอบเล่นกับเพื่อน และทำกิจกรรมต่างๆ มากมาย แต่วันหนึ่ง ฟ้าเริ่มเปลี่ยนไป...</p>
+            <p>เธอไม่อยากไปโรงเรียน ไม่อยากเล่นกับเพื่อน และมักจะนั่งเหม่อลอยอยู่คนเดียว แม่ของฟ้าสังเกตเห็นว่าลูกสาวไม่เหมือนเดิม...</p>
+          </div>
+          <div class="preview-page">
+            <h2>📖 ตัวอย่างหน้าที่ 1</h2>
+            <p style="font-style: italic; color: #94a3b8;">[ภาพประกอบการ์ตูน: ฟ้านั่งมองออกไปนอกหน้าต่าง ท้องฟ้าเป็นสีเทา]</p>
+            <p>"ทำไมฟ้าถึงรู้สึกเศร้าตลอดเวลา ทั้งที่ไม่มีอะไรเกิดขึ้น..."</p>
+          </div>
+          <div class="preview-end">
+            <h3>🔒 ต้องการอ่านต่อ?</h3>
+            <p>ปลดล็อกเนื้อหาทั้ง 6 ตอน ราคา ฿399</p>
+            <a href="payment-comic.html" class="btn-buy">ซื้อชุดที่ 1: Depression</a>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+  } else {
+    // Full content
+    frame.srcdoc = `
+      <html>
+      <head>
+        <style>
+          body { font-family: 'Sarabun', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+          .content { text-align: center; padding: 40px; }
+          h1 { margin-bottom: 16px; }
+          p { opacity: 0.9; }
+        </style>
+      </head>
+      <body>
+        <div class="content">
+          <h1>${title}</h1>
+          <p>✅ เนื้อหาเต็มจะแสดงที่นี่</p>
+          <p style="margin-top: 20px; font-size: 14px; opacity: 0.7;">กำลังพัฒนา...</p>
+        </div>
+      </body>
+      </html>
+    `;
+  }
+}
+
+// Close viewer
 function closeViewer() {
   document.getElementById('comicViewer').classList.remove('active');
   document.getElementById('viewerFrame').srcdoc = '';
+  document.body.style.overflow = '';
 }
 
-// Init
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('loadingSection').style.display = 'none';
-
-  if (checkAccess()) {
-    document.getElementById('comicsContainer').style.display = 'block';
-    renderComics();
-  } else {
-    document.getElementById('noAccessSection').style.display = 'block';
+// Update buy button if already purchased
+function updateBuyButton() {
+  if (hasAccess()) {
+    const btn = document.getElementById('buyBtn');
+    btn.textContent = 'ปลดล็อกแล้ว ✓';
+    btn.style.background = '#22c55e';
+    btn.href = '#';
+    btn.onclick = (e) => { e.preventDefault(); alert('คุณปลดล็อกเนื้อหาทั้งหมดแล้ว!'); };
   }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  renderCategory('child', 'grid-child');
+  renderCategory('teen', 'grid-teen');
+  renderCategory('elder', 'grid-elder');
+  updateBuyButton();
+});
+
+// Handle escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeViewer();
 });
 </script>
-<script src="../js/security.js"></script>
 </body>
 </html>
