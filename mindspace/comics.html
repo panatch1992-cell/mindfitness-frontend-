@@ -28,9 +28,16 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
 
 .category-tabs{max-width:1200px;margin:0 auto;padding:24px 20px 0}
 .tabs-container{display:flex;gap:12px;overflow-x:auto;padding-bottom:12px}
-.tab-btn{padding:12px 24px;border:2px solid #e2e8f0;background:white;border-radius:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.tab-btn{padding:12px 24px;border:2px solid #e2e8f0;background:white;border-radius:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s;font-family:inherit}
 .tab-btn:hover{border-color:#667eea}
 .tab-btn.active{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border-color:transparent}
+
+.dsm-filter{max-width:1200px;margin:0 auto;padding:16px 20px}
+.dsm-filter h3{font-size:14px;color:#64748b;margin-bottom:12px}
+.dsm-tags{display:flex;gap:8px;flex-wrap:wrap}
+.dsm-tag-btn{padding:8px 16px;background:#f1f5f9;border:none;border-radius:20px;font-size:13px;cursor:pointer;transition:all 0.2s;font-family:inherit}
+.dsm-tag-btn:hover{background:#e2e8f0}
+.dsm-tag-btn.active{background:#667eea;color:white}
 
 .comics-container{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
 .category-section{margin-bottom:48px}
@@ -103,8 +110,8 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
 </section>
 
 <div class="price-banner">
-  <h3>รวม 6 ตอน เป็นเล่มที่ 1 - ราคาพิเศษ ฿399</h3>
-  <p>ดูตัวอย่าง Vol.1 ฟรี | ปลดล็อกทั้งหมดเพียงครั้งเดียว</p>
+  <h3>ชุดที่ 1: Depression - รวม 6 ตอน ราคาพิเศษ ฿399</h3>
+  <p>ดูตัวอย่าง Vol.1 ฟรี | ปลดล็อกทั้งชุดเพียงครั้งเดียว</p>
 </div>
 
 <div class="category-tabs">
@@ -116,6 +123,20 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
   </div>
 </div>
 
+<div class="dsm-filter">
+  <h3>กรองตามหมวด DSM-5:</h3>
+  <div class="dsm-tags">
+    <button class="dsm-tag-btn active" onclick="filterDSM('all')">ทั้งหมด</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('depression')">Depression</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('anxiety')">Anxiety</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('trauma')">Trauma & Stress</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('eating')">Eating Disorders</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('bipolar')">Bipolar</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('autism')">Autism</button>
+    <button class="dsm-tag-btn" onclick="filterDSM('addiction')">Addiction</button>
+  </div>
+</div>
+
 <div class="comics-container">
   <!-- Children Category -->
   <div class="category-section" id="category-child" data-category="child">
@@ -123,7 +144,7 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
       <span class="category-icon">🧒</span>
       <div class="category-title">
         <h2>ช่วงวัยเด็ก (6-12 ปี)</h2>
-        <p>โรคและความผิดปกติที่มักพบในช่วงวัยเด็ก</p>
+        <p>โรคและความผิดปกติที่มักพบในช่วงวัยเด็ก ตาม DSM-5</p>
       </div>
     </div>
     <div class="comics-grid" id="grid-child"></div>
@@ -135,7 +156,7 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
       <span class="category-icon">🧑</span>
       <div class="category-title">
         <h2>ช่วงวัยรุ่น-ผู้ใหญ่</h2>
-        <p>โรคและความผิดปกติที่พบบ่อยในวัยรุ่นและผู้ใหญ่</p>
+        <p>โรคและความผิดปกติที่พบบ่อยในวัยรุ่นและผู้ใหญ่ ตาม DSM-5</p>
       </div>
     </div>
     <div class="comics-grid" id="grid-teen"></div>
@@ -147,7 +168,7 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
       <span class="category-icon">👴</span>
       <div class="category-title">
         <h2>ช่วงผู้สูงอายุ</h2>
-        <p>โรคและความผิดปกติที่พบในผู้สูงอายุ</p>
+        <p>โรคและความผิดปกติที่พบในผู้สูงอายุ ตาม DSM-5</p>
       </div>
     </div>
     <div class="comics-grid" id="grid-elder"></div>
@@ -159,19 +180,19 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
   <div class="book-card">
     <div class="book-cover">📚</div>
     <div class="book-info">
-      <h2>Psychoeducation Comics เล่ม 1</h2>
-      <p>รวม 6 ตอนในเล่มเดียว ครอบคลุมโรคทางจิตเวชที่พบบ่อยในทุกช่วงวัย พร้อมความรู้ตามมาตรฐาน DSM-5</p>
+      <h2>ชุดที่ 1: Depression</h2>
+      <p>รวม 6 ตอนในชุดเดียว เรียนรู้เรื่องภาวะซึมเศร้าในทุกช่วงวัย ตั้งแต่เด็กจนถึงผู้สูงอายุ พร้อมความรู้ตามมาตรฐาน DSM-5</p>
       <ul class="book-features">
         <li>Vol.1 - Vol.6 ครบทั้ง 6 ตอน</li>
-        <li>เนื้อหาตาม DSM-5 แบ่งตามช่วงวัย</li>
+        <li>เนื้อหา Depression ตาม DSM-5</li>
+        <li>แบ่งตามช่วงวัย: เด็ก / วัยรุ่น-ผู้ใหญ่ / ผู้สูงอายุ</li>
         <li>อ่านได้ไม่จำกัดครั้ง</li>
-        <li>รองรับทุกอุปกรณ์</li>
       </ul>
       <div class="book-price">
         <span class="price-old">฿599</span>
         <span class="price-new">฿399</span>
       </div>
-      <a href="payment-comic.html" class="btn-buy" id="buyBtn">ซื้อเล่มที่ 1</a>
+      <a href="payment-comic.html" class="btn-buy" id="buyBtn">ซื้อชุดที่ 1: Depression</a>
     </div>
   </div>
 </section>
@@ -190,63 +211,85 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
 <script>
 const API_BASE = 'https://mindfitness-ai-backend.vercel.app';
 
-// Comics data organized by DSM-5 categories and age groups
+// DSM-5 Categories Reference (based on psychologytools.com)
+const DSM_CATEGORIES = {
+  depression: 'Depressive Disorders',
+  anxiety: 'Anxiety Disorders',
+  trauma: 'Trauma & Stressor-Related Disorders',
+  eating: 'Eating Disorders',
+  bipolar: 'Bipolar & Related Disorders',
+  autism: 'Autism Spectrum Disorder',
+  addiction: 'Substance-Related & Addictive Disorders',
+  dissociation: 'Dissociative Disorders',
+  anger: 'Disruptive, Impulse-Control Disorders',
+  grief: 'Persistent Complex Bereavement Disorder'
+};
+
+// Comics data - ชุดที่ 1: Depression (เด็ก focus)
 const COMICS = {
   child: [
     {
       id: 'vol1',
       title: 'Vol.1: ทำไมฟ้าไม่เหมือนเดิม?',
-      desc: 'ทำความเข้าใจภาวะซึมเศร้าในเด็ก และวิธีช่วยเหลือ',
+      desc: 'ทำความเข้าใจภาวะซึมเศร้าในเด็ก สาเหตุ อาการ และวิธีช่วยเหลือ',
       icon: '🌧️',
-      dsm: 'Depressive Disorders',
+      dsm: 'depression',
+      dsmLabel: 'Major Depressive Disorder - Children',
       free: true
     },
     {
-      id: 'vol3',
-      title: 'Vol.3: ถูกกลั่นแกล้ง',
-      desc: 'ผลกระทบของ Bullying ต่อสุขภาพจิตเด็ก',
-      icon: '😢',
-      dsm: 'Trauma & Stressor-Related',
+      id: 'vol2',
+      title: 'Vol.2: เมื่อเพื่อนของหนูเศร้า',
+      desc: 'วิธีช่วยเหลือเพื่อนที่มีภาวะซึมเศร้า สำหรับเด็ก',
+      icon: '🤝',
+      dsm: 'depression',
+      dsmLabel: 'Psychological First Aid - Children',
       free: false
     }
   ],
   teen: [
     {
-      id: 'vol2',
-      title: 'Vol.2: เมื่อหัวใจไม่เข้มแข็ง',
-      desc: 'รู้จักโรคซึมเศร้า อาการ สาเหตุ และการรักษา',
+      id: 'vol3',
+      title: 'Vol.3: เมื่อหัวใจไม่เข้มแข็ง',
+      desc: 'รู้จักโรคซึมเศร้าในวัยรุ่น อาการ สาเหตุ และการรักษา',
       icon: '💔',
-      dsm: 'Major Depressive Disorder',
+      dsm: 'depression',
+      dsmLabel: 'Major Depressive Disorder - Adolescent',
       free: false
     },
     {
       id: 'vol4',
-      title: 'Vol.4: ความกลัวที่มองไม่เห็น',
-      desc: 'ทำความเข้าใจโรควิตกกังวลและการรับมือ',
-      icon: '😰',
-      dsm: 'Anxiety Disorders',
+      title: 'Vol.4: ความมืดในใจวัยรุ่น',
+      desc: 'ปัจจัยเสี่ยงและการป้องกันภาวะซึมเศร้าในวัยรุ่น',
+      icon: '🌑',
+      dsm: 'depression',
+      dsmLabel: 'Persistent Depressive Disorder',
       free: false
     },
     {
       id: 'vol5',
-      title: 'Vol.5: เพื่อนของฉัน',
-      desc: 'วิธีช่วยเหลือเพื่อนที่มีปัญหาสุขภาพจิต',
-      icon: '🤝',
-      dsm: 'Psychological First Aid',
+      title: 'Vol.5: ก้าวออกจากความเศร้า',
+      desc: 'การรักษาและฟื้นตัวจากภาวะซึมเศร้า ทางเลือกในการรักษา',
+      icon: '🌱',
+      dsm: 'depression',
+      dsmLabel: 'Depression Treatment & Recovery',
       free: false
     }
   ],
   elder: [
     {
       id: 'vol6',
-      title: 'Vol.6: ก้าวข้ามความมืด',
-      desc: 'การฟื้นตัวจากภาวะซึมเศร้าในผู้สูงอายุ',
+      title: 'Vol.6: สายรุ้งหลังฝน',
+      desc: 'ภาวะซึมเศร้าในผู้สูงอายุ อาการที่ต่างจากวัยอื่น และการดูแล',
       icon: '🌈',
-      dsm: 'Late-Life Depression',
+      dsm: 'depression',
+      dsmLabel: 'Late-Life Depression',
       free: false
     }
   ]
 };
+
+let currentDSMFilter = 'all';
 
 // Check if user has access
 function hasAccess() {
@@ -263,13 +306,23 @@ function hasAccess() {
 // Render comics for a category
 function renderCategory(category, gridId) {
   const grid = document.getElementById(gridId);
-  const comics = COMICS[category] || [];
+  let comics = COMICS[category] || [];
   const userHasAccess = hasAccess();
+
+  // Filter by DSM if not 'all'
+  if (currentDSMFilter !== 'all') {
+    comics = comics.filter(c => c.dsm === currentDSMFilter);
+  }
+
+  if (comics.length === 0) {
+    grid.innerHTML = '<p style="color:#94a3b8;grid-column:1/-1;text-align:center;padding:40px">ไม่มีเนื้อหาในหมวดนี้</p>';
+    return;
+  }
 
   grid.innerHTML = comics.map(comic => {
     const isLocked = !comic.free && !userHasAccess;
     return `
-      <div class="comic-card ${isLocked ? 'locked' : ''}" onclick="${isLocked ? 'showPaymentPrompt()' : `openComic('${comic.id}', '${comic.title}')`}">
+      <div class="comic-card ${isLocked ? 'locked' : ''}" data-dsm="${comic.dsm}" onclick="${isLocked ? 'showPaymentPrompt()' : `openComic('${comic.id}', '${comic.title}')`}">
         <div class="comic-thumb ${category}">
           ${comic.icon}
           ${comic.free ? '<span class="free-badge">ดูฟรี</span>' : ''}
@@ -278,16 +331,16 @@ function renderCategory(category, gridId) {
         <div class="comic-info">
           <h3>${comic.title}</h3>
           <p>${comic.desc}</p>
-          <span class="dsm-tag">DSM-5: ${comic.dsm}</span>
+          <span class="dsm-tag">DSM-5: ${comic.dsmLabel}</span>
         </div>
       </div>
     `;
   }).join('');
 }
 
-// Show/hide categories
+// Show/hide categories by age
 function showCategory(category) {
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.category-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
   event.target.classList.add('active');
 
   document.querySelectorAll('.category-section').forEach(section => {
@@ -299,9 +352,21 @@ function showCategory(category) {
   });
 }
 
+// Filter by DSM category
+function filterDSM(dsm) {
+  currentDSMFilter = dsm;
+
+  document.querySelectorAll('.dsm-tag-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+
+  renderCategory('child', 'grid-child');
+  renderCategory('teen', 'grid-teen');
+  renderCategory('elder', 'grid-elder');
+}
+
 // Show payment prompt
 function showPaymentPrompt() {
-  if (confirm('ต้องการปลดล็อก Psychoeducation Comics ทั้ง 6 ตอน?\n\nราคา ฿399 (จากปกติ ฿599)')) {
+  if (confirm('ต้องการปลดล็อก Psychoeducation Comics ชุดที่ 1: Depression ทั้ง 6 ตอน?\n\nราคา ฿399 (จากปกติ ฿599)')) {
     window.location.href = 'payment-comic.html';
   }
 }
@@ -312,23 +377,25 @@ async function openComic(id, title) {
   document.getElementById('viewerTitle').textContent = title;
   document.body.style.overflow = 'hidden';
 
-  // For now, show placeholder content
   const frame = document.getElementById('viewerFrame');
   frame.srcdoc = `
     <html>
     <head>
       <style>
-        body { font-family: 'Sarabun', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #f8fafc; }
+        body { font-family: 'Sarabun', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
         .content { text-align: center; padding: 40px; }
-        h1 { color: #667eea; margin-bottom: 16px; }
-        p { color: #64748b; }
+        h1 { margin-bottom: 16px; }
+        p { opacity: 0.9; }
+        .loader { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
       </style>
     </head>
     <body>
       <div class="content">
+        <div class="loader"></div>
         <h1>${title}</h1>
-        <p>เนื้อหาการ์ตูนจะแสดงที่นี่</p>
-        <p style="margin-top: 20px; font-size: 14px;">กำลังพัฒนา...</p>
+        <p>กำลังโหลดเนื้อหา...</p>
+        <p style="margin-top: 20px; font-size: 14px; opacity: 0.7;">เนื้อหาจะแสดงที่นี่เมื่อพร้อม</p>
       </div>
     </body>
     </html>
