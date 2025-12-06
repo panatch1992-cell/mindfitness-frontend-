@@ -141,6 +141,7 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh;displa
           <span>กำลังพูดคุย</span>
         </div>
       </div>
+      <button class="report-btn" onclick="reportUser()" style="padding:10px 16px;background:#f1f5f9;color:#64748b;border:none;border-radius:20px;font-size:14px;cursor:pointer;margin-right:8px" title="รายงานผู้ใช้">⚠️</button>
       <button class="end-chat-btn" onclick="endChat()">จบการสนทนา</button>
     </div>
 
@@ -164,15 +165,48 @@ body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh;displa
 </div>
 
 <script>
-const AVATARS = ['🌸', '🌈', '🌙', '⭐', '🦋', '🌻', '🍀', '🎈', '🐱', '🐰'];
-const NAMES = ['เพื่อนร่วมทาง', 'คนแปลกหน้า', 'ผู้ฟังที่ดี', 'เพื่อนใหม่', 'ใครบางคน'];
+// API Configuration
+const API_BASE = window.location.hostname === 'localhost'
+  ? ''
+  : 'https://mindfitness-ai-backend.vercel.app';
+const CHAT_API = API_BASE + '/api/private-chat';
 
-let myAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
+// State
+let userId = localStorage.getItem('private_chat_user_id') || null;
+let myAvatar = '😊';
 let partnerAvatar = '';
 let partnerName = '';
 let chatId = null;
 let isMatching = false;
+let pollingInterval = null;
+let matchCheckInterval = null;
+let lastMessageId = null;
+let renderedMessageIds = new Set();
 
+// Sanitize for XSS prevention
+function sanitize(text) {
+  if (typeof text !== 'string') return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// API Helper
+async function apiCall(action, data = {}) {
+  try {
+    const res = await fetch(CHAT_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, userId, chatId, ...data })
+    });
+    return await res.json();
+  } catch (e) {
+    console.error('API Error:', e);
+    return { error: e.message };
+  }
+}
+
+// Screen Management
 function showScreen(screenId) {
   document.getElementById('matchingScreen').style.display = 'none';
   document.getElementById('searchingScreen').style.display = 'none';
@@ -181,86 +215,250 @@ function showScreen(screenId) {
   document.getElementById(screenId).style.display = screenId === 'chatScreen' ? 'flex' : 'block';
 }
 
-function startMatching() {
+// Start Matching
+async function startMatching() {
   showScreen('searchingScreen');
   isMatching = true;
 
-  // Simulate matching (in real app, this would be WebSocket/polling)
-  setTimeout(() => {
-    if (isMatching) {
-      matchFound();
-    }
-  }, 2000 + Math.random() * 3000);
-}
+  // Join queue
+  const result = await apiCall('join_queue');
 
-function cancelMatching() {
-  isMatching = false;
-  showScreen('matchingScreen');
-}
+  if (result.error) {
+    alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
+    showScreen('matchingScreen');
+    return;
+  }
 
-function matchFound() {
-  partnerAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
-  partnerName = NAMES[Math.floor(Math.random() * NAMES.length)];
-  chatId = 'chat_' + Date.now();
+  // Save userId
+  userId = result.userId;
+  localStorage.setItem('private_chat_user_id', userId);
 
-  document.getElementById('partnerAvatar').textContent = partnerAvatar;
-  document.getElementById('partnerName').textContent = partnerName;
-  document.getElementById('chatMessagesArea').innerHTML = '<div class="system-msg">เริ่มการสนทนาแล้ว - พูดคุยอย่างสุภาพนะคะ</div>';
-
-  showScreen('chatScreen');
-
-  // Welcome message from partner (simulated)
-  setTimeout(() => {
-    addMessage('สวัสดีค่ะ วันนี้เป็นอย่างไรบ้าง?', false);
-  }, 1500);
-}
-
-function addMessage(content, isMine) {
-  const area = document.getElementById('chatMessagesArea');
-  const div = document.createElement('div');
-  div.className = `chat-message ${isMine ? 'mine' : 'partner'}`;
-  div.innerHTML = `
-    <div class="msg-avatar ${isMine ? 'mine' : ''}">${isMine ? myAvatar : partnerAvatar}</div>
-    <div class="msg-bubble">${content}</div>
-  `;
-  area.appendChild(div);
-  area.scrollTop = area.scrollHeight;
-}
-
-function sendChatMessage() {
-  const input = document.getElementById('chatInput');
-  const message = input.value.trim();
-  if (!message) return;
-
-  addMessage(message, true);
-  input.value = '';
-
-  // Simulate partner response (in real app, this would be sent via WebSocket)
-  setTimeout(() => {
-    const responses = [
-      'ฟังดูน่าสนใจเลย เล่าเพิ่มได้ไหมคะ?',
-      'เข้าใจค่ะ บางทีก็รู้สึกแบบนั้นเหมือนกัน',
-      'ขอบคุณที่เล่าให้ฟังนะคะ',
-      'คุณเก่งมากที่ผ่านมาได้',
-      'ไม่เป็นไรนะคะ ทุกอย่างจะดีขึ้น'
-    ];
-    addMessage(responses[Math.floor(Math.random() * responses.length)], false);
-  }, 1500 + Math.random() * 2000);
-}
-
-function endChat() {
-  if (confirm('ต้องการจบการสนทนาใช่ไหม?')) {
-    chatId = null;
-    showScreen('endedScreen');
+  if (result.matched) {
+    // Matched immediately
+    handleMatchFound(result);
+  } else {
+    // Start polling for match
+    startMatchPolling();
   }
 }
 
-function resetToMatching() {
+// Poll for match
+function startMatchPolling() {
+  if (matchCheckInterval) clearInterval(matchCheckInterval);
+
+  matchCheckInterval = setInterval(async () => {
+    if (!isMatching) {
+      clearInterval(matchCheckInterval);
+      return;
+    }
+
+    const result = await apiCall('check_match');
+
+    if (result.matched) {
+      clearInterval(matchCheckInterval);
+      handleMatchFound(result);
+    }
+  }, 2000); // Check every 2 seconds
+}
+
+// Handle match found
+function handleMatchFound(result) {
+  isMatching = false;
+  chatId = result.chatId;
+  partnerAvatar = result.partner?.avatar || '🌸';
+  partnerName = result.partner?.name || 'คนแปลกหน้า';
+
+  document.getElementById('partnerAvatar').textContent = partnerAvatar;
+  document.getElementById('partnerName').textContent = sanitize(partnerName);
+  document.getElementById('chatMessagesArea').innerHTML = '';
+  renderedMessageIds.clear();
+
+  showScreen('chatScreen');
+
+  // Start message polling
+  startMessagePolling();
+}
+
+// Cancel matching
+async function cancelMatching() {
+  isMatching = false;
+  if (matchCheckInterval) clearInterval(matchCheckInterval);
+
+  await apiCall('leave_queue');
   showScreen('matchingScreen');
 }
 
+// Poll for new messages
+function startMessagePolling() {
+  if (pollingInterval) clearInterval(pollingInterval);
+
+  // Initial fetch
+  fetchMessages();
+
+  // Poll every 1.5 seconds
+  pollingInterval = setInterval(fetchMessages, 1500);
+}
+
+// Fetch messages
+async function fetchMessages() {
+  if (!chatId) return;
+
+  const result = await apiCall('get_messages');
+
+  if (result.error || result.ended) {
+    clearInterval(pollingInterval);
+    if (result.ended || result.sessionStatus === 'ended') {
+      showScreen('endedScreen');
+    }
+    return;
+  }
+
+  if (result.sessionStatus === 'ended') {
+    clearInterval(pollingInterval);
+    showScreen('endedScreen');
+    return;
+  }
+
+  // Render new messages
+  if (result.messages) {
+    renderMessages(result.messages);
+  }
+}
+
+// Render messages
+function renderMessages(messages) {
+  const area = document.getElementById('chatMessagesArea');
+
+  messages.forEach(msg => {
+    if (renderedMessageIds.has(msg.id)) return;
+    renderedMessageIds.add(msg.id);
+
+    const div = document.createElement('div');
+
+    if (msg.type === 'system') {
+      div.className = 'system-msg';
+      div.textContent = msg.content;
+    } else {
+      const isMine = msg.senderId === userId;
+      div.className = `chat-message ${isMine ? 'mine' : 'partner'}`;
+      div.innerHTML = `
+        <div class="msg-avatar ${isMine ? 'mine' : ''}">${sanitize(isMine ? myAvatar : msg.senderAvatar || partnerAvatar)}</div>
+        <div class="msg-bubble">${sanitize(msg.content)}</div>
+      `;
+    }
+
+    area.appendChild(div);
+  });
+
+  area.scrollTop = area.scrollHeight;
+}
+
+// Add message to UI (optimistic update)
+function addMessageOptimistic(content, isMine) {
+  const area = document.getElementById('chatMessagesArea');
+  const div = document.createElement('div');
+  const tempId = 'temp_' + Date.now();
+
+  div.className = `chat-message ${isMine ? 'mine' : 'partner'}`;
+  div.setAttribute('data-temp-id', tempId);
+  div.innerHTML = `
+    <div class="msg-avatar ${isMine ? 'mine' : ''}">${sanitize(isMine ? myAvatar : partnerAvatar)}</div>
+    <div class="msg-bubble">${sanitize(content)}</div>
+  `;
+
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+
+  return tempId;
+}
+
+// Send message
+async function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const message = input.value.trim();
+  if (!message || !chatId) return;
+
+  // Rate limiting
+  if (typeof MFSecurity !== 'undefined' && !MFSecurity.RateLimiter.check('private_chat', 20, 60000)) {
+    alert('กรุณารอสักครู่ก่อนส่งข้อความถัดไป');
+    return;
+  }
+
+  input.value = '';
+
+  // Optimistic update
+  const tempId = addMessageOptimistic(message, true);
+  renderedMessageIds.add(tempId);
+
+  // Send to API
+  const result = await apiCall('send_message', { message });
+
+  if (result.error) {
+    // Remove optimistic message on error
+    const tempEl = document.querySelector(`[data-temp-id="${tempId}"]`);
+    if (tempEl) tempEl.remove();
+    renderedMessageIds.delete(tempId);
+
+    if (result.error.includes('ended')) {
+      showScreen('endedScreen');
+    } else {
+      input.value = message; // Restore message
+      alert('ส่งข้อความไม่สำเร็จ กรุณาลองใหม่');
+    }
+  } else if (result.message) {
+    // Mark the real message as rendered
+    renderedMessageIds.add(result.message.id);
+  }
+}
+
+// End chat
+async function endChat() {
+  if (!confirm('ต้องการจบการสนทนาใช่ไหม?')) return;
+
+  if (pollingInterval) clearInterval(pollingInterval);
+
+  await apiCall('end_chat');
+  chatId = null;
+  showScreen('endedScreen');
+}
+
+// Reset to matching screen
+function resetToMatching() {
+  chatId = null;
+  renderedMessageIds.clear();
+  if (pollingInterval) clearInterval(pollingInterval);
+  if (matchCheckInterval) clearInterval(matchCheckInterval);
+  showScreen('matchingScreen');
+}
+
+// Report user
+async function reportUser() {
+  const reason = prompt('กรุณาระบุเหตุผลในการรายงาน:');
+  if (!reason) return;
+
+  await apiCall('report', { reason });
+  alert('ขอบคุณสำหรับการรายงาน ทีมงานจะตรวจสอบโดยเร็ว');
+}
+
+// Keyboard event
 document.getElementById('chatInput').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') sendChatMessage();
+});
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+  if (chatId) {
+    navigator.sendBeacon(CHAT_API, JSON.stringify({
+      action: 'end_chat',
+      userId,
+      chatId
+    }));
+  } else if (isMatching) {
+    navigator.sendBeacon(CHAT_API, JSON.stringify({
+      action: 'leave_queue',
+      userId
+    }));
+  }
 });
 </script>
 <script src="../js/security.js"></script>
