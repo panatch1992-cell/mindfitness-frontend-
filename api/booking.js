@@ -1,5 +1,5 @@
 /**
- * Psychologist Booking API
+ * Psychologist Booking API - MySQL Database Integration
  * MindFitness - ระบบจองนัดพบจิตแพทย์/นักจิตวิทยา
  *
  * Features:
@@ -10,96 +10,9 @@
  * - Booking confirmation/cancellation
  */
 
-// In-memory storage (use database in production)
-const therapists = {
-  'therapist_001': {
-    id: 'therapist_001',
-    name: 'ดร.สมหญิง รักษาใจ',
-    nameEn: 'Dr. Somying Raksajai',
-    title: 'นักจิตวิทยาคลินิก',
-    titleEn: 'Clinical Psychologist',
-    avatar: '../images/mind-mascot/avatar-1.svg',
-    specializations: ['วิตกกังวล', 'ซึมเศร้า', 'ความเครียด'],
-    specializationsEn: ['Anxiety', 'Depression', 'Stress'],
-    experience: 8,
-    rating: 4.9,
-    reviewCount: 127,
-    price: 1500,
-    bio: 'ประสบการณ์ให้คำปรึกษามากกว่า 8 ปี เชี่ยวชาญด้านการบำบัดความวิตกกังวลและภาวะซึมเศร้า',
-    bioEn: 'Over 8 years of counseling experience, specializing in anxiety and depression therapy',
-    availability: {
-      monday: ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'],
-      tuesday: ['09:00', '10:00', '14:00', '15:00'],
-      wednesday: ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'],
-      thursday: ['10:00', '11:00', '14:00', '15:00'],
-      friday: ['09:00', '10:00', '11:00', '14:00'],
-      saturday: ['10:00', '11:00'],
-      sunday: []
-    },
-    isVerified: true,
-    isActive: true
-  },
-  'therapist_002': {
-    id: 'therapist_002',
-    name: 'อ.ธนพล ใจดี',
-    nameEn: 'Thanapol Jaidee',
-    title: 'นักจิตวิทยาการปรึกษา',
-    titleEn: 'Counseling Psychologist',
-    avatar: '../images/mind-mascot/avatar-2.svg',
-    specializations: ['ความสัมพันธ์', 'การทำงาน', 'การพัฒนาตนเอง'],
-    specializationsEn: ['Relationships', 'Work Issues', 'Self-development'],
-    experience: 5,
-    rating: 4.7,
-    reviewCount: 89,
-    price: 1200,
-    bio: 'ผู้เชี่ยวชาญด้านปัญหาความสัมพันธ์และการพัฒนาศักยภาพบุคคล',
-    bioEn: 'Expert in relationship issues and personal development',
-    availability: {
-      monday: ['10:00', '11:00', '15:00', '16:00', '17:00'],
-      tuesday: ['09:00', '10:00', '11:00', '15:00', '16:00'],
-      wednesday: ['15:00', '16:00', '17:00'],
-      thursday: ['09:00', '10:00', '11:00', '15:00', '16:00', '17:00'],
-      friday: ['10:00', '11:00', '15:00', '16:00'],
-      saturday: ['09:00', '10:00', '11:00'],
-      sunday: []
-    },
-    isVerified: true,
-    isActive: true
-  },
-  'therapist_003': {
-    id: 'therapist_003',
-    name: 'ดร.พิมพ์ชนก สุขใจ',
-    nameEn: 'Dr. Pimchanok Sukjai',
-    title: 'จิตแพทย์',
-    titleEn: 'Psychiatrist',
-    avatar: '../images/mind-mascot/avatar-3.svg',
-    specializations: ['โรคซึมเศร้า', 'โรควิตกกังวล', 'นอนไม่หลับ'],
-    specializationsEn: ['Depression Disorder', 'Anxiety Disorder', 'Insomnia'],
-    experience: 12,
-    rating: 4.95,
-    reviewCount: 203,
-    price: 2000,
-    bio: 'จิตแพทย์ผู้เชี่ยวชาญด้านโรคทางจิตเวช มีประสบการณ์มากกว่า 12 ปี',
-    bioEn: 'Psychiatrist specializing in mental health disorders with over 12 years of experience',
-    availability: {
-      monday: ['09:00', '10:00', '11:00'],
-      tuesday: ['09:00', '10:00', '11:00', '14:00'],
-      wednesday: ['14:00', '15:00', '16:00'],
-      thursday: ['09:00', '10:00', '11:00', '14:00', '15:00'],
-      friday: ['09:00', '10:00'],
-      saturday: [],
-      sunday: []
-    },
-    isVerified: true,
-    isActive: true
-  }
-};
+const db = require('../utils/db');
 
-// Bookings storage
-const bookings = {};
-const userBookings = {};
-
-// Video call rooms
+// Video call rooms (in-memory for real-time sessions)
 const videoRooms = {};
 
 // Helper: Generate unique ID
@@ -114,33 +27,63 @@ function getDayName(date) {
 }
 
 // Helper: Check if slot is available
-function isSlotAvailable(therapistId, date, time) {
-  const therapist = therapists[therapistId];
-  if (!therapist || !therapist.isActive) return false;
+async function isSlotAvailable(therapistId, date, time) {
+  try {
+    const therapist = await db.queryOne(
+      'SELECT * FROM psychologists WHERE id = ? AND status = "active"',
+      [therapistId]
+    );
+    if (!therapist) return false;
 
-  const dayName = getDayName(date);
-  const availableSlots = therapist.availability[dayName] || [];
+    const dayName = getDayName(date);
+    const availability = JSON.parse(therapist.availability || '{}');
+    const availableSlots = availability[dayName] || [];
 
-  if (!availableSlots.includes(time)) return false;
+    if (!availableSlots.includes(time)) return false;
 
-  // Check if already booked
-  const bookingKey = `${therapistId}_${date}_${time}`;
-  return !bookings[bookingKey];
+    // Check if already booked
+    const existing = await db.queryOne(
+      `SELECT id FROM psy_appointments
+       WHERE psychologist_id = ? AND scheduled_date = ? AND scheduled_time = ?
+       AND status NOT IN ('cancelled', 'no_show')`,
+      [therapistId, date, time]
+    );
+
+    return !existing;
+  } catch (error) {
+    console.error('Check availability error:', error);
+    return false;
+  }
 }
 
 // Helper: Get available slots for a date
-function getAvailableSlots(therapistId, date) {
-  const therapist = therapists[therapistId];
-  if (!therapist || !therapist.isActive) return [];
+async function getAvailableSlots(therapistId, date) {
+  try {
+    const therapist = await db.queryOne(
+      'SELECT * FROM psychologists WHERE id = ? AND status = "active"',
+      [therapistId]
+    );
+    if (!therapist) return [];
 
-  const dayName = getDayName(date);
-  const allSlots = therapist.availability[dayName] || [];
+    const dayName = getDayName(date);
+    const availability = JSON.parse(therapist.availability || '{}');
+    const allSlots = availability[dayName] || [];
 
-  // Filter out already booked slots
-  return allSlots.filter(time => {
-    const bookingKey = `${therapistId}_${date}_${time}`;
-    return !bookings[bookingKey];
-  });
+    // Get booked slots
+    const bookedSlots = await db.query(
+      `SELECT scheduled_time FROM psy_appointments
+       WHERE psychologist_id = ? AND scheduled_date = ?
+       AND status NOT IN ('cancelled', 'no_show')`,
+      [therapistId, date]
+    );
+
+    const bookedTimes = bookedSlots.map(b => b.scheduled_time);
+
+    return allSlots.filter(time => !bookedTimes.includes(time));
+  } catch (error) {
+    console.error('Get slots error:', error);
+    return [];
+  }
 }
 
 // Helper: Generate video room
@@ -153,7 +96,7 @@ function generateVideoRoom(bookingId) {
     bookingId: bookingId,
     token: roomToken,
     createdAt: new Date().toISOString(),
-    expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // 2 hours
+    expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
     participants: [],
     status: 'waiting'
   };
@@ -161,75 +104,99 @@ function generateVideoRoom(bookingId) {
   return {
     roomId,
     roomToken,
-    // In production, integrate with Twilio/Daily.co/Jitsi
     joinUrl: `/video-call.html?room=${roomId}&token=${roomToken}`
   };
 }
 
 // Handler: List therapists
-function handleListTherapists(res, filters = {}) {
-  let therapistList = Object.values(therapists).filter(t => t.isActive && t.isVerified);
+async function handleListTherapists(res, filters = {}) {
+  try {
+    let sql = 'SELECT * FROM psychologists WHERE status = "active"';
+    const params = [];
 
-  // Filter by specialization
-  if (filters.specialization) {
-    therapistList = therapistList.filter(t =>
-      t.specializations.includes(filters.specialization) ||
-      t.specializationsEn.includes(filters.specialization)
-    );
-  }
+    if (filters.specialization) {
+      sql += ' AND (specialties LIKE ? OR specialties_en LIKE ?)';
+      params.push(`%${filters.specialization}%`, `%${filters.specialization}%`);
+    }
 
-  // Filter by max price
-  if (filters.maxPrice) {
-    therapistList = therapistList.filter(t => t.price <= parseInt(filters.maxPrice));
-  }
+    if (filters.maxPrice) {
+      sql += ' AND rate_per_session <= ?';
+      params.push(parseInt(filters.maxPrice));
+    }
 
-  // Sort by rating
-  therapistList.sort((a, b) => b.rating - a.rating);
+    sql += ' ORDER BY rating DESC';
 
-  return res.status(200).json({
-    success: true,
-    therapists: therapistList.map(t => ({
+    const therapists = await db.query(sql, params);
+
+    const formattedTherapists = therapists.map(t => ({
       id: t.id,
-      name: t.name,
-      nameEn: t.nameEn,
-      title: t.title,
-      titleEn: t.titleEn,
-      avatar: t.avatar,
-      specializations: t.specializations,
-      specializationsEn: t.specializationsEn,
-      experience: t.experience,
-      rating: t.rating,
-      reviewCount: t.reviewCount,
-      price: t.price,
-      bio: t.bio,
-      bioEn: t.bioEn
-    }))
-  });
+      name: t.fullname_th,
+      nameEn: t.fullname_en,
+      title: t.title_th,
+      titleEn: t.title_en,
+      avatar: t.avatar_url || `../images/mind-mascot/avatar-${(t.id % 6) + 1}.svg`,
+      specializations: JSON.parse(t.specialties || '[]'),
+      specializationsEn: JSON.parse(t.specialties_en || '[]'),
+      experience: t.experience_years,
+      rating: parseFloat(t.rating) || 4.5,
+      reviewCount: t.review_count || 0,
+      price: t.rate_per_session,
+      bio: t.bio_th,
+      bioEn: t.bio_en
+    }));
+
+    return res.status(200).json({
+      success: true,
+      therapists: formattedTherapists
+    });
+  } catch (error) {
+    console.error('List therapists error:', error);
+    return res.status(500).json({ success: false, error: 'Failed to load therapists' });
+  }
 }
 
 // Handler: Get therapist details
-function handleGetTherapist(res, therapistId) {
-  const therapist = therapists[therapistId];
+async function handleGetTherapist(res, therapistId) {
+  try {
+    const therapist = await db.queryOne(
+      'SELECT * FROM psychologists WHERE id = ?',
+      [therapistId]
+    );
 
-  if (!therapist) {
-    return res.status(404).json({
-      success: false,
-      error: 'ไม่พบข้อมูลนักจิตวิทยา'
-    });
-  }
-
-  return res.status(200).json({
-    success: true,
-    therapist: {
-      ...therapist,
-      // Remove sensitive data
-      availability: undefined
+    if (!therapist) {
+      return res.status(404).json({
+        success: false,
+        error: 'ไม่พบข้อมูลนักจิตวิทยา'
+      });
     }
-  });
+
+    return res.status(200).json({
+      success: true,
+      therapist: {
+        id: therapist.id,
+        name: therapist.fullname_th,
+        nameEn: therapist.fullname_en,
+        title: therapist.title_th,
+        titleEn: therapist.title_en,
+        avatar: therapist.avatar_url || `../images/mind-mascot/avatar-${(therapist.id % 6) + 1}.svg`,
+        specializations: JSON.parse(therapist.specialties || '[]'),
+        specializationsEn: JSON.parse(therapist.specialties_en || '[]'),
+        experience: therapist.experience_years,
+        rating: parseFloat(therapist.rating) || 4.5,
+        reviewCount: therapist.review_count || 0,
+        price: therapist.rate_per_session,
+        bio: therapist.bio_th,
+        bioEn: therapist.bio_en
+      }
+    });
+  } catch (error) {
+    console.error('Get therapist error:', error);
+    return res.status(500).json({ success: false, error: 'Failed to load therapist' });
+  }
 }
 
 // Handler: Get available slots
-function handleGetSlots(res, therapistId, date) {
+async function handleGetSlots(res, therapistId, date) {
   if (!therapistId || !date) {
     return res.status(400).json({
       success: false,
@@ -237,42 +204,51 @@ function handleGetSlots(res, therapistId, date) {
     });
   }
 
-  const therapist = therapists[therapistId];
-  if (!therapist) {
-    return res.status(404).json({
-      success: false,
-      error: 'ไม่พบข้อมูลนักจิตวิทยา'
+  try {
+    const therapist = await db.queryOne(
+      'SELECT * FROM psychologists WHERE id = ?',
+      [therapistId]
+    );
+
+    if (!therapist) {
+      return res.status(404).json({
+        success: false,
+        error: 'ไม่พบข้อมูลนักจิตวิทยา'
+      });
+    }
+
+    // Check if date is in the future
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      return res.status(400).json({
+        success: false,
+        error: 'ไม่สามารถจองวันที่ผ่านมาแล้ว'
+      });
+    }
+
+    const availableSlots = await getAvailableSlots(therapistId, date);
+
+    return res.status(200).json({
+      success: true,
+      date: date,
+      therapistId: therapistId,
+      slots: availableSlots.map(time => ({
+        time: time,
+        display: `${time} - ${parseInt(time.split(':')[0]) + 1}:00`,
+        available: true
+      }))
     });
+  } catch (error) {
+    console.error('Get slots error:', error);
+    return res.status(500).json({ success: false, error: 'Failed to load slots' });
   }
-
-  // Check if date is in the future
-  const selectedDate = new Date(date);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  if (selectedDate < today) {
-    return res.status(400).json({
-      success: false,
-      error: 'ไม่สามารถจองวันที่ผ่านมาแล้ว'
-    });
-  }
-
-  const availableSlots = getAvailableSlots(therapistId, date);
-
-  return res.status(200).json({
-    success: true,
-    date: date,
-    therapistId: therapistId,
-    slots: availableSlots.map(time => ({
-      time: time,
-      display: `${time} - ${parseInt(time.split(':')[0]) + 1}:00`,
-      available: true
-    }))
-  });
 }
 
 // Handler: Create booking
-function handleCreateBooking(res, userId, therapistId, date, time, notes = '') {
+async function handleCreateBooking(res, userId, therapistId, date, time, notes = '') {
   if (!userId || !therapistId || !date || !time) {
     return res.status(400).json({
       success: false,
@@ -280,70 +256,71 @@ function handleCreateBooking(res, userId, therapistId, date, time, notes = '') {
     });
   }
 
-  const therapist = therapists[therapistId];
-  if (!therapist) {
-    return res.status(404).json({
-      success: false,
-      error: 'ไม่พบข้อมูลนักจิตวิทยา'
-    });
-  }
+  try {
+    const therapist = await db.queryOne(
+      'SELECT * FROM psychologists WHERE id = ?',
+      [therapistId]
+    );
 
-  // Check availability
-  if (!isSlotAvailable(therapistId, date, time)) {
-    return res.status(400).json({
-      success: false,
-      error: 'ช่วงเวลานี้ไม่ว่างแล้ว กรุณาเลือกช่วงเวลาอื่น'
-    });
-  }
-
-  // Create booking
-  const bookingId = generateId('booking');
-  const bookingKey = `${therapistId}_${date}_${time}`;
-
-  const booking = {
-    id: bookingId,
-    userId: userId,
-    therapistId: therapistId,
-    therapistName: therapist.name,
-    therapistAvatar: therapist.avatar,
-    date: date,
-    time: time,
-    endTime: `${parseInt(time.split(':')[0]) + 1}:00`,
-    notes: notes.substring(0, 500), // Limit notes length
-    price: therapist.price,
-    status: 'confirmed',
-    videoRoom: null,
-    createdAt: new Date().toISOString(),
-    reminderSent: false
-  };
-
-  // Store booking
-  bookings[bookingKey] = booking;
-
-  // Add to user's bookings
-  if (!userBookings[userId]) {
-    userBookings[userId] = [];
-  }
-  userBookings[userId].push(bookingId);
-
-  return res.status(200).json({
-    success: true,
-    message: 'จองนัดสำเร็จ!',
-    booking: {
-      id: booking.id,
-      therapistName: booking.therapistName,
-      therapistAvatar: booking.therapistAvatar,
-      date: booking.date,
-      time: booking.time,
-      endTime: booking.endTime,
-      price: booking.price,
-      status: booking.status
+    if (!therapist) {
+      return res.status(404).json({
+        success: false,
+        error: 'ไม่พบข้อมูลนักจิตวิทยา'
+      });
     }
-  });
+
+    // Check availability
+    const available = await isSlotAvailable(therapistId, date, time);
+    if (!available) {
+      return res.status(400).json({
+        success: false,
+        error: 'ช่วงเวลานี้ไม่ว่างแล้ว กรุณาเลือกช่วงเวลาอื่น'
+      });
+    }
+
+    // Generate booking reference
+    const bookingRef = 'MF' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substr(2, 4).toUpperCase();
+
+    // Create booking
+    const bookingId = await db.insert('psy_appointments', {
+      booking_ref: bookingRef,
+      psychologist_id: therapistId,
+      client_id: userId,
+      scheduled_date: date,
+      scheduled_time: time,
+      end_time: `${parseInt(time.split(':')[0]) + 1}:00`,
+      notes: (notes || '').substring(0, 500),
+      amount: therapist.rate_per_session,
+      status: 'confirmed',
+      created_at: new Date()
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'จองนัดสำเร็จ!',
+      booking: {
+        id: bookingId,
+        bookingRef: bookingRef,
+        therapistName: therapist.fullname_th,
+        therapistAvatar: therapist.avatar_url || `../images/mind-mascot/avatar-${(therapist.id % 6) + 1}.svg`,
+        date: date,
+        time: time,
+        endTime: `${parseInt(time.split(':')[0]) + 1}:00`,
+        price: therapist.rate_per_session,
+        status: 'confirmed'
+      }
+    });
+  } catch (error) {
+    console.error('Create booking error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง'
+    });
+  }
 }
 
 // Handler: Get user's bookings
-function handleGetUserBookings(res, userId) {
+async function handleGetUserBookings(res, userId) {
   if (!userId) {
     return res.status(400).json({
       success: false,
@@ -351,154 +328,165 @@ function handleGetUserBookings(res, userId) {
     });
   }
 
-  const userBookingIds = userBookings[userId] || [];
-  const userBookingList = [];
+  try {
+    const bookings = await db.query(
+      `SELECT a.*, p.fullname_th as therapist_name, p.avatar_url as therapist_avatar
+       FROM psy_appointments a
+       LEFT JOIN psychologists p ON a.psychologist_id = p.id
+       WHERE a.client_id = ?
+       ORDER BY a.scheduled_date DESC, a.scheduled_time DESC`,
+      [userId]
+    );
 
-  // Find all user's bookings
-  Object.values(bookings).forEach(booking => {
-    if (booking.userId === userId) {
-      userBookingList.push({
-        id: booking.id,
-        therapistId: booking.therapistId,
-        therapistName: booking.therapistName,
-        therapistAvatar: booking.therapistAvatar,
-        date: booking.date,
-        time: booking.time,
-        endTime: booking.endTime,
-        price: booking.price,
-        status: booking.status,
-        hasVideoRoom: !!booking.videoRoom
-      });
-    }
-  });
+    const formattedBookings = bookings.map(b => ({
+      id: b.id,
+      bookingRef: b.booking_ref,
+      therapistId: b.psychologist_id,
+      therapistName: b.therapist_name,
+      therapistAvatar: b.therapist_avatar || `../images/mind-mascot/avatar-${(b.psychologist_id % 6) + 1}.svg`,
+      date: b.scheduled_date,
+      time: b.scheduled_time,
+      endTime: b.end_time,
+      price: b.amount,
+      status: b.status,
+      hasVideoRoom: !!b.video_room_id
+    }));
 
-  // Sort by date (newest first)
-  userBookingList.sort((a, b) => {
-    const dateA = new Date(`${a.date} ${a.time}`);
-    const dateB = new Date(`${b.date} ${b.time}`);
-    return dateB - dateA;
-  });
-
-  return res.status(200).json({
-    success: true,
-    bookings: userBookingList
-  });
+    return res.status(200).json({
+      success: true,
+      bookings: formattedBookings
+    });
+  } catch (error) {
+    console.error('Get user bookings error:', error);
+    return res.status(500).json({ success: false, error: 'Failed to load bookings' });
+  }
 }
 
 // Handler: Cancel booking
-function handleCancelBooking(res, userId, bookingId) {
-  // Find booking
-  let targetBooking = null;
-  let bookingKey = null;
+async function handleCancelBooking(res, userId, bookingId) {
+  try {
+    const booking = await db.queryOne(
+      'SELECT * FROM psy_appointments WHERE id = ? AND client_id = ?',
+      [bookingId, userId]
+    );
 
-  Object.entries(bookings).forEach(([key, booking]) => {
-    if (booking.id === bookingId && booking.userId === userId) {
-      targetBooking = booking;
-      bookingKey = key;
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        error: 'ไม่พบการจองนี้'
+      });
     }
-  });
 
-  if (!targetBooking) {
-    return res.status(404).json({
-      success: false,
-      error: 'ไม่พบการจองนี้'
+    // Check if can cancel (at least 24 hours before)
+    const bookingDateTime = new Date(`${booking.scheduled_date} ${booking.scheduled_time}`);
+    const now = new Date();
+    const hoursUntilBooking = (bookingDateTime - now) / (1000 * 60 * 60);
+
+    if (hoursUntilBooking < 24) {
+      return res.status(400).json({
+        success: false,
+        error: 'ไม่สามารถยกเลิกได้ เนื่องจากเหลือเวลาน้อยกว่า 24 ชั่วโมง'
+      });
+    }
+
+    // Cancel booking
+    await db.update('psy_appointments',
+      { status: 'cancelled', cancelled_at: new Date() },
+      'id = ?',
+      [bookingId]
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: 'ยกเลิกการจองสำเร็จ'
     });
+  } catch (error) {
+    console.error('Cancel booking error:', error);
+    return res.status(500).json({ success: false, error: 'Failed to cancel booking' });
   }
-
-  // Check if can cancel (at least 24 hours before)
-  const bookingDateTime = new Date(`${targetBooking.date} ${targetBooking.time}`);
-  const now = new Date();
-  const hoursUntilBooking = (bookingDateTime - now) / (1000 * 60 * 60);
-
-  if (hoursUntilBooking < 24) {
-    return res.status(400).json({
-      success: false,
-      error: 'ไม่สามารถยกเลิกได้ เนื่องจากเหลือเวลาน้อยกว่า 24 ชั่วโมง'
-    });
-  }
-
-  // Cancel booking
-  targetBooking.status = 'cancelled';
-  delete bookings[bookingKey];
-
-  return res.status(200).json({
-    success: true,
-    message: 'ยกเลิกการจองสำเร็จ'
-  });
 }
 
 // Handler: Start video call
-function handleStartVideoCall(res, userId, bookingId) {
-  // Find booking
-  let targetBooking = null;
-  let bookingKey = null;
+async function handleStartVideoCall(res, userId, bookingId) {
+  try {
+    const booking = await db.queryOne(
+      `SELECT a.*, p.fullname_th as therapist_name
+       FROM psy_appointments a
+       LEFT JOIN psychologists p ON a.psychologist_id = p.id
+       WHERE a.id = ?`,
+      [bookingId]
+    );
 
-  Object.entries(bookings).forEach(([key, booking]) => {
-    if (booking.id === bookingId) {
-      targetBooking = booking;
-      bookingKey = key;
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        error: 'ไม่พบการจองนี้'
+      });
     }
-  });
 
-  if (!targetBooking) {
-    return res.status(404).json({
-      success: false,
-      error: 'ไม่พบการจองนี้'
-    });
-  }
-
-  // Check if user is authorized (either user or therapist)
-  const isAuthorized = targetBooking.userId === userId || targetBooking.therapistId === userId;
-  if (!isAuthorized) {
-    return res.status(403).json({
-      success: false,
-      error: 'คุณไม่มีสิทธิ์เข้าถึงการนัดหมายนี้'
-    });
-  }
-
-  // Check booking status
-  if (targetBooking.status !== 'confirmed') {
-    return res.status(400).json({
-      success: false,
-      error: 'การจองนี้ถูกยกเลิกแล้ว'
-    });
-  }
-
-  // Check if within valid time window (30 min before to 1 hour after)
-  const bookingDateTime = new Date(`${targetBooking.date} ${targetBooking.time}`);
-  const now = new Date();
-  const minutesUntilBooking = (bookingDateTime - now) / (1000 * 60);
-
-  if (minutesUntilBooking > 30) {
-    return res.status(400).json({
-      success: false,
-      error: `ยังไม่ถึงเวลานัดหมาย กรุณารอจนถึง ${targetBooking.time}`,
-      minutesRemaining: Math.round(minutesUntilBooking - 30)
-    });
-  }
-
-  if (minutesUntilBooking < -60) {
-    return res.status(400).json({
-      success: false,
-      error: 'หมดเวลานัดหมายแล้ว'
-    });
-  }
-
-  // Generate or get existing video room
-  if (!targetBooking.videoRoom) {
-    targetBooking.videoRoom = generateVideoRoom(bookingId);
-  }
-
-  return res.status(200).json({
-    success: true,
-    videoRoom: targetBooking.videoRoom,
-    booking: {
-      id: targetBooking.id,
-      therapistName: targetBooking.therapistName,
-      date: targetBooking.date,
-      time: targetBooking.time
+    // Check if user is authorized
+    const isAuthorized = booking.client_id === userId || booking.psychologist_id == userId;
+    if (!isAuthorized) {
+      return res.status(403).json({
+        success: false,
+        error: 'คุณไม่มีสิทธิ์เข้าถึงการนัดหมายนี้'
+      });
     }
-  });
+
+    if (booking.status !== 'confirmed') {
+      return res.status(400).json({
+        success: false,
+        error: 'การจองนี้ถูกยกเลิกแล้ว'
+      });
+    }
+
+    // Check if within valid time window
+    const bookingDateTime = new Date(`${booking.scheduled_date} ${booking.scheduled_time}`);
+    const now = new Date();
+    const minutesUntilBooking = (bookingDateTime - now) / (1000 * 60);
+
+    if (minutesUntilBooking > 30) {
+      return res.status(400).json({
+        success: false,
+        error: `ยังไม่ถึงเวลานัดหมาย กรุณารอจนถึง ${booking.scheduled_time}`,
+        minutesRemaining: Math.round(minutesUntilBooking - 30)
+      });
+    }
+
+    if (minutesUntilBooking < -60) {
+      return res.status(400).json({
+        success: false,
+        error: 'หมดเวลานัดหมายแล้ว'
+      });
+    }
+
+    // Generate or get existing video room
+    let videoRoom = videoRooms[booking.video_room_id];
+    if (!videoRoom) {
+      videoRoom = generateVideoRoom(bookingId);
+
+      // Update booking with video room ID
+      await db.update('psy_appointments',
+        { video_room_id: videoRoom.roomId },
+        'id = ?',
+        [bookingId]
+      );
+    }
+
+    return res.status(200).json({
+      success: true,
+      videoRoom: videoRoom,
+      booking: {
+        id: booking.id,
+        therapistName: booking.therapist_name,
+        date: booking.scheduled_date,
+        time: booking.scheduled_time
+      }
+    });
+  } catch (error) {
+    console.error('Start video call error:', error);
+    return res.status(500).json({ success: false, error: 'Failed to start video call' });
+  }
 }
 
 // Handler: Join video room
@@ -519,7 +507,6 @@ function handleJoinVideoRoom(res, roomId, token, participantId, participantName)
     });
   }
 
-  // Check if room expired
   if (new Date() > new Date(room.expiresAt)) {
     return res.status(400).json({
       success: false,
@@ -527,7 +514,6 @@ function handleJoinVideoRoom(res, roomId, token, participantId, participantName)
     });
   }
 
-  // Add participant
   if (!room.participants.find(p => p.id === participantId)) {
     room.participants.push({
       id: participantId,
@@ -544,7 +530,6 @@ function handleJoinVideoRoom(res, roomId, token, participantId, participantName)
       id: room.id,
       status: room.status,
       participants: room.participants,
-      // WebRTC signaling info would go here in production
       signalingServer: '/api/signaling',
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' }
