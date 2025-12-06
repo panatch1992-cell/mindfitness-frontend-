@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vent Wall - Mind Fitness</title>
+  <meta name="description" content="Vent Wall - ระบายความรู้สึกแบบ Anonymous รับกำลังใจจากชุมชน">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="../images/logo.jpg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Sarabun',sans-serif;background:#f0f2f5;min-height:100vh}
+.site-header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:1000}
+.header__inner{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand__logo{width:40px;height:40px;border-radius:10px}
+.brand__name{font-size:20px;font-weight:700;color:#0B1E47}
+.back-link{color:#64748b;text-decoration:none;display:flex;align-items:center;gap:6px}
+.back-link:hover{color:#00A8A8}
+
+.feed-container{max-width:680px;margin:0 auto;padding:20px}
+
+.post-composer{background:white;border-radius:12px;padding:16px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.composer-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.composer-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00A8A8,#0B1E47);display:flex;align-items:center;justify-content:center;color:white;font-size:20px}
+.composer-input{flex:1;background:#f0f2f5;border:none;border-radius:25px;padding:12px 18px;font-size:16px;font-family:inherit;cursor:pointer;text-align:left;color:#65676b}
+.composer-input:hover{background:#e4e6e9}
+.composer-actions{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid #e4e6e9}
+.composer-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border:none;background:transparent;border-radius:8px;font-size:14px;font-family:inherit;color:#65676b;cursor:pointer}
+.composer-btn:hover{background:#f0f2f5}
+
+.post-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.post-modal.show{display:flex}
+.modal-content{background:white;border-radius:12px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid #e4e6e9}
+.modal-header h3{font-size:20px;color:#0B1E47}
+.close-btn{width:36px;height:36px;border:none;background:#e4e6e9;border-radius:50%;font-size:20px;cursor:pointer}
+.close-btn:hover{background:#d8dadf}
+.modal-body{padding:16px}
+.modal-composer{display:flex;gap:12px}
+.modal-textarea{flex:1;border:none;resize:none;font-size:18px;font-family:inherit;min-height:150px;outline:none}
+.modal-textarea::placeholder{color:#65676b}
+.mood-selector{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.mood-btn{padding:8px 16px;border:2px solid #e4e6e9;border-radius:20px;background:white;font-size:14px;cursor:pointer;transition:all 0.2s}
+.mood-btn:hover,.mood-btn.selected{border-color:#00A8A8;background:#f0fdf4;color:#00A8A8}
+.modal-footer{padding:16px;border-top:1px solid #e4e6e9}
+.post-btn{width:100%;padding:12px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer}
+.post-btn:hover{opacity:0.9}
+.post-btn:disabled{opacity:0.5;cursor:not-allowed}
+
+.feed-posts{display:flex;flex-direction:column;gap:16px}
+.post-card{background:white;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.post-header{display:flex;align-items:center;gap:12px;padding:16px 16px 12px}
+.post-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:18px}
+.post-avatar.ai{background:linear-gradient(135deg,#00A8A8,#0B1E47)}
+.post-meta h4{font-size:15px;color:#0B1E47}
+.post-meta span{font-size:13px;color:#65676b}
+.post-mood{display:inline-block;background:#f0f2f5;padding:2px 10px;border-radius:12px;font-size:12px;margin-left:8px}
+.post-content{padding:0 16px 16px;font-size:16px;line-height:1.7;color:#1c1e21;white-space:pre-wrap}
+.post-actions{display:flex;border-top:1px solid #e4e6e9;padding:4px 16px}
+.action-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:none;background:transparent;border-radius:8px;font-size:14px;color:#65676b;cursor:pointer;font-family:inherit}
+.action-btn:hover{background:#f0f2f5}
+.action-btn.liked{color:#e74c3c}
+.post-reactions{padding:8px 16px;font-size:13px;color:#65676b;border-top:1px solid #e4e6e9}
+
+.ai-response{background:linear-gradient(135deg,#f0fdf4,#ecfeff);margin:0 16px 16px;padding:16px;border-radius:12px;border-left:4px solid #00A8A8}
+.ai-response-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ai-badge{background:#00A8A8;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.ai-response p{font-size:14px;color:#0B1E47;line-height:1.6}
+
+.loading{text-align:center;padding:40px}
+.loading-spinner{width:40px;height:40px;border:3px solid #e4e6e9;border-top-color:#00A8A8;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:768px){
+  .feed-container{padding:12px}
+  .composer-actions{flex-wrap:wrap}
+  .composer-btn{flex:none;width:calc(50% - 4px)}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header__inner">
+    <a class="brand" href="../index.html">
+      <img src="../images/logo.jpg" alt="Mind Fitness" class="brand__logo">
+      <span class="brand__name">Mind Fitness</span>
+    </a>
+    <a href="index.html" class="back-link">← กลับ MindSpace</a>
+  </div>
+</header>
+
+<div class="feed-container">
+  <div class="post-composer">
+    <div class="composer-header">
+      <div class="composer-avatar">😊</div>
+      <button class="composer-input" onclick="openModal()">วันนี้คุณรู้สึกอย่างไร?</button>
+    </div>
+    <div class="composer-actions">
+      <button class="composer-btn" onclick="openModal()">😊 ความรู้สึก</button>
+      <button class="composer-btn" onclick="openModal()">💭 ระบาย</button>
+    </div>
+  </div>
+
+  <div class="feed-posts" id="feedPosts">
+    <div class="loading" id="loadingIndicator">
+      <div class="loading-spinner"></div>
+      <p>กำลังโหลด...</p>
+    </div>
+  </div>
+</div>
+
+<div class="post-modal" id="postModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>สร้างโพสต์</h3>
+      <button class="close-btn" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-composer">
+        <div class="composer-avatar">😊</div>
+        <textarea class="modal-textarea" id="postContent" placeholder="วันนี้คุณรู้สึกอย่างไร? อยากระบายเรื่องอะไร?"></textarea>
+      </div>
+      <div class="mood-selector">
+        <button class="mood-btn" data-mood="sad" onclick="selectMood(this)">😢 เศร้า</button>
+        <button class="mood-btn" data-mood="anxious" onclick="selectMood(this)">😰 กังวล</button>
+        <button class="mood-btn" data-mood="angry" onclick="selectMood(this)">😤 โกรธ</button>
+        <button class="mood-btn" data-mood="lonely" onclick="selectMood(this)">🥺 เหงา</button>
+        <button class="mood-btn" data-mood="confused" onclick="selectMood(this)">😵 สับสน</button>
+        <button class="mood-btn" data-mood="hopeful" onclick="selectMood(this)">🤞 หวัง</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="post-btn" id="submitPostBtn" onclick="submitPost()">โพสต์</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE = 'https://mindfitness-ai-backend.vercel.app';
+let selectedMood = '';
+let posts = [];
+
+const MOOD_LABELS = {
+  sad: '😢 เศร้า',
+  anxious: '😰 กังวล',
+  angry: '😤 โกรธ',
+  lonely: '🥺 เหงา',
+  confused: '😵 สับสน',
+  hopeful: '🤞 หวัง'
+};
+
+const AVATARS = ['😊', '🌸', '🌈', '🌙', '⭐', '🦋', '🌻', '🍀', '🎈', '🐱'];
+
+function getRandomAvatar() {
+  return AVATARS[Math.floor(Math.random() * AVATARS.length)];
+}
+
+function getRandomName() {
+  const adjectives = ['Anonymous', 'ใครบางคน', 'คนแปลกหน้า', 'เพื่อนร่วมทาง', 'ผู้เดินทาง'];
+  return adjectives[Math.floor(Math.random() * adjectives.length)];
+}
+
+function timeAgo(date) {
+  const now = new Date();
+  const diff = Math.floor((now - new Date(date)) / 1000);
+  if (diff < 60) return 'เมื่อสักครู่';
+  if (diff < 3600) return `${Math.floor(diff / 60)} นาทีที่แล้ว`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)} ชั่วโมงที่แล้ว`;
+  return `${Math.floor(diff / 86400)} วันที่แล้ว`;
+}
+
+function openModal() {
+  document.getElementById('postModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('postModal').classList.remove('show');
+  document.getElementById('postContent').value = '';
+  selectedMood = '';
+  document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+}
+
+function selectMood(btn) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedMood = btn.dataset.mood;
+}
+
+async function submitPost() {
+  const content = document.getElementById('postContent').value.trim();
+  if (!content) return alert('กรุณาเขียนข้อความ');
+
+  const btn = document.getElementById('submitPostBtn');
+  btn.disabled = true;
+  btn.textContent = 'กำลังโพสต์...';
+
+  try {
+    const res = await fetch(`${API_BASE}/api/vent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'create',
+        content,
+        mood: selectedMood || 'neutral'
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      closeModal();
+      loadPosts();
+    } else {
+      alert(data.error || 'เกิดข้อผิดพลาด');
+    }
+  } catch (e) {
+    alert('ไม่สามารถโพสต์ได้ กรุณาลองใหม่');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'โพสต์';
+}
+
+async function loadPosts() {
+  const container = document.getElementById('feedPosts');
+  container.innerHTML = '<div class="loading" id="loadingIndicator"><div class="loading-spinner"></div><p>กำลังโหลด...</p></div>';
+
+  try {
+    const res = await fetch(`${API_BASE}/api/vent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'list', limit: 20 })
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.posts) {
+      posts = data.posts;
+      renderPosts();
+    } else {
+      container.innerHTML = '<p style="text-align:center;color:#65676b;padding:40px">ยังไม่มีโพสต์</p>';
+    }
+  } catch (e) {
+    container.innerHTML = '<p style="text-align:center;color:#65676b;padding:40px">ไม่สามารถโหลดโพสต์ได้</p>';
+  }
+}
+
+function renderPosts() {
+  const container = document.getElementById('feedPosts');
+  container.innerHTML = posts.map(post => `
+    <div class="post-card" data-id="${post.id}">
+      <div class="post-header">
+        <div class="post-avatar">${post.avatar || getRandomAvatar()}</div>
+        <div class="post-meta">
+          <h4>${post.name || getRandomName()} ${post.mood ? `<span class="post-mood">${MOOD_LABELS[post.mood] || post.mood}</span>` : ''}</h4>
+          <span>${timeAgo(post.createdAt)}</span>
+        </div>
+      </div>
+      <div class="post-content">${post.content}</div>
+      ${post.aiResponse ? `
+        <div class="ai-response">
+          <div class="ai-response-header">
+            <span class="ai-badge">AI</span>
+            <span style="font-size:13px;color:#65676b">น้องมายด์ตอบกลับ</span>
+          </div>
+          <p>${post.aiResponse}</p>
+        </div>
+      ` : ''}
+      <div class="post-reactions">
+        ${post.likes || 0} คนให้กำลังใจ
+      </div>
+      <div class="post-actions">
+        <button class="action-btn ${post.liked ? 'liked' : ''}" onclick="likePost('${post.id}')">
+          ${post.liked ? '❤️' : '🤍'} ให้กำลังใจ
+        </button>
+        <button class="action-btn" onclick="replyPost('${post.id}')">
+          💬 ตอบกลับ
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function likePost(postId) {
+  try {
+    const res = await fetch(`${API_BASE}/api/vent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'like', postId })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      loadPosts();
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function replyPost(postId) {
+  alert('ฟีเจอร์นี้กำลังพัฒนา');
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', loadPosts);
+</script>
+</body>
+</html>

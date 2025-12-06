@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Private Chat - Mind Fitness</title>
+  <meta name="description" content="Private Chat - พูดคุยส่วนตัวกับคนแปลกหน้าที่พร้อมรับฟัง">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="../images/logo.jpg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh;display:flex;flex-direction:column}
+.site-header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:1000}
+.header__inner{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand__logo{width:40px;height:40px;border-radius:10px}
+.brand__name{font-size:20px;font-weight:700;color:#0B1E47}
+.back-link{color:#64748b;text-decoration:none;display:flex;align-items:center;gap:6px}
+.back-link:hover{color:#00A8A8}
+
+.main-content{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+
+/* Matching Screen */
+.matching-screen{text-align:center;max-width:500px}
+.matching-icon{width:120px;height:120px;margin:0 auto 24px}
+.matching-screen h1{font-size:28px;color:#0B1E47;margin-bottom:12px}
+.matching-screen p{color:#64748b;margin-bottom:32px;line-height:1.7}
+.match-btn{display:inline-block;padding:16px 48px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:30px;font-size:18px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:inherit}
+.match-btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,168,168,0.3)}
+.match-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.rules{margin-top:40px;text-align:left;background:white;padding:24px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)}
+.rules h3{font-size:16px;color:#0B1E47;margin-bottom:12px}
+.rules ul{color:#64748b;font-size:14px;line-height:2;padding-left:20px}
+
+/* Searching Screen */
+.searching-screen{text-align:center;display:none}
+.search-animation{width:100px;height:100px;margin:0 auto 24px;position:relative}
+.search-ring{position:absolute;top:0;left:0;right:0;bottom:0;border:4px solid #e2e8f0;border-top-color:#00A8A8;border-radius:50%;animation:spin 1s linear infinite}
+.search-ring:nth-child(2){animation-delay:-0.3s;transform:scale(0.8)}
+.search-ring:nth-child(3){animation-delay:-0.6s;transform:scale(0.6)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.searching-screen h2{font-size:24px;color:#0B1E47;margin-bottom:12px}
+.searching-screen p{color:#64748b}
+.cancel-btn{margin-top:24px;padding:12px 32px;background:#f1f5f9;color:#64748b;border:none;border-radius:25px;font-size:16px;cursor:pointer;font-family:inherit}
+.cancel-btn:hover{background:#e2e8f0}
+
+/* Chat Screen */
+.chat-screen{display:none;flex-direction:column;width:100%;max-width:800px;height:calc(100vh - 100px)}
+.chat-header-bar{background:white;padding:16px 20px;border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,0.05)}
+.partner-info{display:flex;align-items:center;gap:12px}
+.partner-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:20px}
+.partner-info h3{font-size:16px;color:#0B1E47}
+.partner-info span{font-size:13px;color:#10b981}
+.end-chat-btn{padding:10px 20px;background:#fee2e2;color:#dc2626;border:none;border-radius:20px;font-size:14px;cursor:pointer;font-family:inherit}
+.end-chat-btn:hover{background:#fecaca}
+
+.chat-messages-area{flex:1;background:#f8fafc;padding:20px;overflow-y:auto}
+.chat-message{margin-bottom:16px;display:flex;gap:10px}
+.chat-message.mine{flex-direction:row-reverse}
+.msg-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;flex-shrink:0}
+.msg-avatar.mine{background:linear-gradient(135deg,#00A8A8,#0B1E47)}
+.msg-bubble{max-width:70%;padding:12px 16px;border-radius:18px;font-size:15px;line-height:1.5}
+.chat-message.mine .msg-bubble{background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border-bottom-right-radius:4px}
+.chat-message.partner .msg-bubble{background:white;color:#0B1E47;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.system-msg{text-align:center;color:#64748b;font-size:13px;margin:16px 0}
+
+.chat-input-area{background:white;padding:16px;border-radius:0 0 16px 16px;display:flex;gap:12px}
+.chat-input-area input{flex:1;padding:14px 18px;border:2px solid #e2e8f0;border-radius:25px;font-size:16px;font-family:inherit}
+.chat-input-area input:focus{outline:none;border-color:#00A8A8}
+.send-msg-btn{width:50px;height:50px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:50%;cursor:pointer;font-size:20px}
+.send-msg-btn:hover{opacity:0.9}
+
+/* Ended Screen */
+.ended-screen{text-align:center;display:none}
+.ended-screen h2{font-size:24px;color:#0B1E47;margin-bottom:12px}
+.ended-screen p{color:#64748b;margin-bottom:24px}
+.new-chat-btn{padding:16px 40px;background:linear-gradient(135deg,#00A8A8,#0B1E47);color:white;border:none;border-radius:30px;font-size:18px;font-weight:700;cursor:pointer;font-family:inherit}
+
+@media(max-width:768px){
+  .matching-screen h1{font-size:24px}
+  .rules{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header__inner">
+    <a class="brand" href="../index.html">
+      <img src="../images/logo.jpg" alt="Mind Fitness" class="brand__logo">
+      <span class="brand__name">Mind Fitness</span>
+    </a>
+    <a href="index.html" class="back-link">← กลับ MindSpace</a>
+  </div>
+</header>
+
+<div class="main-content">
+  <!-- Matching Screen -->
+  <div class="matching-screen" id="matchingScreen">
+    <img src="../images/mind-mascot/mind-calm.svg" alt="Private Chat" class="matching-icon">
+    <h1>Private Chat</h1>
+    <p>พูดคุยส่วนตัวกับคนแปลกหน้าที่พร้อมรับฟังคุณ<br>ทุกอย่างเป็นความลับ ไม่มีการบันทึก</p>
+    <button class="match-btn" id="startMatchBtn" onclick="startMatching()">เริ่มหาคู่สนทนา</button>
+
+    <div class="rules">
+      <h3>กฎการใช้งาน</h3>
+      <ul>
+        <li>เคารพซึ่งกันและกัน ไม่ด่าทอหรือข่มขู่</li>
+        <li>ไม่เปิดเผยข้อมูลส่วนตัว (ชื่อ, เบอร์โทร, social)</li>
+        <li>ไม่ส่งรูปหรือลิงก์ที่ไม่เหมาะสม</li>
+        <li>หากรู้สึกไม่สบายใจ สามารถจบการสนทนาได้ทุกเมื่อ</li>
+        <li>หากต้องการความช่วยเหลือเร่งด่วน โทร 1323</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Searching Screen -->
+  <div class="searching-screen" id="searchingScreen">
+    <div class="search-animation">
+      <div class="search-ring"></div>
+      <div class="search-ring"></div>
+      <div class="search-ring"></div>
+    </div>
+    <h2>กำลังหาคู่สนทนา...</h2>
+    <p>โปรดรอสักครู่</p>
+    <button class="cancel-btn" onclick="cancelMatching()">ยกเลิก</button>
+  </div>
+
+  <!-- Chat Screen -->
+  <div class="chat-screen" id="chatScreen">
+    <div class="chat-header-bar">
+      <div class="partner-info">
+        <div class="partner-avatar" id="partnerAvatar">🌸</div>
+        <div>
+          <h3 id="partnerName">คนแปลกหน้า</h3>
+          <span>กำลังพูดคุย</span>
+        </div>
+      </div>
+      <button class="end-chat-btn" onclick="endChat()">จบการสนทนา</button>
+    </div>
+
+    <div class="chat-messages-area" id="chatMessagesArea">
+      <div class="system-msg">เริ่มการสนทนาแล้ว - พูดคุยอย่างสุภาพนะคะ</div>
+    </div>
+
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="พิมพ์ข้อความ..." autocomplete="off">
+      <button class="send-msg-btn" onclick="sendChatMessage()">➤</button>
+    </div>
+  </div>
+
+  <!-- Ended Screen -->
+  <div class="ended-screen" id="endedScreen">
+    <img src="../images/mind-mascot/mind-happy.svg" alt="Chat Ended" style="width:100px;margin-bottom:24px">
+    <h2>จบการสนทนาแล้ว</h2>
+    <p>ขอบคุณที่ใช้เวลาพูดคุย หวังว่าคุณจะรู้สึกดีขึ้นนะคะ</p>
+    <button class="new-chat-btn" onclick="resetToMatching()">เริ่มสนทนาใหม่</button>
+  </div>
+</div>
+
+<script>
+const AVATARS = ['🌸', '🌈', '🌙', '⭐', '🦋', '🌻', '🍀', '🎈', '🐱', '🐰'];
+const NAMES = ['เพื่อนร่วมทาง', 'คนแปลกหน้า', 'ผู้ฟังที่ดี', 'เพื่อนใหม่', 'ใครบางคน'];
+
+let myAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
+let partnerAvatar = '';
+let partnerName = '';
+let chatId = null;
+let isMatching = false;
+
+function showScreen(screenId) {
+  document.getElementById('matchingScreen').style.display = 'none';
+  document.getElementById('searchingScreen').style.display = 'none';
+  document.getElementById('chatScreen').style.display = 'none';
+  document.getElementById('endedScreen').style.display = 'none';
+  document.getElementById(screenId).style.display = screenId === 'chatScreen' ? 'flex' : 'block';
+}
+
+function startMatching() {
+  showScreen('searchingScreen');
+  isMatching = true;
+
+  // Simulate matching (in real app, this would be WebSocket/polling)
+  setTimeout(() => {
+    if (isMatching) {
+      matchFound();
+    }
+  }, 2000 + Math.random() * 3000);
+}
+
+function cancelMatching() {
+  isMatching = false;
+  showScreen('matchingScreen');
+}
+
+function matchFound() {
+  partnerAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
+  partnerName = NAMES[Math.floor(Math.random() * NAMES.length)];
+  chatId = 'chat_' + Date.now();
+
+  document.getElementById('partnerAvatar').textContent = partnerAvatar;
+  document.getElementById('partnerName').textContent = partnerName;
+  document.getElementById('chatMessagesArea').innerHTML = '<div class="system-msg">เริ่มการสนทนาแล้ว - พูดคุยอย่างสุภาพนะคะ</div>';
+
+  showScreen('chatScreen');
+
+  // Welcome message from partner (simulated)
+  setTimeout(() => {
+    addMessage('สวัสดีค่ะ วันนี้เป็นอย่างไรบ้าง?', false);
+  }, 1500);
+}
+
+function addMessage(content, isMine) {
+  const area = document.getElementById('chatMessagesArea');
+  const div = document.createElement('div');
+  div.className = `chat-message ${isMine ? 'mine' : 'partner'}`;
+  div.innerHTML = `
+    <div class="msg-avatar ${isMine ? 'mine' : ''}">${isMine ? myAvatar : partnerAvatar}</div>
+    <div class="msg-bubble">${content}</div>
+  `;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const message = input.value.trim();
+  if (!message) return;
+
+  addMessage(message, true);
+  input.value = '';
+
+  // Simulate partner response (in real app, this would be sent via WebSocket)
+  setTimeout(() => {
+    const responses = [
+      'ฟังดูน่าสนใจเลย เล่าเพิ่มได้ไหมคะ?',
+      'เข้าใจค่ะ บางทีก็รู้สึกแบบนั้นเหมือนกัน',
+      'ขอบคุณที่เล่าให้ฟังนะคะ',
+      'คุณเก่งมากที่ผ่านมาได้',
+      'ไม่เป็นไรนะคะ ทุกอย่างจะดีขึ้น'
+    ];
+    addMessage(responses[Math.floor(Math.random() * responses.length)], false);
+  }, 1500 + Math.random() * 2000);
+}
+
+function endChat() {
+  if (confirm('ต้องการจบการสนทนาใช่ไหม?')) {
+    chatId = null;
+    showScreen('endedScreen');
+  }
+}
+
+function resetToMatching() {
+  showScreen('matchingScreen');
+}
+
+document.getElementById('chatInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') sendChatMessage();
+});
+</script>
+</body>
+</html>

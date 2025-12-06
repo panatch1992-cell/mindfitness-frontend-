@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>สมัครเป็น Listener - Mind Fitness</title>
+  <meta name="description" content="ร่วมเป็น Listener อาสา ช่วยรับฟังและให้กำลังใจคนที่ต้องการ">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="../images/logo.jpg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Sarabun',sans-serif;background:#f8fafc;min-height:100vh}
+.site-header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:1000}
+.header__inner{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand__logo{width:40px;height:40px;border-radius:10px}
+.brand__name{font-size:20px;font-weight:700;color:#0B1E47}
+.back-link{color:#64748b;text-decoration:none;display:flex;align-items:center;gap:6px}
+.back-link:hover{color:#00A8A8}
+
+.hero{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:80px 20px;text-align:center}
+.hero img{width:120px;margin-bottom:24px}
+.hero h1{font-size:36px;margin-bottom:16px}
+.hero p{opacity:0.9;max-width:600px;margin:0 auto;line-height:1.8;font-size:18px}
+
+.container{max-width:900px;margin:0 auto;padding:40px 20px}
+
+.benefits-section{margin-bottom:48px}
+.section-title{font-size:24px;color:#0B1E47;margin-bottom:24px;text-align:center}
+.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.benefit-card{background:white;border-radius:16px;padding:28px;box-shadow:0 2px 10px rgba(0,0,0,0.06);text-align:center}
+.benefit-card .icon{font-size:48px;margin-bottom:16px}
+.benefit-card h3{font-size:18px;color:#0B1E47;margin-bottom:8px}
+.benefit-card p{color:#64748b;font-size:14px;line-height:1.6}
+
+.requirements-section{margin-bottom:48px}
+.requirements-card{background:white;border-radius:16px;padding:32px;box-shadow:0 2px 10px rgba(0,0,0,0.06)}
+.requirements-card h3{font-size:20px;color:#0B1E47;margin-bottom:20px}
+.requirements-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.requirement-item{display:flex;align-items:flex-start;gap:12px;padding:12px;background:#f8fafc;border-radius:10px}
+.requirement-item .check{color:#10b981;font-size:20px;flex-shrink:0}
+.requirement-item p{color:#64748b;font-size:14px;line-height:1.5}
+
+.form-section{margin-bottom:48px}
+.form-card{background:white;border-radius:20px;padding:40px;box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+.form-card h2{font-size:24px;color:#0B1E47;margin-bottom:8px;text-align:center}
+.form-card>p{color:#64748b;text-align:center;margin-bottom:32px}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-weight:600;color:#0B1E47;margin-bottom:8px;font-size:15px}
+.form-label .required{color:#ef4444}
+.form-input,.form-select,.form-textarea{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:16px;font-family:inherit;transition:border-color 0.2s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:#667eea}
+.form-textarea{min-height:120px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.checkbox-group{display:flex;align-items:flex-start;gap:12px;padding:16px;background:#f8fafc;border-radius:12px}
+.checkbox-group input{width:20px;height:20px;flex-shrink:0;margin-top:2px}
+.checkbox-group label{color:#64748b;font-size:14px;line-height:1.6}
+.submit-btn{width:100%;padding:18px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:12px;font-size:18px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:24px}
+.submit-btn:hover{opacity:0.9}
+.submit-btn:disabled{opacity:0.6;cursor:not-allowed}
+
+.success-message{display:none;text-align:center;padding:40px}
+.success-message .icon{font-size:80px;margin-bottom:24px}
+.success-message h3{font-size:24px;color:#10b981;margin-bottom:12px}
+.success-message p{color:#64748b;line-height:1.7}
+
+.footer{background:#0B1E47;color:white;padding:40px 20px;text-align:center}
+.footer p{opacity:0.8}
+
+@media(max-width:768px){
+  .hero h1{font-size:28px}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header__inner">
+    <a class="brand" href="../index.html">
+      <img src="../images/logo.jpg" alt="Mind Fitness" class="brand__logo">
+      <span class="brand__name">Mind Fitness</span>
+    </a>
+    <a href="index.html" class="back-link">← กลับ MindSpace</a>
+  </div>
+</header>
+
+<section class="hero">
+  <img src="../images/mind-mascot/mind-support.svg" alt="Listener">
+  <h1>ร่วมเป็น Listener</h1>
+  <p>เป็นส่วนหนึ่งของชุมชนที่ช่วยรับฟังและให้กำลังใจผู้ที่ต้องการ ไม่จำเป็นต้องมีวุฒิการศึกษาด้านจิตวิทยา</p>
+</section>
+
+<div class="container">
+  <div class="benefits-section">
+    <h2 class="section-title">ทำไมควรเป็น Listener?</h2>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="icon">💜</div>
+        <h3>ช่วยเหลือผู้อื่น</h3>
+        <p>บางครั้งการมีคนรับฟังก็เพียงพอที่จะช่วยให้ใครบางคนรู้สึกดีขึ้น</p>
+      </div>
+      <div class="benefit-card">
+        <div class="icon">📚</div>
+        <h3>เรียนรู้ทักษะใหม่</h3>
+        <p>ได้รับการอบรมทักษะการฟังอย่างมีคุณภาพ และความรู้ด้านสุขภาพจิต</p>
+      </div>
+      <div class="benefit-card">
+        <div class="icon">🏅</div>
+        <h3>ได้รับใบรับรอง</h3>
+        <p>รับ Certificate จาก Mind Fitness หลังผ่านการอบรมและปฏิบัติงาน</p>
+      </div>
+      <div class="benefit-card">
+        <div class="icon">🤝</div>
+        <h3>ชุมชนที่อบอุ่น</h3>
+        <p>เข้าร่วมชุมชน Listeners ที่มีเป้าหมายเดียวกัน แลกเปลี่ยนประสบการณ์</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="requirements-section">
+    <div class="requirements-card">
+      <h3>คุณสมบัติของ Listener</h3>
+      <div class="requirements-list">
+        <div class="requirement-item">
+          <span class="check">✓</span>
+          <p>อายุ 18 ปีขึ้นไป</p>
+        </div>
+        <div class="requirement-item">
+          <span class="check">✓</span>
+          <p>มีความตั้งใจช่วยเหลือผู้อื่นอย่างแท้จริง</p>
+        </div>
+        <div class="requirement-item">
+          <span class="check">✓</span>
+          <p>สามารถรักษาความลับได้</p>
+        </div>
+        <div class="requirement-item">
+          <span class="check">✓</span>
+          <p>มีเวลาให้อย่างน้อย 2 ชั่วโมง/สัปดาห์</p>
+        </div>
+        <div class="requirement-item">
+          <span class="check">✓</span>
+          <p>พร้อมเข้ารับการอบรม (ออนไลน์ 4 ชั่วโมง)</p>
+        </div>
+        <div class="requirement-item">
+          <span class="check">✓</span>
+          <p>ไม่จำเป็นต้องมีประสบการณ์หรือวุฒิด้านจิตวิทยา</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-card">
+      <h2>สมัครเป็น Listener</h2>
+      <p>กรอกข้อมูลเพื่อเริ่มต้นเส้นทางการเป็น Listener</p>
+
+      <form id="listenerForm" onsubmit="submitForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">ชื่อ <span class="required">*</span></label>
+            <input type="text" class="form-input" name="firstName" required placeholder="ชื่อ">
+          </div>
+          <div class="form-group">
+            <label class="form-label">นามสกุล <span class="required">*</span></label>
+            <input type="text" class="form-input" name="lastName" required placeholder="นามสกุล">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">อีเมล <span class="required">*</span></label>
+            <input type="email" class="form-input" name="email" required placeholder="email@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">เบอร์โทรศัพท์ <span class="required">*</span></label>
+            <input type="tel" class="form-input" name="phone" required placeholder="08X-XXX-XXXX">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">อายุ <span class="required">*</span></label>
+          <select class="form-select" name="age" required>
+            <option value="">-- เลือก --</option>
+            <option value="18-24">18-24 ปี</option>
+            <option value="25-34">25-34 ปี</option>
+            <option value="35-44">35-44 ปี</option>
+            <option value="45+">45 ปีขึ้นไป</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">ทำไมอยากเป็น Listener? <span class="required">*</span></label>
+          <textarea class="form-textarea" name="motivation" required placeholder="เล่าให้เราฟังหน่อย..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">คุณมีเวลาว่างช่วงไหน?</label>
+          <select class="form-select" name="availability">
+            <option value="">-- เลือก --</option>
+            <option value="morning">เช้า (8:00-12:00)</option>
+            <option value="afternoon">บ่าย (12:00-18:00)</option>
+            <option value="evening">เย็น (18:00-22:00)</option>
+            <option value="flexible">ยืดหยุ่นได้</option>
+          </select>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" name="consent" required id="consent">
+          <label for="consent">ข้าพเจ้ายืนยันว่าข้อมูลทั้งหมดเป็นความจริง และยินยอมให้ Mind Fitness เก็บและใช้ข้อมูลเพื่อการพิจารณา <span class="required">*</span></label>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">สมัครเป็น Listener</button>
+      </form>
+
+      <div class="success-message" id="successMessage">
+        <div class="icon">🎉</div>
+        <h3>สมัครสำเร็จ!</h3>
+        <p>ขอบคุณที่สนใจร่วมเป็น Listener<br>เราจะติดต่อกลับทางอีเมลภายใน 3-5 วันทำการ<br>เพื่อนัดหมายการอบรม</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>© 2025 Mind Fitness | Mental Health Ecosystem</p>
+  <p style="margin-top:8px;opacity:0.6;">สายด่วนสุขภาพจิต 1323 (24 ชั่วโมง)</p>
+</footer>
+
+<script>
+async function submitForm(e) {
+  e.preventDefault();
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'กำลังส่ง...';
+
+  const form = document.getElementById('listenerForm');
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData);
+
+  // Save to localStorage (in real app, send to backend)
+  const applications = JSON.parse(localStorage.getItem('listener_applications') || '[]');
+  applications.push({
+    ...data,
+    submittedAt: new Date().toISOString()
+  });
+  localStorage.setItem('listener_applications', JSON.stringify(applications));
+
+  // Simulate sending to backend
+  await new Promise(resolve => setTimeout(resolve, 1500));
+
+  // Show success
+  form.style.display = 'none';
+  document.querySelector('.form-card h2').style.display = 'none';
+  document.querySelector('.form-card > p').style.display = 'none';
+  document.getElementById('successMessage').style.display = 'block';
+}
+</script>
+</body>
+</html>

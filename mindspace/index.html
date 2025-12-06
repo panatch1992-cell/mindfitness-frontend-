@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MindSpace - Mind Fitness</title>
+  <meta name="description" content="MindSpace - พื้นที่ดูแลสุขภาพจิตครบวงจร">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/mindbot-widget.css">
+  <link rel="icon" href="../images/logo.jpg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Sarabun',sans-serif;color:#0B1E47;background:#f8fafc}
+.site-header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:1000}
+.header__inner{max-width:1200px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand__logo{width:40px;height:40px;border-radius:10px}
+.brand__name{font-size:20px;font-weight:700;color:#0B1E47}
+.nav__list{display:flex;gap:28px;list-style:none}
+.nav__link{text-decoration:none;color:#64748b;font-weight:500}
+.nav__link:hover,.nav__link.active{color:#00A8A8}
+.nav-toggle{display:none;background:#0B1E47;color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-size:18px}
+
+.hero{background:linear-gradient(135deg,#00A8A8 0%,#0B1E47 100%);color:white;padding:60px 20px;text-align:center}
+.hero h1{font-size:36px;margin-bottom:16px}
+.hero p{opacity:0.9;font-size:18px;max-width:600px;margin:0 auto}
+
+.features{padding:60px 20px;max-width:1100px;margin:0 auto}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.feature-card{background:white;border-radius:20px;padding:32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.06);transition:all 0.3s;border:2px solid transparent;text-decoration:none;display:block}
+.feature-card:hover{transform:translateY(-5px);border-color:#00A8A8;box-shadow:0 10px 30px rgba(0,168,168,0.15)}
+.feature-icon{width:80px;height:80px;margin:0 auto 20px;background:linear-gradient(135deg,#f0fdf4,#ecfeff);border-radius:20px;display:flex;align-items:center;justify-content:center}
+.feature-icon img{width:50px;height:50px}
+.feature-card h3{font-size:20px;color:#0B1E47;margin-bottom:10px}
+.feature-card p{color:#64748b;font-size:14px;line-height:1.6;margin-bottom:16px}
+.feature-tag{display:inline-block;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:#d1fae5;color:#047857}
+.feature-tag.new{background:#dbeafe;color:#1d4ed8}
+
+.cta-section{background:linear-gradient(135deg,#0B1E47,#1e3a5f);padding:60px 20px;text-align:center;color:white}
+.cta-section h2{font-size:28px;margin-bottom:16px}
+.cta-section p{opacity:0.8;margin-bottom:24px}
+.btn-gold{display:inline-block;padding:16px 32px;background:linear-gradient(135deg,#E4AA3A,#f59e0b);color:#0B1E47;text-decoration:none;border-radius:12px;font-weight:700;font-size:16px}
+
+.footer{background:#0B1E47;color:white;padding:40px 20px;text-align:center}
+.footer p{opacity:0.8}
+.footer-links{display:flex;gap:20px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.footer-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:14px}
+.footer-links a:hover{color:#00A8A8}
+
+@media(max-width:768px){
+  .nav-toggle{display:block}
+  .nav{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:white;z-index:9999;padding:80px 20px}
+  .nav.active{display:flex;flex-direction:column}
+  .nav__list{flex-direction:column;gap:0}
+  .nav__link{display:block;padding:16px;border-bottom:1px solid #f0f0f0;color:#0B1E47}
+  .hero h1{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header__inner">
+    <a class="brand" href="../index.html">
+      <img src="../images/logo.jpg" alt="Mind Fitness" class="brand__logo">
+      <span class="brand__name">Mind Fitness</span>
+    </a>
+    <button class="nav-toggle" id="mobile-nav-toggle">&#9776;</button>
+    <nav id="primary-nav" class="nav">
+      <ul class="nav__list">
+        <li><a href="../index.html" class="nav__link">หน้าแรก</a></li>
+        <li><a href="../school.html" class="nav__link">โรงเรียน</a></li>
+        <li><a href="index.html" class="nav__link active">MindSpace</a></li>
+        <li><a href="../mhl-assessment.html" class="nav__link">ประเมิน MHL</a></li>
+        <li><a href="../about.html" class="nav__link">เกี่ยวกับเรา</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>MindSpace</h1>
+  <p>พื้นที่ดูแลสุขภาพจิตครบวงจร AI Chat, Vent Wall, Private Chat และ Psychoeducation</p>
+</section>
+
+<section class="features">
+  <div class="features-grid">
+    <a href="mindbot.html" class="feature-card">
+      <div class="feature-icon">
+        <img src="../images/mind-mascot/mind-support.svg" alt="น้องมายด์ AI">
+      </div>
+      <h3>น้องมายด์ AI</h3>
+      <p>พูดคุยกับ AI ที่พร้อมรับฟังคุณ 24 ชั่วโมง พร้อมระบบ Crisis Detection</p>
+      <span class="feature-tag">ฟรี</span>
+    </a>
+
+    <a href="vent-wall.html" class="feature-card">
+      <div class="feature-icon">
+        <img src="../images/mind-mascot/mind-vent.svg" alt="Vent Wall">
+      </div>
+      <h3>Vent Wall</h3>
+      <p>ระบายความรู้สึกแบบ Anonymous รับกำลังใจจากชุมชน</p>
+      <span class="feature-tag">ฟรี</span>
+    </a>
+
+    <a href="private-chat.html" class="feature-card" id="private-chat">
+      <div class="feature-icon">
+        <img src="../images/mind-mascot/mind-calm.svg" alt="Private Chat">
+      </div>
+      <h3>Private Chat</h3>
+      <p>พูดคุยส่วนตัวกับคนแปลกหน้าที่พร้อมรับฟัง แบบ Anonymous</p>
+      <span class="feature-tag new">ใหม่</span>
+    </a>
+
+    <a href="comics.html" class="feature-card">
+      <div class="feature-icon">
+        <img src="../images/mind-mascot/mind-reading.svg" alt="Comics">
+      </div>
+      <h3>Psychoeducation Comics</h3>
+      <p>เรียนรู้เรื่องสุขภาพจิตผ่านการ์ตูน 6 ตอน</p>
+      <span class="feature-tag">ฟรี</span>
+    </a>
+
+    <a href="../mhl-assessment.html" class="feature-card">
+      <div class="feature-icon">
+        <img src="../images/mind-mascot/mind-thinking.svg" alt="Assessment">
+      </div>
+      <h3>ประเมิน MHL-35</h3>
+      <p>ประเมินความรอบรู้ด้านสุขภาพจิต รับ Action Plan ส่วนบุคคล</p>
+      <span class="feature-tag">ฟรี</span>
+    </a>
+
+    <a href="dashboard.html" class="feature-card">
+      <div class="feature-icon">
+        <img src="../images/mind-mascot/mind-dashboard.svg" alt="Dashboard">
+      </div>
+      <h3>Dashboard</h3>
+      <p>ติดตามสุขภาพจิตของคุณ ดูประวัติและแนวโน้ม</p>
+      <span class="feature-tag">ฟรี</span>
+    </a>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>ต้องการความช่วยเหลือเพิ่มเติม?</h2>
+  <p>ปรึกษานักจิตวิทยาผู้เชี่ยวชาญ</p>
+  <a href="psychologist.html" class="btn-gold">นัดพบนักจิตวิทยา</a>
+</section>
+
+<footer class="footer">
+  <p>© 2025 Mind Fitness | Mental Health Ecosystem</p>
+  <p style="margin-top:8px;opacity:0.6;">สายด่วนสุขภาพจิต 1323 (24 ชั่วโมง)</p>
+  <div class="footer-links">
+    <a href="../index.html">หน้าแรก</a>
+    <a href="../school.html">โรงเรียน</a>
+    <a href="index.html">MindSpace</a>
+    <a href="../about.html">เกี่ยวกับเรา</a>
+    <a href="../privacy-policy.html">นโยบายความเป็นส่วนตัว</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('mobile-nav-toggle').addEventListener('click', function() {
+  document.getElementById('primary-nav').classList.toggle('active');
+  this.textContent = this.textContent === '\u2630' ? '\u2715' : '\u2630';
+});
+</script>
+
+<script src="../js/mindbot.js"></script>
+<script src="../js/mindbot-widget.js"></script>
+</body>
+</html>
